@@ -84,7 +84,7 @@ Conforme avance el desarrollo, se agregarán instrucciones de instalación, arqu
 El proyecto trabaja con un backlog inicial de dos semanas cuyo objetivo principal es implementar la primera versión funcional del juego Scrabble.  
 En este ciclo se priorizan las funcionalidades básicas descritas en las historias de usuario y se establece la base de trabajo colaborativo.
 
-[Ver Project Backlog](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/wiki#sprint)
+[Ver Sprint](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/wiki#sprint)
 
 ---
 
