@@ -17,7 +17,7 @@ Para documentación más detallada, se puede consultar la **Wiki del proyecto**:
 - [Historias de usuario](#historias-de-usuario)
 - [Gestión de riesgos](#gestion-de-riesgos)
 - [Estructura inicial](#estructura-inicial)
-- [Equipo de desarrollo](#equipo-de-desarrollo)
+- [Sprint](#sprint)
 - [Próximos pasos](#proximos-pasos)
 - [Enlaces útiles](#enlaces-utiles)
 
@@ -48,7 +48,7 @@ Algunas de las funcionalidades principales son:
 - Pasar turno y finalizar la partida de acuerdo con las reglas establecidas.
 
 La lista completa y detallada se encuentra en los Issues: //cambiarlo, no me gusta Issues  
-[Ver historias de usuario](https://github.com/TU_USUARIO/TU_REPOSITORIO/wiki/Historias-de-usuario)
+[Ver historias de usuario](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/issues)
 
 ---
 
@@ -79,18 +79,12 @@ Conforme avance el desarrollo, se agregarán instrucciones de instalación, arqu
 
 ---
 
-## Equipo de desarrollo
+## Sprint
 
-- Proyecto académico de Ingeniería de Software.  
-- Trabajo en equipo mediante GitHub.  
-- Reuniones periódicas para revisar avances y riesgos.
+El proyecto trabaja con un backlog inicial de dos semanas cuyo objetivo principal es implementar la primera versión funcional del juego Scrabble.  
+En este ciclo se priorizan las funcionalidades básicas descritas en las historias de usuario y se establece la base de trabajo colaborativo.
 
-Pasos recomendados para nuevos integrantes:
-1. Leer las historias de usuario.  
-2. Revisar la tabla de riesgos.  
-3. Consultar el Project Board para ver las tareas abiertas.
-
-[Ver equipo en la Wiki](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/wiki#equipo)
+[Ver Project Backlog](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/wiki#sprint)
 
 ---
 
@@ -107,5 +101,9 @@ Pasos recomendados para nuevos integrantes:
 ---
 
 ## Enlaces útiles
-
+- [Wiki principal](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/wiki)  
+- [Historias de usuario](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/issues)  
+- [Gestión de riesgos](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/wiki#gesti%C3%B3n-de-riesgos)  
+- [Sprint](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/wiki#sprint)  
+- [Project Backlog](https://github.com/orgs/UCM-FDI-DISIA/projects/157)  
 
