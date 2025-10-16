@@ -11,5 +11,9 @@ config_version=5
 [application]
 
 config/name="Scrabble_definitivo"
+run/main_scene="uid://c0cjfrkwb0hpq"
 config/features=PackedStringArray("4.5", "Forward Plus")
-config/icon="res://icon.svg"
+
+[internationalization]
+
+locale/locale_filter_mode=1
