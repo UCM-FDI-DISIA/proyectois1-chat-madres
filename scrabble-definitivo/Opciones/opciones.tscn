@@ -72,3 +72,4 @@ libraries = {
 }
 
 [connection signal="pressed" from="PanelContainer/Popup menu/Tutorial" to="." method="_on_tutorial_pressed"]
+[connection signal="pressed" from="PanelContainer/Popup menu/Salir" to="." method="_on_salir_pressed"]
