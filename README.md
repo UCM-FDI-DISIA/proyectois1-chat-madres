@@ -107,7 +107,7 @@ En este ciclo se priorizan las funcionalidades básicas descritas en las histori
 - [Sprint](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/wiki#sprint)  
 - [Project Backlog](https://github.com/orgs/UCM-FDI-DISIA/projects/157)
 
-  ## Importar proyecto en Godot
+## Importar proyecto en Godot
 1. Abrir Godot (Godot_v4.5-stable_win64.exe)
 2. Seleccionar la opción de importar proyecto.
 3. Seleccionar la carpeta de GitHub.
