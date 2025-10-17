@@ -105,5 +105,15 @@ En este ciclo se priorizan las funcionalidades básicas descritas en las histori
 - [Historias de usuario](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/issues)  
 - [Gestión de riesgos](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/wiki#gesti%C3%B3n-de-riesgos)  
 - [Sprint](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/wiki#sprint)  
-- [Project Backlog](https://github.com/orgs/UCM-FDI-DISIA/projects/157)  
+- [Project Backlog](https://github.com/orgs/UCM-FDI-DISIA/projects/157)
+
+  ## Importar proyecto en Godot
+1. Abrir Godot (Godot_v4.5-stable_win64.exe)
+2. Seleccionar la opción de importar proyecto.
+3. Seleccionar la carpeta de GitHub.
+4. Seleccionar el repositorio proyectois1-chat-madres.
+5. Seleccionar la carpeta Scrabble_definitivo.
+
+
+
 
