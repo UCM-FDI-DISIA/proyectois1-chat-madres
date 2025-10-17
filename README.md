@@ -47,7 +47,7 @@ Algunas de las funcionalidades principales son:
 - Ver el tablero y la puntuación en tiempo real.  
 - Pasar turno y finalizar la partida de acuerdo con las reglas establecidas.
 
-La lista completa y detallada se encuentra en los Issues: //cambiarlo, no me gusta Issues  
+La lista completa y detallada se encuentra en el apartado Issues:  
 [Ver historias de usuario](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/issues)
 
 ---
@@ -96,7 +96,7 @@ En este ciclo se priorizan las funcionalidades básicas descritas en las histori
 - Añadir lógica de puntuación y turnos.  
 - Crear pruebas para asegurar calidad.
 
-[Ver planificación en la Wiki]()
+[Ver planificación en la Wiki](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/wiki)
 
 ---
 
