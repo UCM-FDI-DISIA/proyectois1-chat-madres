@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://u20jm8sccj4k"
-path="res://.godot/imported/12.png-39b5264c71f51d12868bc04bdc385406.ctex"
+uid="uid://21c4krb62sdw"
+path="res://.godot/imported/Fondo (2).png-8c457552d76ab63d412e3d589f514dbf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Casillas/Fichas/12.png"
-dest_files=["res://.godot/imported/12.png-39b5264c71f51d12868bc04bdc385406.ctex"]
+source_file="res://Juego/Fondo (2).png"
+dest_files=["res://.godot/imported/Fondo (2).png-8c457552d76ab63d412e3d589f514dbf.ctex"]
 
 [params]
 

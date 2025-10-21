@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://df0o1k1e4lu3o"
-path="res://.godot/imported/28.png-c400fc89acd4c0b81016f2e73739c688.ctex"
+uid="uid://bxbyybfxnpdl0"
+path="res://.godot/imported/Fondo tablero.png-e3315a9e5750b7b0804b038ab4a148a2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Casillas/Fichas/28.png"
-dest_files=["res://.godot/imported/28.png-c400fc89acd4c0b81016f2e73739c688.ctex"]
+source_file="res://Juego/Fondo tablero.png"
+dest_files=["res://.godot/imported/Fondo tablero.png-e3315a9e5750b7b0804b038ab4a148a2.ctex"]
 
 [params]
 

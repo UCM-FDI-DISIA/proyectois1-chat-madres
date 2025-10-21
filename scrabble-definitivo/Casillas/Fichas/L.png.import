@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://p8euln5ed43k"
-path="res://.godot/imported/23.png-21d758c45ec7f10997f257495061619d.ctex"
+uid="uid://u20jm8sccj4k"
+path="res://.godot/imported/L.png-92fed81f43b7127e8ae70ab865877cbc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Casillas/Fichas/23.png"
-dest_files=["res://.godot/imported/23.png-21d758c45ec7f10997f257495061619d.ctex"]
+source_file="res://Casillas/Fichas/L.png"
+dest_files=["res://.godot/imported/L.png-92fed81f43b7127e8ae70ab865877cbc.ctex"]
 
 [params]
 

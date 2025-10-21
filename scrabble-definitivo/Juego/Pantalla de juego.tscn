@@ -1,9 +1,78 @@
-[gd_scene format=3 uid="uid://bgu417px3gdnm"]
+[gd_scene load_steps=4 format=3 uid="uid://bgu417px3gdnm"]
+
+[ext_resource type="Texture2D" uid="uid://21c4krb62sdw" path="res://Juego/Fondo (2).png" id="1_5u6n2"]
+[ext_resource type="PackedScene" uid="uid://cmlki6e4x7jqq" path="res://Casillas/Tablero/board.tscn" id="1_d15d8"]
+[ext_resource type="Texture2D" uid="uid://bxbyybfxnpdl0" path="res://Juego/Fondo tablero.png" id="2_a8u10"]
 
 [node name="PantallaDeJuego" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -24.0
+offset_right = -150.0
+offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Fondo(2)" type="Sprite2D" parent="."]
+position = Vector2(703.5, 346)
+scale = Vector2(1.321875, 1.2814815)
+texture = ExtResource("1_5u6n2")
+
+[node name="FondoTablero" type="Sprite2D" parent="."]
+position = Vector2(509, 346.49994)
+scale = Vector2(0.5145834, 0.9166667)
+texture = ExtResource("2_a8u10")
+
+[node name="Board" parent="." instance=ExtResource("1_d15d8")]
+position = Vector2(525, 329.99994)
+scale = Vector2(0.015, 0.015)
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 865.0
+offset_top = 558.0
+offset_right = 905.0
+offset_bottom = 566.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(4.04, 4.04)
+columns = 7
+
+[node name="Hueco 1" type="Button" parent="PanelContainer/VBoxContainer/Panel/GridContainer"]
+layout_mode = 2
+
+[node name="Hueco 2" type="Button" parent="PanelContainer/VBoxContainer/Panel/GridContainer"]
+layout_mode = 2
+
+[node name="Hueco 3" type="Button" parent="PanelContainer/VBoxContainer/Panel/GridContainer"]
+layout_mode = 2
+
+[node name="Hueco 4" type="Button" parent="PanelContainer/VBoxContainer/Panel/GridContainer"]
+layout_mode = 2
+
+[node name="Hueco 5" type="Button" parent="PanelContainer/VBoxContainer/Panel/GridContainer"]
+layout_mode = 2
+
+[node name="Hueco 6" type="Button" parent="PanelContainer/VBoxContainer/Panel/GridContainer"]
+layout_mode = 2
+
+[node name="Hueco 7" type="Button" parent="PanelContainer/VBoxContainer/Panel/GridContainer"]
+layout_mode = 2
