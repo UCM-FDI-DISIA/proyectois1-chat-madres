@@ -32,8 +32,7 @@ func _load_icons() -> void:
 func _set_random_icons() -> void:
 	if icon_textures.is_empty():
 		return
-	var shuffled_icons: Array[Texture2D] = []
-	shuffled_icons.append_array(icon_textures)
+	var shuffled_icons: Array[Texture2D] = icon_textures.duplicate()
 	shuffled_icons.shuffle()
 	var n: int = min(huecos.size(), shuffled_icons.size())
 
@@ -44,7 +43,19 @@ func _set_random_icons() -> void:
 		b.custom_minimum_size = Vector2(40, 40)
 		b.icon = shuffled_icons[i] if i < n else null
 
-		# Asignar script de ficha si no lo tiene
-		if not b.get_script():
-			b.set_script(load("res://Opciones/Ficha.gd"))  # ⚠️ Ajusta la ruta
-			
+
+# === NUEVA LÓGICA DE ANIMACIÓN ===
+
+# 🔹 Cuando se empieza a arrastrar una ficha
+func on_ficha_arrastrada(ficha: Button) -> void:
+	for b in huecos:
+		if b != ficha:
+			var t := create_tween()
+			t.tween_property(b, "position:x", 60, 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+# 🔹 Cuando se suelta la ficha
+func on_ficha_soltada(ficha: Button) -> void:
+	for b in huecos:
+		if b != ficha:
+			var t := create_tween()
+			t.tween_property(b, "position:x", 0, 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
