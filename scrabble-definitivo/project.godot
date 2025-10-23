@@ -14,6 +14,11 @@ config/name="Scrabble_definitivo"
 run/main_scene="uid://c0cjfrkwb0hpq"
 config/features=PackedStringArray("4.5", "Forward Plus")
 
+[display]
+
+window/size/mode=2
+window/stretch/scale=2.3
+
 [internationalization]
 
 locale/locale_filter_mode=1
