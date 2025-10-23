@@ -2,10 +2,10 @@
 
 [ext_resource type="Texture2D" uid="uid://21c4krb62sdw" path="res://Juego/Fondo (2).png" id="1_5u6n2"]
 [ext_resource type="PackedScene" uid="uid://cmlki6e4x7jqq" path="res://Casillas/Tablero/board.tscn" id="1_d15d8"]
-[ext_resource type="Script" uid="uid://cigli3d888xs8" path="res://Juego/pantalla_de_juego.gd" id="1_qi2nl"]
+[ext_resource type="Script" uid="uid://cigli3d888xs8" path="res://Juego/pantalla_de_juego.gd" id="1_wg8rh"]
 [ext_resource type="Texture2D" uid="uid://bxbyybfxnpdl0" path="res://Juego/Fondo tablero.png" id="2_a8u10"]
 [ext_resource type="Script" uid="uid://di5qhd0ug6crr" path="res://Juego/Atril.gd" id="4_xtkgl"]
-[ext_resource type="Script" uid="uid://tm28s1wv3jtj" path="res://Juego/turn_glow.gd" id="6_wg8rh"]
+[ext_resource type="Script" uid="uid://55xb13pdhrsc" path="res://Juego/tu_turno.gd" id="5_qi2nl"]
 
 [node name="PantallaDeJuego" type="Control"]
 layout_mode = 3
@@ -18,7 +18,7 @@ offset_right = -150.0
 offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_qi2nl")
+script = ExtResource("1_wg8rh")
 
 [node name="Fondo(2)" type="Sprite2D" parent="."]
 position = Vector2(784, 365.5)
@@ -81,8 +81,15 @@ layout_mode = 2
 [node name="Hueco 7" type="Button" parent="PanelContainer/VBoxContainer/Panel/GridContainer"]
 layout_mode = 2
 
-[node name="TurnGlow" type="Control" parent="."]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("6_wg8rh")
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 277.0
+offset_bottom = 214.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.41960785, 0.21960784, 1, 0.34117648)
+script = ExtResource("5_qi2nl")
