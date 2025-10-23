@@ -30,12 +30,26 @@ func _load_icons():
 	if icon_textures.is_empty():
 		push_warning("No hay PNGs en %s" % icons_folder)
 
-func _set_random_icons():
-	if icon_textures.is_empty(): return
-	var rng := RandomNumberGenerator.new()
-	for b in huecos:
-		var tex := icon_textures[rng.randi_range(0, icon_textures.size() - 1)]
+func _set_random_icons() -> void:
+	if icon_textures.is_empty():
+		return
+
+	# Duplica preservando el tipo
+	var shuffled_icons: Array[Texture2D] = []
+	shuffled_icons.append_array(icon_textures)
+	shuffled_icons.shuffle()
+
+	var n: int = min(huecos.size(), shuffled_icons.size())
+
+	for i in range(n):
+		var b: Button = huecos[i]
+		var tex: Texture2D = shuffled_icons[i]
 		b.expand_icon = true
 		b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		b.custom_minimum_size = Vector2(40, 40)
 		b.icon = tex
+
+	# Si faltan iconos para todos los huecos, deja los extra vacíos
+	for i in range(n, huecos.size()):
+		var b: Button = huecos[i]
+		b.icon = null
