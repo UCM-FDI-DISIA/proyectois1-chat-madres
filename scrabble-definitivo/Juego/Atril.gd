@@ -44,18 +44,37 @@ func _set_random_icons() -> void:
 		b.icon = shuffled_icons[i] if i < n else null
 
 
-# === NUEVA LÓGICA DE ANIMACIÓN ===
+# ===================
+#  NUEVA LÓGICA
+# ===================
 
-# 🔹 Cuando se empieza a arrastrar una ficha
-func on_ficha_arrastrada(ficha: Button) -> void:
-	for b in huecos:
-		if b != ficha:
-			var t := create_tween()
-			t.tween_property(b, "position:x", 60, 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+# 🔹 Devuelve el índice de una ficha
+func obtener_indice_ficha(ficha: Button) -> int:
+	return huecos.find(ficha)
 
-# 🔹 Cuando se suelta la ficha
-func on_ficha_soltada(ficha: Button) -> void:
+# 🔹 Cuando arrastras una ficha: las de la derecha se mueven a +X
+func abrir_hueco_en(indice: int) -> void:
+	for i in range(indice + 1, huecos.size()):
+		var b := huecos[i]
+		var t := create_tween()
+		t.tween_property(b, "position:x", 60, 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+# 🔹 Cuando sueltas la ficha: todas vuelven a su posición
+func restaurar_todo() -> void:
 	for b in huecos:
-		if b != ficha:
-			var t := create_tween()
-			t.tween_property(b, "position:x", 0, 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		var t := create_tween()
+		t.tween_property(b, "position:x", 0, 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+# 🔹 Coloca la ficha arrastrada en el hueco 1 (reordena en el contenedor)
+func mover_ficha_a_hueco_1(ficha: Button) -> void:
+	var grid := $VBoxContainer/Panel/GridContainer
+	var idx := huecos.find(ficha)
+	if idx == -1:
+		return
+
+	huecos.remove_at(idx)
+	huecos.insert(0, ficha)
+
+	grid.remove_child(ficha)
+	grid.add_child(ficha)
+	grid.move_child(ficha, 0)
