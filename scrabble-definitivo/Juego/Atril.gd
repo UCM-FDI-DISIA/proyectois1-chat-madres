@@ -47,3 +47,4 @@ func _set_random_icons() -> void:
 		# Asignar script de ficha si no lo tiene
 		if not b.get_script():
 			b.set_script(load("res://Opciones/Ficha.gd"))  # ⚠️ Ajusta la ruta
+			
