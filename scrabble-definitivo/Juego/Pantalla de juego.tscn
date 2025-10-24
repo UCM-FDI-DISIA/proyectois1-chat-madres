@@ -95,15 +95,26 @@ script = ExtResource("11_vcpce")
 layout_mode = 2
 script = ExtResource("12_y3uwc")
 
+[node name="Opciones" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1185.0
+offset_top = 47.0
+offset_right = 1212.0
+offset_bottom = 73.0
+
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 277.0
-offset_bottom = 214.0
+offset_left = 100.0
+offset_top = 3.0
+offset_right = 243.0
+offset_bottom = 90.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.41960785, 0.21960784, 1, 0.34117648)
 script = ExtResource("5_qi2nl")
+
+[connection signal="pressed" from="Opciones" to="." method="_on_opciones_pressed"]

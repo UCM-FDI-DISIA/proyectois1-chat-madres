@@ -9,3 +9,8 @@ func set_turno(mi_turno: bool) -> void:
 
 func _ready() -> void: 
 	set_turno(true)
+
+const OPTIONS_SCENE := preload("res://Opciones/opciones.tscn")
+func _on_opciones_pressed() -> void:
+	var t = OPTIONS_SCENE.instantiate()
+	get_tree().current_scene.add_child(t)

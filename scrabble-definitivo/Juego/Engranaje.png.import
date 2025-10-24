@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bsxxnaf1mlgbs"
-path="res://.godot/imported/Engranaje.png-8d4c2e65ee529bb2086a9417463e0336.ctex"
+uid="uid://87je87n72hyf"
+path="res://.godot/imported/Engranaje.png-499d9fe69da70a5a5dff8850f1ed0e15.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Opciones/Engranaje.png"
-dest_files=["res://.godot/imported/Engranaje.png-8d4c2e65ee529bb2086a9417463e0336.ctex"]
+source_file="res://Juego/Engranaje.png"
+dest_files=["res://.godot/imported/Engranaje.png-499d9fe69da70a5a5dff8850f1ed0e15.ctex"]
 
 [params]
 
