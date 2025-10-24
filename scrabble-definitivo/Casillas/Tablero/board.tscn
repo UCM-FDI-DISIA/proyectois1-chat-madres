@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://cmlki6e4x7jqq"]
+[gd_scene load_steps=3 format=3 uid="uid://cmlki6e4x7jqq"]
 
+[ext_resource type="Script" uid="uid://mutfusxg3hv7" path="res://Casillas/Tablero/board.gd" id="1_8f8mc"]
 [ext_resource type="TileSet" uid="uid://qqrri1q4k6sg" path="res://Casillas/Tablero/Tablero_tilemap.tres" id="1_wkr6o"]
 
 [node name="Board" type="Node2D"]
+script = ExtResource("1_8f8mc")
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = ExtResource("1_wkr6o")
