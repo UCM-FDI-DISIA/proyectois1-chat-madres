@@ -12,7 +12,6 @@ func _gui_input(event: InputEvent) -> void:
 func _eliminar_capa_superior() -> void:
 	var visibles := _contar_sprites_visibles()
 	if visibles <= 0:
-		_cerrar_tutorial()
 		return
 	elif visibles == 1:
 		# 🔹 si solo queda una imagen, la eliminamos y cerramos automáticamente
@@ -23,14 +22,13 @@ func _eliminar_capa_superior() -> void:
 			t.tween_callback(func():
 				if is_instance_valid(sprite):
 					sprite.queue_free()
-				_cerrar_tutorial()
 			)
 		return
 
 	# 🔹 caso normal: hay más de una capa
 	var sprite := _get_sprite_superior()
 	if sprite == null:
-		_cerrar_tutorial()
+
 		return
 
 	var t := create_tween()
@@ -55,16 +53,5 @@ func _contar_sprites_visibles() -> int:
 			c += 1
 	return c
 
-func _cerrar_tutorial() -> void:
-	# 🔹 fundido a negro y cambio al menú
-	var fade := ColorRect.new()
-	fade.color = Color(0, 0, 0, 0)
-	fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	fade.size = get_viewport_rect().size
-	add_child(fade)
-
-	var t := create_tween()
-	t.tween_property(fade, "color:a", 1.0, fade_time).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	t.tween_callback(func():
-		get_tree().change_scene_to_file("res://Opciones/opciones.tscn")  # ⚠️ pon tu ruta exacta aquí
-	)
+func _on_salir_pressed() -> void:
+	queue_free()

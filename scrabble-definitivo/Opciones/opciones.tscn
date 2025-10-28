@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://catuiiw1bkejl"]
 
-[ext_resource type="Script" uid="uid://dgwgu4sm157gx" path="res://Opciones/opciones.gd" id="1_qj4ti"]
+[ext_resource type="Script" uid="uid://dgwgu4sm157gx" path="res://Opciones/Tutorial/opciones.gd" id="1_qj4ti"]
 
 [sub_resource type="Animation" id="Animation_t7x2g"]
 resource_name = "Blur"
@@ -40,10 +40,6 @@ grow_vertical = 2
 [node name="Popup menu" type="VBoxContainer" parent="PanelContainer"]
 layout_mode = 2
 size_flags_vertical = 4
-
-[node name="Personalizar" type="Button" parent="PanelContainer/Popup menu"]
-layout_mode = 2
-text = "Personalizar"
 
 [node name="Button2" type="Button" parent="PanelContainer/Popup menu"]
 layout_mode = 2

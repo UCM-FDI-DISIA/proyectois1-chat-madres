@@ -97,10 +97,11 @@ script = ExtResource("12_y3uwc")
 
 [node name="Opciones" type="Button" parent="."]
 layout_mode = 0
-offset_left = 1185.0
-offset_top = 47.0
-offset_right = 1212.0
-offset_bottom = 73.0
+offset_left = 1194.0
+offset_top = 84.0
+offset_right = 1224.0
+offset_bottom = 115.0
+text = "⚙️"
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
