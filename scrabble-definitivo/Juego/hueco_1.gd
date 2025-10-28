@@ -37,7 +37,7 @@ func _gui_input(event: InputEvent) -> void:
 				if manager:
 					manager.on_ficha_soltada(self)
 				var t := create_tween()
-				t.tween_property(self, "global_position", start_pos, 0.25)\
+				t.tween_property(self, "global_posif6tion", start_pos, 0.25)\
 					.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 	elif event is InputEventMouseMotion and is_dragging:

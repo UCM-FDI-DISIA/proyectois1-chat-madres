@@ -1,0 +1,120 @@
+[gd_scene load_steps=14 format=3 uid="uid://bgu417px3gdnm"]
+
+[ext_resource type="Texture2D" uid="uid://21c4krb62sdw" path="res://Juego/Fondo (2).png" id="1_5u6n2"]
+[ext_resource type="PackedScene" uid="uid://cmlki6e4x7jqq" path="res://Casillas/Tablero/board.tscn" id="1_d15d8"]
+[ext_resource type="Script" uid="uid://cigli3d888xs8" path="res://Juego/pantalla_de_juego.gd" id="1_wg8rh"]
+[ext_resource type="Texture2D" uid="uid://bxbyybfxnpdl0" path="res://Juego/Fondo tablero.png" id="2_a8u10"]
+[ext_resource type="Script" uid="uid://di5qhd0ug6crr" path="res://Juego/Atril.gd" id="4_xtkgl"]
+[ext_resource type="Script" uid="uid://55xb13pdhrsc" path="res://Juego/tu_turno.gd" id="5_qi2nl"]
+[ext_resource type="Script" uid="uid://dki0gsm3ndnjr" path="res://Juego/hueco_1.gd" id="6_cmwkj"]
+[ext_resource type="Script" uid="uid://cn6qdobfrs1sr" path="res://Juego/hueco_2.gd" id="7_dadpr"]
+[ext_resource type="Script" uid="uid://bm3ffkceu2lb6" path="res://Juego/hueco_3.gd" id="8_evtru"]
+[ext_resource type="Script" uid="uid://dx0itosdcg6tc" path="res://Juego/hueco_4.gd" id="9_qxxvd"]
+[ext_resource type="Script" uid="uid://bwiutq554vxcn" path="res://Juego/hueco_5.gd" id="10_qpeoq"]
+[ext_resource type="Script" uid="uid://tcty2e426dqf" path="res://Juego/hueco_6.gd" id="11_vcpce"]
+[ext_resource type="Script" uid="uid://cuplq10yvrdil" path="res://Juego/hueco_7.gd" id="12_y3uwc"]
+
+[node name="PantallaDeJuego" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -24.0
+offset_right = -150.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wg8rh")
+
+[node name="Fondo(2)" type="Sprite2D" parent="."]
+position = Vector2(784, 365.5)
+scale = Vector2(1.321875, 1.2981483)
+texture = ExtResource("1_5u6n2")
+
+[node name="FondoTablero" type="Sprite2D" parent="."]
+position = Vector2(509, 346.49994)
+scale = Vector2(0.5145834, 0.9166667)
+texture = ExtResource("2_a8u10")
+
+[node name="Board" parent="." instance=ExtResource("1_d15d8")]
+position = Vector2(525, 329.99994)
+scale = Vector2(0.015, 0.015)
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("4_xtkgl")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="PanelContainer/VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 995.99
+offset_top = 572.455
+offset_right = 1035.9906
+offset_bottom = 580.455
+grow_horizontal = 2
+grow_vertical = 2
+columns = 7
+
+[node name="Hueco 1" type="Button" parent="PanelContainer/VBoxContainer/Panel/GridContainer"]
+layout_mode = 2
+script = ExtResource("6_cmwkj")
+
+[node name="Hueco 2" type="Button" parent="PanelContainer/VBoxContainer/Panel/GridContainer"]
+layout_mode = 2
+script = ExtResource("7_dadpr")
+
+[node name="Hueco 3" type="Button" parent="PanelContainer/VBoxContainer/Panel/GridContainer"]
+layout_mode = 2
+script = ExtResource("8_evtru")
+
+[node name="Hueco 4" type="Button" parent="PanelContainer/VBoxContainer/Panel/GridContainer"]
+layout_mode = 2
+script = ExtResource("9_qxxvd")
+
+[node name="Hueco 5" type="Button" parent="PanelContainer/VBoxContainer/Panel/GridContainer"]
+layout_mode = 2
+script = ExtResource("10_qpeoq")
+
+[node name="Hueco 6" type="Button" parent="PanelContainer/VBoxContainer/Panel/GridContainer"]
+layout_mode = 2
+script = ExtResource("11_vcpce")
+
+[node name="Hueco 7" type="Button" parent="PanelContainer/VBoxContainer/Panel/GridContainer"]
+layout_mode = 2
+script = ExtResource("12_y3uwc")
+
+[node name="Opciones" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1185.0
+offset_top = 47.0
+offset_right = 1212.0
+offset_bottom = 73.0
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 100.0
+offset_top = 3.0
+offset_right = 243.0
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.41960785, 0.21960784, 1, 0.34117648)
+script = ExtResource("5_qi2nl")
+
+[connection signal="pressed" from="Opciones" to="." method="_on_opciones_pressed"]
