@@ -1,57 +1,63 @@
 extends PanelContainer
 
-@export_dir var icons_folder := "res://Casillas/Fichas"
+# ============================================================
+# ATRIL DE SCRABBLE
+# Muestra 7 fichas aleatorias provenientes de la BolsaFichas.
+# ============================================================
 
-var icon_textures: Array[Texture2D] = []
-var huecos: Array[Button] = []
+@export var cantidad_fichas_en_atril := 7
+@onready var bolsa := preload("res://scripts/BolsaFichas.gd").new()
+
+var huecos: Array[Button] = []      # Referencias a los botones del atril
+var fichas_en_atril: Array = []     # Fichas actuales (diccionarios con letra, puntos, textura)
+
 
 func _ready() -> void:
-	_load_icons()
+	# Iniciar la bolsa si aún no se ha creado
+	if bolsa.bolsa.is_empty():
+		bolsa._inicializar_bolsa()
+
+	# Obtener los huecos (botones del atril)
 	var grid := $VBoxContainer/Panel/GridContainer
 	for child in grid.get_children():
 		if child is Button and child.name.begins_with("Hueco"):
 			huecos.append(child)
-	_set_random_icons()
 
-func _load_icons() -> void:
-	icon_textures.clear()
-	var dir := DirAccess.open(icons_folder)
-	if dir == null:
-		push_error("No se pudo abrir: %s" % icons_folder)
-		return
+	# Repartir las fichas iniciales
+	_rellenar_atril()
 
-	dir.list_dir_begin()
-	while true:
-		var f := dir.get_next()
-		if f == "":
-			break
-		if dir.current_is_dir():
-			continue
-		if f.to_lower().ends_with(".png"):
-			var tex := load(icons_folder.path_join(f)) as Texture2D
-			if tex:
-				icon_textures.append(tex)
-	dir.list_dir_end()
 
-func _set_random_icons() -> void:
-	if icon_textures.is_empty():
-		return
+# ============================================================
+# FUNCIONES PRINCIPALES
+# ============================================================
 
-	var shuffled_icons: Array[Texture2D] = icon_textures.duplicate()
-	shuffled_icons.shuffle()
-	var n: int = min(huecos.size(), shuffled_icons.size())
+# Llenar el atril con fichas de la bolsa
+func _rellenar_atril() -> void:
+	var nuevas_fichas = bolsa.sacar_fichas(cantidad_fichas_en_atril)
+	fichas_en_atril = nuevas_fichas.duplicate()
 
 	for i in range(huecos.size()):
 		var b: Button = huecos[i]
 		b.expand_icon = true
 		b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		b.custom_minimum_size = Vector2(40, 40)
-		b.icon = shuffled_icons[i] if i < n else null
+
+		if i < nuevas_fichas.size():
+			b.icon = nuevas_fichas[i]["texture"]
+			b.text = nuevas_fichas[i]["letra"]  # opcional, si quieres que se vea la letra encima
+			b.tooltip_text = "Letra: %s\nPuntos: %d" % [
+				nuevas_fichas[i]["letra"],
+				nuevas_fichas[i]["puntos"]
+			]
+			print("🧩 Ficha repartida: ", nuevas_fichas[i]["letra"])
+		else:
+			b.icon = null
+			b.text = ""
 
 
-# ===================
-#  NUEVA LÓGICA
-# ===================
+# ============================================================
+# FUNCIONES DE CONTROL DEL ATRIL
+# ============================================================
 
 func obtener_indice_ficha(ficha: Button) -> int:
 	return huecos.find(ficha)

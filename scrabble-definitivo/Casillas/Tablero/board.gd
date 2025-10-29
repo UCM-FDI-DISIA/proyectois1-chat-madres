@@ -8,7 +8,7 @@ var celdas_ocupadas: Dictionary = {}  # Vector2i -> Sprite2D
 # Fichas colocadas en el turno actual
 var fichas_turno_actual: Array = []
 
-# Palabras formadas en el turno actual (cada palabra = Array de Vector2i)
+# Palabras formadas en el turno actual (ahora guardan letras, no posiciones)
 var palabras_turno_actual: Array = []
 
 func _ready() -> void:
@@ -50,6 +50,16 @@ func soltar_ficha_en_tablero(global_position: Vector2, textura: Texture2D, orige
 	s.z_index = 10
 	tilemap.add_child(s)
 
+	# 🔹 Guardar la letra como metadata (para poder reconstruir palabras)
+	if origen_boton.has_meta("letra"):
+		s.set_meta("letra", origen_boton.get_meta("letra"))
+	elif origen_boton.text != "":
+		s.set_meta("letra", origen_boton.text)
+	else:
+		# fallback: intentar deducir la letra del nombre de la textura
+		var tex_name := textura.resource_path.get_file().get_basename()
+		s.set_meta("letra", tex_name.substr(0, 1).to_upper())
+
 	# guardar la celda como ocupada
 	celdas_ocupadas[cell] = s
 	fichas_turno_actual.append(cell)
@@ -67,18 +77,14 @@ func soltar_ficha_en_tablero(global_position: Vector2, textura: Texture2D, orige
 	var palabra_nueva := _obtener_palabra_desde_celda(cell)
 	if palabra_nueva.size() > 1:
 		# evitar duplicados
+		var palabra_string := "".join(palabra_nueva)
 		var ya_agregada := false
 		for palabra in palabras_turno_actual:
-			var todos_presentes := true
-			for celda_p in palabra_nueva:
-				if not palabra.has(celda_p):
-					todos_presentes = false
-					break
-			if todos_presentes:
+			if palabra == palabra_string:
 				ya_agregada = true
 				break
 		if not ya_agregada:
-			palabras_turno_actual.append(palabra_nueva)
+			palabras_turno_actual.append(palabra_string)
 			_imprimir_palabras_turno()
 
 	return true
@@ -92,7 +98,6 @@ func _buscar_tilemap() -> TileMap:
 		return tm
 	return _find_tilemap_recursive(self)
 
-
 func _find_tilemap_recursive(n: Node) -> TileMap:
 	for child in n.get_children():
 		if child is TileMap:
@@ -104,7 +109,7 @@ func _find_tilemap_recursive(n: Node) -> TileMap:
 
 
 # ===========================
-# 🔹 COMPROBACIÓN PREVENTIVA CONTIGUO HORIZONTAL Y VERTICAL
+# 🔹 COMPROBACIÓN CONTIGUA
 # ===========================
 
 func _ficha_valida_para_turno(fichas_turno: Array, nueva_celda: Vector2i) -> bool:
@@ -119,38 +124,30 @@ func _ficha_valida_para_turno(fichas_turno: Array, nueva_celda: Vector2i) -> boo
 		columnas.append(cell.x)
 
 	# Determinar dirección
-	var direccion_horizontal := false
-	var direccion_vertical := false
-	if filas.max() == filas.min():
-		direccion_horizontal = true
-	if columnas.max() == columnas.min():
-		direccion_vertical = true
+	var direccion_horizontal: bool = (filas.max() == filas.min())
+	var direccion_vertical: bool = (columnas.max() == columnas.min())
 
-	# Si solo hay 1 ficha: nueva ficha puede estar contigua horizontal o vertical
+
+	# Si solo hay una ficha colocada, se puede añadir en cualquier sentido (horizontal o vertical)
 	if fichas_turno.size() == 1:
 		var existing = fichas_turno[0]
 		var dx = abs(nueva_celda.x - existing.x)
 		var dy = abs(nueva_celda.y - existing.y)
-		if (dx == 1 and dy == 0) or (dx == 0 and dy == 1):
-			return true
-		else:
-			return false
+		return (dx == 1 and dy == 0) or (dx == 0 and dy == 1)
 
-	# Secuencia definida: validar contigüidad según dirección
+	# Secuencia definida: validar contigüidad según dirección, en ambos sentidos
 	if direccion_horizontal:
 		var min_x = columnas.min()
 		var max_x = columnas.max()
 		if nueva_celda.y != filas[0]:
 			return false
-		if nueva_celda.x < min_x - 1 or nueva_celda.x > max_x + 1:
-			return false
+		return nueva_celda.x >= min_x - 1 and nueva_celda.x <= max_x + 1
 	elif direccion_vertical:
 		var min_y = filas.min()
 		var max_y = filas.max()
 		if nueva_celda.x != columnas[0]:
 			return false
-		if nueva_celda.y < min_y - 1 or nueva_celda.y > max_y + 1:
-			return false
+		return nueva_celda.y >= min_y - 1 and nueva_celda.y <= max_y + 1
 
 	return true
 
@@ -171,7 +168,9 @@ func _obtener_palabra_desde_celda(celda: Vector2i) -> Array:
 		max_x += 1
 	if max_x != min_x:
 		for x in range(min_x, max_x + 1):
-			palabra_total.append(Vector2i(x, celda.y))
+			var pos := Vector2i(x, celda.y)
+			if celdas_ocupadas.has(pos):
+				palabra_total.append(_obtener_letra_de_celda(pos))
 
 	# Vertical
 	var min_y = celda.y
@@ -182,9 +181,29 @@ func _obtener_palabra_desde_celda(celda: Vector2i) -> Array:
 		max_y += 1
 	if max_y != min_y:
 		for y in range(min_y, max_y + 1):
-			palabra_total.append(Vector2i(celda.x, y))
+			var pos := Vector2i(celda.x, y)
+			if celdas_ocupadas.has(pos):
+				palabra_total.append(_obtener_letra_de_celda(pos))
 
 	return palabra_total
+
+
+func _obtener_letra_de_celda(pos: Vector2i) -> String:
+	if not celdas_ocupadas.has(pos):
+		return ""
+	# Castear explícitamente a Sprite2D para que Godot conozca el tipo
+	var sprite: Sprite2D = celdas_ocupadas[pos] as Sprite2D
+	if sprite == null:
+		return ""
+	# Si guardaste la letra en metadata, úsala
+	if sprite.has_meta("letra"):
+		return str(sprite.get_meta("letra"))
+	# Si no, intentar deducirla de la textura (nombre del recurso)
+	if sprite.texture:
+		var name := sprite.texture.resource_path.get_file().get_basename()
+		return name.substr(0, 1).to_upper()
+	return ""
+
 
 
 # ===========================
@@ -203,6 +222,6 @@ func limpiar_palabras_turno() -> void:
 # ===========================
 
 func _imprimir_palabras_turno() -> void:
-	print("Palabras formadas este turno:")
+	print("📚 Palabras formadas este turno:")
 	for palabra in palabras_turno_actual:
-		print(palabra)
+		print("   ➜", palabra)
