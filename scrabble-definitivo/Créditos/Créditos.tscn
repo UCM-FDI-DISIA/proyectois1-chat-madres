@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://c0lybfl8nkb4b"]
+[gd_scene load_steps=2 format=3 uid="uid://c0lybfl8nkb4b"]
+
+[ext_resource type="Texture2D" uid="uid://ctlb2w1vy4ocd" path="res://Créditos/Still 2025-10-28 100814_1.1.3.png" id="1_ygyur"]
 
 [node name="Créditos" type="Control"]
 layout_mode = 3
@@ -7,3 +9,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Still202510281008141_1_3" type="Sprite2D" parent="."]
+position = Vector2(575, 321)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("1_ygyur")
