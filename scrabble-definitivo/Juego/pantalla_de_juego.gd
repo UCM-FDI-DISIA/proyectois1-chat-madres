@@ -17,6 +17,11 @@ func set_turno(mi_turno: bool) -> void:
 	es_mi_turno = mi_turno
 	if es_mi_turno:
 		$ColorRect.mostrar_con_fundido()
+		# --- NUEVO ---
+		var tablero := get_tree().current_scene.get_node_or_null("Board")
+		if tablero and tablero.has_method("empezar_turno"):
+			tablero.empezar_turno()
+
 
 
 func _on_opciones_pressed() -> void:
@@ -47,7 +52,6 @@ func _crear_boton_fin_turno() -> void:
 	boton.connect("pressed", Callable(self, "_on_finalizar_turno_pressed"))
 	add_child(boton)
 
-
 func _on_finalizar_turno_pressed() -> void:
 	if not es_mi_turno:
 		return
@@ -75,35 +79,68 @@ func _on_finalizar_turno_pressed() -> void:
 	if tablero:
 		tablero.modulate = Color(1, 1, 1, 0.6)
 
-	# Validar jugada (simulado)
-	_validar_jugada(tablero)
+	# Validar jugada (ahora devuelve bool)
+	var ok := await _validar_jugada(tablero)
 
-	# Limpiar fichas del turno
-	tablero.limpiar_fichas_turno()
+
+	# Si es válida, limpiamos estado de turno en el Board
+	if ok and tablero.has_method("limpiar_fichas_turno"):
+		tablero.limpiar_fichas_turno()
+
+	# Reactivar turno SIEMPRE (tanto si ok como si no) para permitir seguir colocando/corrigiendo
+	_reactivar_turno()
 
 
 # ===========================
 # 🔹 VALIDACIÓN DE JUGADA
 # ===========================
-
-func _validar_jugada(tablero: Node) -> void:
+func _validar_jugada(tablero: Node) -> bool:
 	if tablero == null:
-		_reactivar_turno()
-		return
+		return false
 
 	var dict = tablero.get("celdas_ocupadas")
 	if typeof(dict) != TYPE_DICTIONARY:
-		_reactivar_turno()
-		return
+		return false
 
-	var fichas_colocadas: Array = dict.keys()
-	if fichas_colocadas.is_empty():
-		_reactivar_turno()
-		return
+	var fichas_colocadas: Array = tablero.get("fichas_turno_actual")
+	if fichas_colocadas == null or fichas_colocadas.is_empty():
+		print("⚠️ No hay fichas colocadas este turno.")
+		await get_tree().create_timer(0.3).timeout
+		return false
 
-	print("🔍 Jugada del turno validada (simulado).")
-	await get_tree().create_timer(1.0).timeout
-	_reactivar_turno()
+	var es_primer_turno: bool = true
+	if tablero.has_method("get"):
+		es_primer_turno = tablero.get("es_primer_turno")
+
+	# --- REGLAS SCRABBLE ---
+	if es_primer_turno:
+		# Primera jugada → debe tocar centro
+		if tablero.has_method("_toca_centro_en_turno") and not tablero._toca_centro_en_turno():
+			print("❌ Primera jugada inválida: debe tocar la casilla central.")
+			if tablero.has_method("devolver_fichas_turno"):
+				tablero.devolver_fichas_turno()
+			await get_tree().create_timer(0.3).timeout
+			return false
+	else:
+		# Jugadas siguientes → deben estar conectadas con el tablero previo
+		if tablero.has_method("_hay_conexion_con_tablero_previo") and not tablero._hay_conexion_con_tablero_previo():
+			print("❌ Jugada inválida: no está conectada a palabras ya colocadas.")
+			if tablero.has_method("devolver_fichas_turno"):
+				tablero.devolver_fichas_turno()
+			await get_tree().create_timer(0.3).timeout
+			return false
+
+	print("✅ Jugada válida según reglas de Scrabble.")
+	await get_tree().create_timer(0.6).timeout
+
+	# Marcar fin del primer turno
+	if es_primer_turno:
+		if tablero.has_method("set"):
+			tablero.set("es_primer_turno", false)
+		else:
+			tablero.es_primer_turno = false
+
+	return true
 
 
 # ===========================

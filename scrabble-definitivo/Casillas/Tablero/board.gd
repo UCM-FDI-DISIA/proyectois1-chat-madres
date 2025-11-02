@@ -64,6 +64,10 @@ func soltar_ficha_en_tablero(global_position: Vector2, textura: Texture2D, orige
 	celdas_ocupadas[cell] = s
 	fichas_turno_actual.append(cell)
 
+	# 🔹 Guardar referencia al botón de origen (para poder devolverlo después)
+	s.set_meta("origen_boton", origen_boton)
+
+
 	# desactivar el hueco de origen y limpiar su icono
 	origen_boton.disabled = true
 	origen_boton.icon = null
@@ -113,6 +117,22 @@ func _find_tilemap_recursive(n: Node) -> TileMap:
 # ===========================
 
 func _ficha_valida_para_turno(fichas_turno: Array, nueva_celda: Vector2i) -> bool:
+		# Si no es el primer turno, asegurarse de que toca alguna ficha ya existente
+	if not es_primer_turno and fichas_turno.size() == 0:
+		var vecinos := [
+			Vector2i(nueva_celda.x + 1, nueva_celda.y),
+			Vector2i(nueva_celda.x - 1, nueva_celda.y),
+			Vector2i(nueva_celda.x, nueva_celda.y + 1),
+			Vector2i(nueva_celda.x, nueva_celda.y - 1)
+		]
+		var conectado := false
+		for v in vecinos:
+			if celdas_ocupadas.has(v):
+				conectado = true
+				break
+		if not conectado:
+			return false
+
 	if fichas_turno.size() == 0:
 		return true  # primera ficha del turno siempre permitida
 
@@ -225,3 +245,74 @@ func _imprimir_palabras_turno() -> void:
 	print("📚 Palabras formadas este turno:")
 	for palabra in palabras_turno_actual:
 		print("   ➜", palabra)
+		
+# --- NUEVO ESTADO ---
+var es_primer_turno: bool = true
+var snapshot_ocupadas_previas: Array[Vector2i] = []
+
+# Llamar al principio de cada turno para recordar qué casillas estaban ocupadas ANTES de colocar
+func empezar_turno() -> void:
+	snapshot_ocupadas_previas = []
+	for k in celdas_ocupadas.keys():
+		snapshot_ocupadas_previas.append(k as Vector2i)
+
+
+# Devuelve la celda central del TileMap (usando el rectángulo usado)
+func _get_celda_centro() -> Vector2i:
+	if tilemap == null:
+		return Vector2i.ZERO
+	var used_rect := tilemap.get_used_rect()
+	# centro “matemático”: para dimensiones impares coincide con la estrella
+	var cx := used_rect.position.x + used_rect.size.x / 2
+	var cy := used_rect.position.y + used_rect.size.y / 2
+	return Vector2i(cx, cy)
+
+# ¿Alguna ficha colocada este turno está en la casilla central?
+func _toca_centro_en_turno() -> bool:
+	var centro := _get_celda_centro()
+	for c in fichas_turno_actual:
+		if c == centro:
+			return true
+	return false
+
+# ¿Alguna ficha colocada este turno toca (4-dir) alguna casilla que ya estaba ocupada ANTES de empezar el turno?
+func _hay_conexion_con_tablero_previo() -> bool:
+	if snapshot_ocupadas_previas.is_empty():
+		# Si no había nada previo, estamos en la primera jugada => la regla de conexión no aplica aquí
+		return true
+	var prev := {}
+	for p in snapshot_ocupadas_previas:
+		prev[p] = true
+	for c in fichas_turno_actual:
+		var vecinos := [
+			Vector2i(c.x + 1, c.y), Vector2i(c.x - 1, c.y),
+			Vector2i(c.x, c.y + 1), Vector2i(c.x, c.y - 1)
+		]
+		for v in vecinos:
+			if prev.has(v):
+				return true
+	return false
+	# Devuelve las fichas del turno al atril y las borra del tablero
+	
+func devolver_fichas_turno() -> void:
+	if fichas_turno_actual.is_empty():
+		return
+
+	for cell in fichas_turno_actual:
+		if not celdas_ocupadas.has(cell):
+			continue
+		var sprite: Sprite2D = celdas_ocupadas[cell]
+		celdas_ocupadas.erase(cell)
+
+		# Recuperar el botón de origen (el hueco original del atril)
+		if sprite.has_meta("origen_boton"):
+			var boton: Button = sprite.get_meta("origen_boton")
+			if boton:
+				boton.disabled = false
+				boton.icon = sprite.texture
+				boton.text = str(sprite.get_meta("letra")) if sprite.has_meta("letra") else boton.text
+
+		# Eliminar sprite del tablero
+		sprite.queue_free()
+
+	fichas_turno_actual.clear()
