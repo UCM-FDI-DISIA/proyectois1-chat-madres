@@ -117,15 +117,15 @@ func _find_tilemap_recursive(n: Node) -> TileMap:
 # ===========================
 
 func _ficha_valida_para_turno(fichas_turno: Array, nueva_celda: Vector2i) -> bool:
-		# Si no es el primer turno, asegurarse de que toca alguna ficha ya existente
+	# Si no es el primer turno, asegurarse de que toca alguna ficha ya existente
 	if not es_primer_turno and fichas_turno.size() == 0:
-		var vecinos := [
+		var vecinos = [
 			Vector2i(nueva_celda.x + 1, nueva_celda.y),
 			Vector2i(nueva_celda.x - 1, nueva_celda.y),
 			Vector2i(nueva_celda.x, nueva_celda.y + 1),
 			Vector2i(nueva_celda.x, nueva_celda.y - 1)
 		]
-		var conectado := false
+		var conectado = false
 		for v in vecinos:
 			if celdas_ocupadas.has(v):
 				conectado = true
@@ -133,43 +133,76 @@ func _ficha_valida_para_turno(fichas_turno: Array, nueva_celda: Vector2i) -> boo
 		if not conectado:
 			return false
 
-	if fichas_turno.size() == 0:
-		return true  # primera ficha del turno siempre permitida
-
-	# Extraer filas y columnas de las fichas colocadas
-	var filas := []
-	var columnas := []
+	# Construir la lista prospectiva de celdas del turno (colocadas + la nueva)
+	var placed: Array = []
 	for cell in fichas_turno:
-		filas.append(cell.y)
-		columnas.append(cell.x)
+		placed.append(cell)
+	placed.append(nueva_celda)
 
-	# Determinar dirección
-	var direccion_horizontal: bool = (filas.max() == filas.min())
-	var direccion_vertical: bool = (columnas.max() == columnas.min())
+	# Si sólo hay una celda en el conjunto -> aceptamos (primera ficha del turno)
+	if placed.size() == 1:
+		return true
 
+	# Comprobar si todas las celdas propuestas están en la misma fila o columna
+	var primera: Vector2i = placed[0]
+	var all_same_row = true
+	var all_same_col = true
+	for c in placed:
+		if c.y != primera.y:
+			all_same_row = false
+		if c.x != primera.x:
+			all_same_col = false
 
-	# Si solo hay una ficha colocada, se puede añadir en cualquier sentido (horizontal o vertical)
-	if fichas_turno.size() == 1:
-		var existing = fichas_turno[0]
-		var dx = abs(nueva_celda.x - existing.x)
-		var dy = abs(nueva_celda.y - existing.y)
-		return (dx == 1 and dy == 0) or (dx == 0 and dy == 1)
+	# Si no están todas en la misma fila ni en la misma columna => inválido
+	if not all_same_row and not all_same_col:
+		return false
 
-	# Secuencia definida: validar contigüidad según dirección, en ambos sentidos
-	if direccion_horizontal:
-		var min_x = columnas.min()
-		var max_x = columnas.max()
-		if nueva_celda.y != filas[0]:
-			return false
-		return nueva_celda.x >= min_x - 1 and nueva_celda.x <= max_x + 1
-	elif direccion_vertical:
-		var min_y = filas.min()
-		var max_y = filas.max()
-		if nueva_celda.x != columnas[0]:
-			return false
-		return nueva_celda.y >= min_y - 1 and nueva_celda.y <= max_y + 1
-
-	return true
+	# Validación de contigüidad considerando celdas ya ocupadas y las que se van a colocar
+	if all_same_row:
+		var y = primera.y
+		var min_x = placed[0].x
+		var max_x = placed[0].x
+		for c in placed:
+			if c.y != y:
+				return false
+			min_x = min(min_x, c.x)
+			max_x = max(max_x, c.x)
+		# Entre min_x..max_x todas las celdas deben estar o bien ocupadas previamente o bien formar parte de placed
+		for xi in range(min_x, max_x + 1):
+			var pos = Vector2i(xi, y)
+			if celdas_ocupadas.has(pos):
+				continue
+			var in_placed = false
+			for p in placed:
+				if p == pos:
+					in_placed = true
+					break
+			if not in_placed:
+				# hueco vacío -> inválido
+				return false
+		return true
+	else:
+		# misma columna
+		var x = primera.x
+		var min_y = placed[0].y
+		var max_y = placed[0].y
+		for c in placed:
+			if c.x != x:
+				return false
+			min_y = min(min_y, c.y)
+			max_y = max(max_y, c.y)
+		for yi in range(min_y, max_y + 1):
+			var pos2 = Vector2i(x, yi)
+			if celdas_ocupadas.has(pos2):
+				continue
+			var in_placed2 = false
+			for p2 in placed:
+				if p2 == pos2:
+					in_placed2 = true
+					break
+			if not in_placed2:
+				return false
+		return true
 
 
 # ===========================
@@ -292,8 +325,7 @@ func _hay_conexion_con_tablero_previo() -> bool:
 			if prev.has(v):
 				return true
 	return false
-	# Devuelve las fichas del turno al atril y las borra del tablero
-	
+	# Devuelve las fichas del turno al atril y las borra del tablero	
 func devolver_fichas_turno() -> void:
 	if fichas_turno_actual.is_empty():
 		return
