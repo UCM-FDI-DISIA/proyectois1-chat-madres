@@ -1,0 +1,70 @@
+[gd_scene load_steps=4 format=3 uid="uid://catuiiw1bkejl"]
+
+[ext_resource type="Script" uid="uid://dgwgu4sm157gx" path="res://Opciones/Tutorial/opciones.gd" id="1_qj4ti"]
+
+[sub_resource type="Animation" id="Animation_t7x2g"]
+resource_name = "Blur"
+length = 0.5
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3g7yc"]
+_data = {
+&"Blur": SubResource("Animation_t7x2g")
+}
+
+[node name="Opciones" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 12.0
+offset_right = -170.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qj4ti")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 81.0
+offset_top = -89.0
+offset_right = 81.0
+offset_bottom = 117.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Popup menu" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Button2" type="Button" parent="PanelContainer/Popup menu"]
+layout_mode = 2
+text = "Funcionalidad2"
+
+[node name="Button3" type="Button" parent="PanelContainer/Popup menu"]
+layout_mode = 2
+text = "Funcionalidad3"
+
+[node name="Button4" type="Button" parent="PanelContainer/Popup menu"]
+layout_mode = 2
+text = "Funcionalidad4"
+
+[node name="Tutorial" type="Button" parent="PanelContainer/Popup menu"]
+layout_mode = 2
+text = "Tutorial"
+
+[node name="Salir" type="Button" parent="PanelContainer/Popup menu"]
+layout_mode = 2
+text = "Salir"
+
+[node name="Animacion (por terminar)" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_3g7yc")
+}
+
+[connection signal="pressed" from="PanelContainer/Popup menu/Tutorial" to="." method="_on_tutorial_pressed"]
+[connection signal="pressed" from="PanelContainer/Popup menu/Salir" to="." method="_on_salir_pressed"]
