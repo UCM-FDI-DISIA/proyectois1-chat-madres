@@ -21,12 +21,12 @@ func _eliminar_capa_superior() -> void:
 	var visibles := _contar_sprites_visibles()
 	
 	if visibles <= 0:
-		# 🔹 Si no quedan capas visibles, las restablecemos
+		# Si no quedan capas visibles, las restablecemos
 		_reestablecer_capas()
 		return
 		
 	elif visibles == 1:
-		# 🔹 Si solo queda una imagen, la eliminamos y luego restablecemos
+		# Si solo queda una imagen, la eliminamos y luego restablecemos
 		var sprite := _get_sprite_superior()
 		if sprite:
 			var t := create_tween()
@@ -66,7 +66,7 @@ func _contar_sprites_visibles() -> int:
 	return c
 
 func _reestablecer_capas() -> void:
-	# 🔹 Borra todo y vuelve a agregar las copias originales
+	# Borra todo y vuelve a agregar las copias originales
 	for n in get_children():
 		if n is Sprite2D:
 			n.queue_free()

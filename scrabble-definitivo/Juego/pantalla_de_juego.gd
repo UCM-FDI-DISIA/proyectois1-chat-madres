@@ -9,7 +9,7 @@ func _ready() -> void:
 	_crear_boton_fin_turno()
 
 # ===========================
-# 🔹 Control de turno
+# Control de turno
 # ===========================
 func set_turno(mi_turno: bool) -> void:
 	es_mi_turno = mi_turno
@@ -24,7 +24,7 @@ func _on_opciones_pressed() -> void:
 	get_tree().current_scene.add_child(t)
 
 # ===========================
-# 🔹 BOTÓN "FINALIZAR TURNO"
+# BOTÓN "FINALIZAR TURNO"
 # ===========================
 func _crear_boton_fin_turno() -> void:
 	var boton := Button.new()
@@ -78,12 +78,20 @@ func _on_finalizar_turno_pressed() -> void:
 	# Si es válida, limpiamos estado de turno en el Board
 	if ok and tablero.has_method("limpiar_fichas_turno"):
 		tablero.limpiar_fichas_turno()
+		
+	if ok and tablero.has_method("limpiar_fichas_turno"):
+		tablero.limpiar_fichas_turno()
+
+	# Reponer fichas colocadas
+	if atril and atril.has_method("reponer_fichas_colocadas"):
+		atril.reponer_fichas_colocadas()
+
 
 	# Reactivar turno SIEMPRE para permitir seguir jugando/corrigiendo
 	_reactivar_turno()
 
 # ===========================
-# 🔹 VALIDACIÓN DE JUGADA
+# VALIDACIÓN DE JUGADA
 # ===========================
 func _validar_jugada(tablero: Node) -> bool:
 	if tablero == null:
@@ -160,7 +168,7 @@ func _validar_jugada(tablero: Node) -> bool:
 	return true
 
 # ===========================
-# 🔹 REACTIVAR TURNO
+# REACTIVAR TURNO
 # ===========================
 func _reactivar_turno() -> void:
 	var tablero := get_tree().current_scene.get_node_or_null("Board")

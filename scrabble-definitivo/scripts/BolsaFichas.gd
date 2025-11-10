@@ -33,7 +33,7 @@ const FICHAS_DATOS = {
 	"Y": {"puntos": 4, "cantidad": 1},
 	"CH": {"puntos": 5, "cantidad": 1},
 	"Q": {"puntos": 5, "cantidad": 1},
-	" ": {"puntos": 0, "cantidad": 2}  # comodines
+	"NULL": {"puntos": 0, "cantidad": 2}  # comodines
 }
 
 # Carpeta donde están las imágenes
