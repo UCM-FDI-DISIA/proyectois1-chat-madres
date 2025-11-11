@@ -130,3 +130,4 @@ func reponer_fichas_colocadas() -> void:
 		b.tooltip_text = "Letra: %s\nPuntos: %d" % [letra, puntos]
 		b.set_meta("letra", letra)
 		b.disabled = false
+		

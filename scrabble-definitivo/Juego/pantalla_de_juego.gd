@@ -7,6 +7,25 @@ const OPTIONS_SCENE := preload("res://Opciones/opciones.tscn")
 func _ready() -> void:
 	set_turno(true)
 	_crear_boton_fin_turno()
+	
+# ===========================
+# 🔹 Actualizar contador de bolsa
+# ===========================
+func actualizar_contador_bolsa() -> void:
+	var atril := get_tree().current_scene.get_node_or_null("PanelContainer")
+	if atril == null:
+		push_warning("No se encontró el nodo Atril")
+		return
+
+	var label := get_node_or_null("ContadorBolsa")
+	if label == null:
+		push_warning("No se encontró el Label ContadorBolsa")
+		return
+
+	if atril.bolsa:
+		label.text = str(atril.bolsa.quedan())  # 👈 Solo el número
+	else:
+		label.text = "0"
 
 # ===========================
 # 🔹 Control de turno
@@ -18,6 +37,7 @@ func set_turno(mi_turno: bool) -> void:
 		var tablero := get_tree().current_scene.get_node_or_null("Board")
 		if tablero and tablero.has_method("empezar_turno"):
 			tablero.empezar_turno()
+		actualizar_contador_bolsa() # 👈 aquí
 
 func _on_opciones_pressed() -> void:
 	var t = OPTIONS_SCENE.instantiate()
@@ -88,6 +108,11 @@ func _on_finalizar_turno_pressed() -> void:
 
 	# Reactivar turno SIEMPRE para permitir seguir jugando/corrigiendo
 	_reactivar_turno()
+	
+	if atril and atril.has_method("reponer_fichas_colocadas"):
+		atril.reponer_fichas_colocadas()
+		actualizar_contador_bolsa() # 👈 correcto
+
 
 # ===========================
 # 🔹 VALIDACIÓN DE JUGADA

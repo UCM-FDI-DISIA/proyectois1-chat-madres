@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bgu417px3gdnm"]
+[gd_scene load_steps=16 format=3 uid="uid://bgu417px3gdnm"]
 
 [ext_resource type="Texture2D" uid="uid://21c4krb62sdw" path="res://Juego/Fondo (2).png" id="1_5u6n2"]
 [ext_resource type="PackedScene" uid="uid://cmlki6e4x7jqq" path="res://Casillas/Tablero/board.tscn" id="1_d15d8"]
@@ -15,7 +15,6 @@
 [ext_resource type="Script" uid="uid://cuplq10yvrdil" path="res://Juego/hueco_7.gd" id="12_y3uwc"]
 [ext_resource type="Script" uid="uid://dhut774qwcevi" path="res://Juego/drag_preview_manager.gd" id="14_dadpr"]
 [ext_resource type="PackedScene" uid="uid://m0neq4urgrbm" path="res://Escena_jugar/PantallaInicioTurno.tscn" id="15_evtru"]
-[ext_resource type="Texture2D" uid="uid://2om1aivw88ro" path="res://scripts/Bolsa_1.1.8.png" id="16_qxxvd"]
 
 [node name="PantallaDeJuego" type="Control"]
 layout_mode = 3
@@ -98,6 +97,10 @@ script = ExtResource("11_vcpce")
 layout_mode = 2
 script = ExtResource("12_y3uwc")
 
+[node name="LabelBolsa" type="Label" parent="PanelContainer"]
+layout_mode = 2
+text = "fsgadg"
+
 [node name="Opciones" type="Button" parent="."]
 layout_mode = 0
 offset_left = 1194.0
@@ -132,23 +135,11 @@ visible = false
 visible = false
 
 [node name="LabelPalabraInvalida" type="Label" parent="."]
+visible = false
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 theme_override_colors/font_color = Color(0.50932795, 0.0052424013, 4.813075e-08, 1)
 text = "La palabra introducida no es válida."
-
-[node name="Bolsa1_1_8" type="Sprite2D" parent="."]
-position = Vector2(1252.0001, 573)
-scale = Vector2(0.4628905, 0.44531256)
-texture = ExtResource("16_qxxvd")
-
-[node name="ContadorBolsa" type="Label" parent="."]
-layout_mode = 0
-offset_left = 1234.0
-offset_top = 557.0
-offset_right = 1377.0
-offset_bottom = 580.0
-text = "0"
 
 [connection signal="pressed" from="Opciones" to="." method="_on_opciones_pressed"]
