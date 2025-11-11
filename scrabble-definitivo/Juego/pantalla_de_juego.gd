@@ -6,7 +6,9 @@ const OPTIONS_SCENE := preload("res://Opciones/opciones.tscn")
 
 func _ready() -> void:
 	set_turno(true)
-	
+	$PantallaError.visible = false
+	$PantallaError.modulate.a = 0
+	$MensajeError.visible = false
 # ===========================
 # 🔹 Actualizar contador de bolsa
 # ===========================
@@ -151,6 +153,7 @@ func _validar_jugada(tablero: Node) -> bool:
 		for palabra in tablero.palabras_turno_actual:
 			if not tablero.es_palabra_valida_RAE(palabra):
 				print("Palabra no válida según RAE:", palabra)
+				mostrar_error("Palabra no válida: %s" % palabra)
 				if tablero.has_method("devolver_fichas_turno"):
 					tablero.devolver_fichas_turno()
 				await get_tree().create_timer(0.3).timeout
@@ -169,7 +172,7 @@ func _validar_jugada(tablero: Node) -> bool:
 			tablero.set("es_primer_turno", false)
 		else:
 			tablero.es_primer_turno = false
-
+			
 	return true
 
 # ===========================
@@ -195,3 +198,31 @@ func _reactivar_turno() -> void:
 # ===========================
 func _on_intercambiar_fichas_pressed() -> void:
 	pass # Replace with function body.
+
+# ===========================
+# 🔹 MENSAJE DE ERROR
+# ===========================
+func mostrar_error(mensaje: String) -> void:
+	var pantalla := $PantallaError
+	var label := $MensajeError
+
+	# Preparar nodos
+	pantalla.visible = true
+	label.visible = true
+	label.text = mensaje
+	pantalla.color.a = 0.0  # Empezamos invisible
+
+	# Duraciones
+	var duracion_fade := 0.15
+	var mantener_visible := 0.2
+
+	# Tween
+	var t := create_tween()
+	t.tween_property(pantalla, "color:a", 0.6, duracion_fade).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	t.tween_interval(mantener_visible)
+	t.tween_property(pantalla, "color:a", 0.0, duracion_fade).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	t.tween_callback(Callable(self, "_ocultar_error"))
+
+func _ocultar_error() -> void:
+	$PantallaError.visible = false
+	$MensajeError.visible = false

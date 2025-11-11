@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bgu417px3gdnm"]
+[gd_scene load_steps=16 format=3 uid="uid://bgu417px3gdnm"]
 
 [ext_resource type="Texture2D" uid="uid://21c4krb62sdw" path="res://Juego/Fondo (2).png" id="1_5u6n2"]
 [ext_resource type="PackedScene" uid="uid://cmlki6e4x7jqq" path="res://Casillas/Tablero/board.tscn" id="1_d15d8"]
@@ -14,7 +14,6 @@
 [ext_resource type="Script" uid="uid://tcty2e426dqf" path="res://Juego/hueco_6.gd" id="11_vcpce"]
 [ext_resource type="Script" uid="uid://cuplq10yvrdil" path="res://Juego/hueco_7.gd" id="12_y3uwc"]
 [ext_resource type="Script" uid="uid://dhut774qwcevi" path="res://Juego/drag_preview_manager.gd" id="14_dadpr"]
-[ext_resource type="PackedScene" uid="uid://m0neq4urgrbm" path="res://Escena_jugar/PantallaInicioTurno.tscn" id="15_evtru"]
 [ext_resource type="Texture2D" uid="uid://2om1aivw88ro" path="res://scripts/Bolsa_1.1.8.png" id="16_qxxvd"]
 
 [node name="PantallaDeJuego" type="Control"]
@@ -107,7 +106,6 @@ offset_bottom = 115.0
 text = "⚙️"
 
 [node name="ColorRect" type="ColorRect" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -126,17 +124,6 @@ script = ExtResource("5_qi2nl")
 script = ExtResource("14_dadpr")
 
 [node name="UIOverlay" type="CanvasLayer" parent="."]
-visible = false
-
-[node name="Control" parent="UIOverlay" instance=ExtResource("15_evtru")]
-visible = false
-
-[node name="LabelPalabraInvalida" type="Label" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-theme_override_colors/font_color = Color(0.50932795, 0.0052424013, 4.813075e-08, 1)
-text = "La palabra introducida no es válida."
 
 [node name="Bolsa1_1_8" type="Sprite2D" parent="."]
 position = Vector2(1252.0001, 573)
@@ -166,6 +153,32 @@ offset_top = 633.0
 offset_right = 494.0
 offset_bottom = 672.0
 text = "Finalizar Turno"
+
+[node name="PantallaError" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 1794.0
+offset_bottom = 828.0
+color = Color(0.89534765, 0, 0.13026825, 1)
+
+[node name="MensajeError" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 43.0
+offset_top = 1.0
+offset_right = 342.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.50932795, 0.0052424013, 4.813075e-08, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 22
+text = "La palabra introducida no es válida."
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="Opciones" to="." method="_on_opciones_pressed"]
 [connection signal="pressed" from="IntercambiarFichas" to="." method="_on_intercambiar_fichas_pressed"]
