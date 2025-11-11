@@ -6,7 +6,6 @@ const OPTIONS_SCENE := preload("res://Opciones/opciones.tscn")
 
 func _ready() -> void:
 	set_turno(true)
-	_crear_boton_fin_turno()
 	
 # ===========================
 # 🔹 Actualizar contador de bolsa
@@ -46,24 +45,6 @@ func _on_opciones_pressed() -> void:
 # ===========================
 # 🔹 BOTÓN "FINALIZAR TURNO"
 # ===========================
-func _crear_boton_fin_turno() -> void:
-	var boton := Button.new()
-	boton.text = "Finalizar turno"
-	boton.name = "BotonFinTurno"
-	boton.custom_minimum_size = Vector2(200, 50)
-
-	# Anchors al centro horizontal y abajo
-	boton.anchor_left = 0.5
-	boton.anchor_right = 0.5
-	boton.anchor_top = 1.0
-	boton.anchor_bottom = 1.0
-
-	# Posición relativa al punto central inferior
-	boton.position = Vector2(-100, -70)
-
-	boton.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	boton.connect("pressed", Callable(self, "_on_finalizar_turno_pressed"))
-	add_child(boton)
 
 func _on_finalizar_turno_pressed() -> void:
 	if not es_mi_turno:
@@ -208,3 +189,9 @@ func _reactivar_turno() -> void:
 
 	es_mi_turno = true
 	print("Turno reactivado.")
+
+# ===========================
+# 🔹 INTERCAMBIAR FICHAS
+# ===========================
+func _on_intercambiar_fichas_pressed() -> void:
+	pass # Replace with function body.

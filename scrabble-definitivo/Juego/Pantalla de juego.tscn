@@ -31,7 +31,7 @@ grow_vertical = 2
 script = ExtResource("1_wg8rh")
 
 [node name="Fondo(2)" type="Sprite2D" parent="."]
-position = Vector2(784, 365.5)
+position = Vector2(790, 365)
 scale = Vector2(1.321875, 1.2981483)
 texture = ExtResource("1_5u6n2")
 
@@ -151,4 +151,22 @@ offset_right = 1377.0
 offset_bottom = 580.0
 text = "0"
 
+[node name="IntercambiarFichas" type="Button" parent="."]
+layout_mode = 0
+offset_left = 528.0
+offset_top = 633.0
+offset_right = 652.0
+offset_bottom = 672.0
+text = "Intercambiar Fichas"
+
+[node name="FinalizarTurno" type="Button" parent="."]
+layout_mode = 0
+offset_left = 342.0
+offset_top = 633.0
+offset_right = 494.0
+offset_bottom = 672.0
+text = "Finalizar Turno"
+
 [connection signal="pressed" from="Opciones" to="." method="_on_opciones_pressed"]
+[connection signal="pressed" from="IntercambiarFichas" to="." method="_on_intercambiar_fichas_pressed"]
+[connection signal="pressed" from="FinalizarTurno" to="." method="_on_finalizar_turno_pressed"]
