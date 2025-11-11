@@ -11,10 +11,17 @@ var drag_preview_manager: Node = null
 func _ready() -> void:
 	# Espera un frame para asegurarte de que la escena está completamente cargada
 	await get_tree().process_frame
-	# Buscar el nodo dentro de la escena actual (válido para Godot 4)
 	drag_preview_manager = get_tree().get_current_scene().find_child("DragPreviewManager", true, false)
 
 func _gui_input(event: InputEvent) -> void:
+	# ------------------ MODO REORDENAR ------------------
+	if manager and manager.has_method("esta_en_modo_reordenar") and manager.esta_en_modo_reordenar():
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			if self.icon != null:
+				manager.ficha_click_para_reordenar(self)
+		return  # ignoramos todo lo demás mientras reordenamos
+
+	# ------------------ MODO NORMAL / DRAG ------------------
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			if self.icon == null:
@@ -22,7 +29,6 @@ func _gui_input(event: InputEvent) -> void:
 			mouse_down = true
 			mouse_down_pos = event.global_position
 		else:
-			# Botón soltado
 			if is_dragging:
 				is_dragging = false
 				if drag_preview_manager:
@@ -30,20 +36,12 @@ func _gui_input(event: InputEvent) -> void:
 
 				var board := get_tree().current_scene.get_node_or_null("Board")
 				if board and board.has_method("soltar_ficha_en_tablero"):
-					var ok: bool = board.soltar_ficha_en_tablero(event.global_position, self.icon, self)
-					if ok:
-						if manager:
-							manager.on_ficha_soltada(self)
-					else:
-						if manager:
-							manager.on_ficha_soltada(self)
-				else:
-					if manager:
-						manager.on_ficha_soltada(self)
+					board.soltar_ficha_en_tablero(event.global_position, self.icon, self)
+				if manager:
+					manager.on_ficha_soltada(self)
 
 				mouse_down = false
 			else:
-				# Click corto: seleccionar con teclado
 				if mouse_down and self.icon:
 					var board2 := get_tree().current_scene.get_node_or_null("Board")
 					if board2 and board2.has_method("empezar_seleccion_desde_hueco"):

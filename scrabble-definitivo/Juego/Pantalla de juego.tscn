@@ -154,6 +154,14 @@ offset_right = 494.0
 offset_bottom = 672.0
 text = "Finalizar Turno"
 
+[node name="ReordenarFichas" type="Button" parent="."]
+layout_mode = 0
+offset_left = 961.0
+offset_top = 633.0
+offset_right = 1122.0
+offset_bottom = 672.0
+text = "Reordenar Fichas"
+
 [node name="PantallaError" type="ColorRect" parent="."]
 layout_mode = 0
 offset_right = 1794.0
@@ -183,3 +191,4 @@ vertical_alignment = 1
 [connection signal="pressed" from="Opciones" to="." method="_on_opciones_pressed"]
 [connection signal="pressed" from="IntercambiarFichas" to="." method="_on_intercambiar_fichas_pressed"]
 [connection signal="pressed" from="FinalizarTurno" to="." method="_on_finalizar_turno_pressed"]
+[connection signal="pressed" from="ReordenarFichas" to="PanelContainer" method="_on_reordenar_fichas_pressed"]
