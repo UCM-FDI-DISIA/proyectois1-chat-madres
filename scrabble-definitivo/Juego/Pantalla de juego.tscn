@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bgu417px3gdnm"]
+[gd_scene load_steps=16 format=3 uid="uid://bgu417px3gdnm"]
 
 [ext_resource type="Texture2D" uid="uid://21c4krb62sdw" path="res://Juego/Fondo (2).png" id="1_5u6n2"]
 [ext_resource type="PackedScene" uid="uid://cmlki6e4x7jqq" path="res://Casillas/Tablero/board.tscn" id="1_d15d8"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://tcty2e426dqf" path="res://Juego/hueco_6.gd" id="11_vcpce"]
 [ext_resource type="Script" uid="uid://cuplq10yvrdil" path="res://Juego/hueco_7.gd" id="12_y3uwc"]
 [ext_resource type="Script" uid="uid://dhut774qwcevi" path="res://Juego/drag_preview_manager.gd" id="14_dadpr"]
+[ext_resource type="PackedScene" uid="uid://m0neq4urgrbm" path="res://Escena_jugar/PantallaInicioTurno.tscn" id="15_evtru"]
 
 [node name="PantallaDeJuego" type="Control"]
 layout_mode = 3
@@ -121,5 +122,18 @@ script = ExtResource("5_qi2nl")
 
 [node name="DragPreviewManager" type="Node2D" parent="."]
 script = ExtResource("14_dadpr")
+
+[node name="UIOverlay" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="Control" parent="UIOverlay" instance=ExtResource("15_evtru")]
+visible = false
+
+[node name="LabelPalabraInvalida" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(0.50932795, 0.0052424013, 4.813075e-08, 1)
+text = "La palabra introducida no es válida."
 
 [connection signal="pressed" from="Opciones" to="." method="_on_opciones_pressed"]
