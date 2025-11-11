@@ -11,8 +11,6 @@ extends PanelContainer
 
 var huecos: Array[Button] = []      # Referencias a los botones del atril
 var fichas_en_atril: Array = []     # Fichas actuales (diccionarios con letra, puntos, textura)
-var modo_reordenar: bool = false
-var ficha_seleccionada_para_intercambio: Button = null
 
 
 func _ready() -> void:
@@ -141,25 +139,4 @@ func reponer_fichas_colocadas() -> void:
 # ============================================================
 	
 func _on_reordenar_fichas_pressed() -> void:
-	modo_reordenar = true
-	ficha_seleccionada_para_intercambio = null
-	print("Modo reordenar activado. Haz clic en dos fichas para intercambiar.")
-	
-func _intercambiar_fichas(f1: Button, f2: Button) -> void:
-	var idx1 = huecos.find(f1)
-	var idx2 = huecos.find(f2)
-	if idx1 == -1 or idx2 == -1:
-		return
-
-	# Intercambiar en array
-	huecos[idx1] = f2
-	huecos[idx2] = f1
-
-	# Intercambiar visualmente usando tween
-	var pos1 = f1.position
-	var pos2 = f2.position
-	var t = create_tween()
-	t.tween_property(f1, "position", pos2, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	t.tween_property(f2, "position", pos1, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-
-	print("Fichas intercambiadas:", f1.get_meta("letra"), "<->", f2.get_meta("letra"))
+	pass

@@ -191,4 +191,4 @@ vertical_alignment = 1
 [connection signal="pressed" from="Opciones" to="." method="_on_opciones_pressed"]
 [connection signal="pressed" from="IntercambiarFichas" to="." method="_on_intercambiar_fichas_pressed"]
 [connection signal="pressed" from="FinalizarTurno" to="." method="_on_finalizar_turno_pressed"]
-[connection signal="pressed" from="ReordenarFichas" to="PanelContainer" method="_on_reordenar_fichas_pressed"]
+[connection signal="pressed" from="ReordenarFichas" to="." method="_on_intercambiar_fichas_pressed"]
