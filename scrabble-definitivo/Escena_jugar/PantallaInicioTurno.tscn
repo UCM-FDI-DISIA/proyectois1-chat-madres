@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://m0neq4urgrbm"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "\"Es tu turno, que deseas hacer?\""
+justification_flags = 131
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ButtonColocar" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Colocar"
+
+[node name="ButtonIntercambiar" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Intercambiar"
+
+[node name="ButtonPasar" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Pasar"

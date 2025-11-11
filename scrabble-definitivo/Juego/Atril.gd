@@ -102,3 +102,31 @@ func vaciar_hueco(boton: Button) -> void:
 	boton.text = ""          # <- limpiamos texto para que no quede la letra en blanco
 	boton.tooltip_text = ""
 	boton.disabled = false
+	
+# ============================================================
+# REPONER FICHAS DESPUES DE TURNO
+# ============================================================
+	
+func reponer_fichas_colocadas() -> void:
+	var huecos_vacios: Array[Button] = []
+	for b in huecos:
+		if b.icon == null:
+			huecos_vacios.append(b)
+
+	if huecos_vacios.is_empty():
+		return
+
+	var nuevas_fichas: Array = bolsa.sacar_fichas(huecos_vacios.size())
+
+	for i in range(min(huecos_vacios.size(), nuevas_fichas.size())):
+		var b: Button = huecos_vacios[i]
+		var f: Dictionary = nuevas_fichas[i] as Dictionary
+		var tex: Texture2D = f.get("texture", null)
+		var letra: String = str(f.get("letra", ""))
+		var puntos: int = int(f.get("puntos", 0))
+
+		b.icon = tex
+		b.text = "" # <- no mostramos texto encima del icono
+		b.tooltip_text = "Letra: %s\nPuntos: %d" % [letra, puntos]
+		b.set_meta("letra", letra)
+		b.disabled = false
