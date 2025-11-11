@@ -49,10 +49,6 @@ text = "Funcionalidad2"
 layout_mode = 2
 text = "Funcionalidad3"
 
-[node name="Button4" type="Button" parent="PanelContainer/Popup menu"]
-layout_mode = 2
-text = "Funcionalidad4"
-
 [node name="Tutorial" type="Button" parent="PanelContainer/Popup menu"]
 layout_mode = 2
 text = "Tutorial"
@@ -61,6 +57,10 @@ text = "Tutorial"
 layout_mode = 2
 text = "Reanudar"
 
+[node name="Button4" type="Button" parent="PanelContainer/Popup menu"]
+layout_mode = 2
+text = "Menú Inicial"
+
 [node name="Animacion (por terminar)" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_3g7yc")
@@ -68,3 +68,4 @@ libraries = {
 
 [connection signal="pressed" from="PanelContainer/Popup menu/Tutorial" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="PanelContainer/Popup menu/Salir" to="." method="_on_salir_pressed"]
+[connection signal="pressed" from="PanelContainer/Popup menu/Button4" to="." method="_on_button_4_pressed"]
