@@ -59,7 +59,7 @@ text = "Tutorial"
 
 [node name="Salir" type="Button" parent="PanelContainer/Popup menu"]
 layout_mode = 2
-text = "Salir"
+text = "Reanudar"
 
 [node name="Animacion (por terminar)" type="AnimationPlayer" parent="."]
 libraries = {
