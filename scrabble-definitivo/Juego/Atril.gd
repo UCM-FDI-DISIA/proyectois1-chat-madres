@@ -1,142 +1,164 @@
-# atril.gd
 extends PanelContainer
 
-# ============================================================
-# ATRIL DE SCRABBLE
-# Muestra 7 fichas aleatorias provenientes de la BolsaFichas.
-# ============================================================
-
 @export var cantidad_fichas_en_atril: int = 7
-@onready var bolsa := preload("res://scripts/BolsaFichas.gd").new()
+@onready var bolsa: BolsaFichas = preload("res://scripts/BolsaFichas.gd").new()
 
-var huecos: Array[Button] = []      # Referencias a los botones del atril
-var fichas_en_atril: Array = []     # Fichas actuales (diccionarios con letra, puntos, textura)
+var huecos: Array[Button] = []
+var fichas_en_atril: Array = []
 
+var modo_intercambio: bool = false			# 🔹 NUEVO: controla si estamos eligiendo fichas para intercambio
+var seleccionadas_para_intercambio: Array[Button] = []	# 🔹 NUEVO: fichas seleccionadas
 
 func _ready() -> void:
-	# Iniciar la bolsa si aún no se ha creado
 	if bolsa.bolsa.is_empty():
 		bolsa._inicializar_bolsa()
 
-	# Obtener los huecos (botones del atril)
 	var grid: GridContainer = $VBoxContainer/Panel/GridContainer
 	for child in grid.get_children():
 		if child is Button and child.name.begins_with("Hueco"):
 			huecos.append(child)
+			# 🔹 Asignar el manager si el script del botón lo define
+			if "manager" in child:
+				child.manager = self
 
-	# Repartir las fichas iniciales
+
 	_rellenar_atril()
 
-# ============================================================
+# =======================================================
 # FUNCIONES PRINCIPALES
-# ============================================================
+# =======================================================
 
-# Llenar el atril con fichas de la bolsa
 func _rellenar_atril() -> void:
 	var nuevas_fichas: Array = bolsa.sacar_fichas(cantidad_fichas_en_atril)
 	fichas_en_atril = nuevas_fichas.duplicate()
 
 	for i in range(huecos.size()):
 		var b: Button = huecos[i]
-		# Configuración visual base
 		b.expand_icon = true
 		b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		b.custom_minimum_size = Vector2(40, 40)
 
 		if i < nuevas_fichas.size():
 			var f: Dictionary = nuevas_fichas[i] as Dictionary
-			# texture / letra / puntos vienen del diccionario de la bolsa
 			var tex: Texture2D = f.get("texture", null)
 			var letra: String = str(f.get("letra", ""))
 			var puntos: int = int(f.get("puntos", 0))
-
 			b.icon = tex
-			b.text = ""  # <- NO pintamos texto encima del icono
+			b.text = ""
 			b.tooltip_text = "Letra: %s\nPuntos: %d" % [letra, puntos]
-
-			# Guardamos la letra como meta (útil para el Board)
 			b.set_meta("letra", letra)
 			b.disabled = false
 		else:
-			# Hueco vacío
 			b.icon = null
-			b.text = ""         # <- aseguramos limpiar texto
+			b.text = ""
 			b.tooltip_text = ""
 			b.disabled = false
 
-# ============================================================
-# FUNCIONES DE CONTROL DEL ATRIL
-# ============================================================
+# =======================================================
+# CONTROL ATRIL / TURNO
+# =======================================================
 
-func obtener_indice_ficha(ficha: Button) -> int:
-	return huecos.find(ficha)
-
-func abrir_hueco_en(indice: int) -> void:
-	for i in range(indice + 1, huecos.size()):
-		var b: Button = huecos[i]
-		var t := create_tween()
-		t.tween_property(b, "position:x", 60, 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-
-func restaurar_todo() -> void:
-	for b in huecos:
-		var t := create_tween()
-		t.tween_property(b, "position:x", 0, 0.25).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-
-func mover_ficha_a_hueco_1(ficha: Button) -> void:
-	var grid: GridContainer = $VBoxContainer/Panel/GridContainer
-	var idx := huecos.find(ficha)
-	if idx == -1:
-		return
-
-	huecos.remove_at(idx)
-	huecos.insert(0, ficha)
-
-	grid.remove_child(ficha)
-	grid.add_child(ficha)
-	grid.move_child(ficha, 0)
-
-# Llamado por el Board cuando “consume” un hueco (colocas la ficha en el tablero)
 func vaciar_hueco(boton: Button) -> void:
 	if boton == null:
 		return
 	boton.icon = null
-	boton.text = ""          # <- limpiamos texto para que no quede la letra en blanco
+	boton.text = ""
 	boton.tooltip_text = ""
 	boton.disabled = false
-	
-# ============================================================
-# REPONER FICHAS DESPUES DE TURNO
-# ============================================================
-	
+
 func reponer_fichas_colocadas() -> void:
-	var huecos_vacios: Array[Button] = []
+	var vacios: Array[Button] = []
 	for b in huecos:
 		if b.icon == null:
-			huecos_vacios.append(b)
+			vacios.append(b)
+	if vacios.is_empty():
+		return
+	var nuevas: Array = bolsa.sacar_fichas(vacios.size())
+	for i in range(min(vacios.size(), nuevas.size())):
+		var b: Button = vacios[i]
+		var f: Dictionary = nuevas[i]
+		b.icon = f["texture"]
+		b.text = ""
+		b.tooltip_text = "Letra: %s\nPuntos: %d" % [f["letra"], f["puntos"]]
+		b.set_meta("letra", f["letra"])
+		b.disabled = false
 
-	if huecos_vacios.is_empty():
+# =======================================================
+# MODO INTERCAMBIO
+# =======================================================
+
+func seleccionar_fichas_para_intercambio() -> Array:
+	print("🟡 Modo intercambio: haz clic en las fichas que deseas cambiar y pulsa ENTER para confirmar.")
+	modo_intercambio = true
+	seleccionadas_para_intercambio.clear()
+
+	await _esperar_confirmacion_enter()
+
+	modo_intercambio = false
+	var seleccionadas := seleccionadas_para_intercambio.duplicate()
+	# Limpiar color
+	for b in huecos:
+		b.modulate = Color(1, 1, 1, 1)
+	return seleccionadas
+
+func registrar_click_intercambio(boton: Button) -> void:
+	if not modo_intercambio:
+		return
+	if boton in seleccionadas_para_intercambio:
+		seleccionadas_para_intercambio.erase(boton)
+		boton.modulate = Color(1, 1, 1, 1)
+	else:
+		seleccionadas_para_intercambio.append(boton)
+		boton.modulate = Color(1, 0.6, 0.6, 1)
+
+func _esperar_confirmacion_enter() -> void:
+	await get_tree().create_timer(0.1).timeout
+	while true:
+		await get_tree().process_frame
+		if Input.is_action_just_pressed("ui_accept"):
+			break
+
+func intercambiar_fichas(botones: Array[Button]) -> void:
+	if botones.is_empty():
+		print("⚠️ No seleccionaste fichas para intercambiar.")
+		return
+	if bolsa.quedan() < 7:
+		print("⚠️ No puedes intercambiar: quedan menos de 7 fichas en la bolsa.")
 		return
 
-	var nuevas_fichas: Array = bolsa.sacar_fichas(huecos_vacios.size())
+	var fichas_devueltas: Array = []
 
-	for i in range(min(huecos_vacios.size(), nuevas_fichas.size())):
-		var b: Button = huecos_vacios[i]
-		var f: Dictionary = nuevas_fichas[i] as Dictionary
-		var tex: Texture2D = f.get("texture", null)
-		var letra: String = str(f.get("letra", ""))
-		var puntos: int = int(f.get("puntos", 0))
+	for b in botones:
+		if b.icon == null or not b.has_meta("letra"):
+			continue
+		var letra: String = str(b.get_meta("letra"))
+		var tex: Texture2D = b.icon
+		var puntos: int = 0
+		for f in fichas_en_atril:
+			if f.has("letra") and f["letra"] == letra:
+				puntos = f["puntos"]
+				break
+		fichas_devueltas.append({
+			"letra": letra,
+			"puntos": puntos,
+			"texture": tex
+		})
+		b.icon = null
+		b.text = ""
+		b.tooltip_text = ""
+		b.modulate = Color(1, 1, 1, 1)
 
-		b.icon = tex
-		b.text = "" # <- no mostramos texto encima del icono
-		b.tooltip_text = "Letra: %s\nPuntos: %d" % [letra, puntos]
-		b.set_meta("letra", letra)
-		b.disabled = false
-		
+	bolsa.devolver_fichas(fichas_devueltas)
 
-	
-# ============================================================
-# REORDENAR FICHAS
-# ============================================================
-	
-func _on_reordenar_fichas_pressed() -> void:
-	pass
+	var nuevas: Array = bolsa.sacar_fichas(botones.size())
+	for i in range(botones.size()):
+		var b: Button = botones[i]
+		if i >= nuevas.size():
+			continue
+		var f: Dictionary = nuevas[i]
+		b.icon = f["texture"]
+		b.text = ""
+		b.tooltip_text = "Letra: %s\nPuntos: %d" % [f["letra"], f["puntos"]]
+		b.set_meta("letra", f["letra"])
+
+	print("✅ Intercambio completado: %d fichas nuevas." % botones.size())

@@ -196,8 +196,42 @@ func _reactivar_turno() -> void:
 # ===========================
 # 🔹 INTERCAMBIAR FICHAS
 # ===========================
+
 func _on_intercambiar_fichas_pressed() -> void:
-	pass # Replace with function body.
+	var atril := get_tree().current_scene.get_node_or_null("PanelContainer")
+	if atril == null:
+		mostrar_error("No se encontró el atril.")
+		return
+
+	# Pedir al jugador seleccionar las fichas a intercambiar
+	print("Selecciona las fichas que deseas intercambiar (clic).")
+
+	# Desactivar tablero mientras se eligen fichas
+	var tablero := get_tree().current_scene.get_node_or_null("Board")
+	if tablero:
+		tablero.modulate = Color(1, 1, 1, 0.5)
+		tablero.set_process_input(false)
+
+	# Esperamos selección de fichas
+	var fichas_a_cambiar: Array = await atril.seleccionar_fichas_para_intercambio()
+
+	if fichas_a_cambiar.is_empty():
+		mostrar_error("No seleccionaste fichas para intercambiar.")
+		if tablero:
+			tablero.modulate = Color(1, 1, 1, 1)
+			tablero.set_process_input(true)
+		return
+
+	# Ejecutar el intercambio
+	atril.intercambiar_fichas(fichas_a_cambiar)
+
+	# Reactivar tablero y actualizar contador
+	if tablero:
+		tablero.modulate = Color(1, 1, 1, 1)
+		tablero.set_process_input(true)
+
+	actualizar_contador_bolsa()
+	print("Fichas intercambiadas correctamente.")
 
 # ===========================
 # 🔹 MENSAJE DE ERROR

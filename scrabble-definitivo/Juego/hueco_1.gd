@@ -27,19 +27,21 @@ func _gui_input(event: InputEvent) -> void:
 					var ok: bool = board.soltar_ficha_en_tablero(event.global_position, self.icon, self)
 					if manager:
 						manager.on_ficha_soltada(self)
-				else:
-					if manager:
-						manager.on_ficha_soltada(self)
-
-				mouse_down = false
 			else:
-				# Click corto: seleccionar con teclado
+				# 🔹 Click corto: seleccionar ficha o marcar para intercambio
 				if mouse_down and self.icon:
-					var board2 := get_tree().current_scene.get_node_or_null("Board")
-					if board2 and board2.has_method("empezar_seleccion_desde_hueco"):
-						board2.empezar_seleccion_desde_hueco(self.icon, self)
-				mouse_down = false
-				is_dragging = false
+					var atril := get_tree().current_scene.get_node_or_null("PanelContainer")
+					if atril and atril.has_method("registrar_click_intercambio") and atril.modo_intercambio:
+						# MODO INTERCAMBIO → marcar/deseleccionar ficha
+						atril.registrar_click_intercambio(self)
+					else:
+						# MODO NORMAL → seleccionar para colocar en tablero
+						var board2 := get_tree().current_scene.get_node_or_null("Board")
+						if board2 and board2.has_method("empezar_seleccion_desde_hueco"):
+							board2.empezar_seleccion_desde_hueco(self.icon, self)
+					mouse_down = false
+					is_dragging = false
+			mouse_down = false
 
 	elif event is InputEventMouseMotion:
 		if mouse_down and not is_dragging:
@@ -48,4 +50,6 @@ func _gui_input(event: InputEvent) -> void:
 				if manager:
 					manager.on_ficha_arrastrada(self)
 		if is_dragging and drag_preview_manager:
+			drag_preview_manager.update_preview(event.global_position)
+
 			drag_preview_manager.update_preview(event.global_position)
