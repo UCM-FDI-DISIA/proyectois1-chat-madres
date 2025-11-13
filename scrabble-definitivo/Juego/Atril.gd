@@ -202,7 +202,7 @@ func registrar_click_reordenar(boton: Button) -> void:
 
 	if ficha_reordenar_1 == null:
 		ficha_reordenar_1 = boton
-		boton.modulate = Color(1, 0.7, 0.3, 1)
+		boton.modulate = Color(0.6, 1, 0.6, 1)  # verde claro
 	else:
 		# Intercambiar fichas en el GridContainer
 		_intercambiar_fichas_en_atril(ficha_reordenar_1, boton)
@@ -216,18 +216,23 @@ func _intercambiar_fichas_en_atril(b1: Button, b2: Button) -> void:
 		return
 
 	var grid: GridContainer = $VBoxContainer/Panel/GridContainer
-	# localizar índices entre los hijos del grid
 	var children := grid.get_children()
 	var idx1 := children.find(b1)
 	var idx2 := children.find(b2)
 	if idx1 == -1 or idx2 == -1:
 		return
 
-	# mover; move_child reordena dentro del GridContainer
+	# Extraer ambos botones para evitar conflicto de índices
+	grid.remove_child(b1)
+	grid.remove_child(b2)
+
+	# Insertar en orden inverso
+	grid.add_child(b1)
 	grid.move_child(b1, idx2)
+	grid.add_child(b2)
 	grid.move_child(b2, idx1)
 
-	# reconstruir huecos array según nuevo orden
+	# Reconstruir lista de huecos según nuevo orden
 	var nueva_lista: Array[Button] = []
 	for c in grid.get_children():
 		if c is Button and c.name.begins_with("Hueco"):

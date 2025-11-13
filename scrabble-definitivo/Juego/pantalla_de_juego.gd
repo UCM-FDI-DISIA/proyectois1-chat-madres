@@ -233,6 +233,29 @@ func _on_intercambiar_fichas_pressed() -> void:
 	actualizar_contador_bolsa()
 	print("Fichas intercambiadas correctamente.")
 
+
+# ===========================
+# REORDENAR FICHAS
+# ===========================
+func _on_reordenar_fichas_pressed() -> void:
+	var atril := get_tree().current_scene.get_node_or_null("PanelContainer")
+	if atril == null:
+		mostrar_error("No se encontró el atril.")
+		return
+
+	var tablero := get_tree().current_scene.get_node_or_null("Board")
+	if tablero:
+		tablero.modulate = Color(1, 1, 1, 0.5)
+		tablero.set_process_input(false)
+
+	await atril.seleccionar_fichas_para_reordenar()
+
+	if tablero:
+		tablero.modulate = Color(1, 1, 1, 1)
+		tablero.set_process_input(true)
+
+	print("🔁 Reordenamiento completado.")
+
 # ===========================
 # 🔹 MENSAJE DE ERROR
 # ===========================
