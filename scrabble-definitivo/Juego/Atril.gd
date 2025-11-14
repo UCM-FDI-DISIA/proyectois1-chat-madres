@@ -79,6 +79,7 @@ func reponer_fichas_colocadas() -> void:
 		return
 
 	var nuevas_fichas: Array = bolsa.sacar_fichas(huecos_vacios.size())
+
 	for i in range(min(huecos_vacios.size(), nuevas_fichas.size())):
 		var b: Button = huecos_vacios[i]
 		var f: Dictionary = nuevas_fichas[i] as Dictionary
@@ -93,39 +94,8 @@ func reponer_fichas_colocadas() -> void:
 		b.disabled = false
 
 # ----------------------------
-# Modo INTERCAMBIO
+# INTERCAMBIAR FICHAS
 # ----------------------------
-func seleccionar_fichas_para_intercambio() -> Array:
-	# Entrar en modo intercambio (aseguramos que NO estemos en reordenar)
-	modo_reordenar = false
-	modo_intercambio = true
-	seleccionadas_para_intercambio.clear()
-	print("🟡 Modo intercambio: haz clic en las fichas que quieras cambiar y pulsa ENTER para confirmar.")
-
-	# Esperar confirmación
-	await _esperar_confirmacion_enter()
-
-	# Salir de modo intercambio
-	modo_intercambio = false
-	var seleccionadas := seleccionadas_para_intercambio.duplicate()
-
-	# restaurar visual
-	for b in huecos:
-		b.modulate = Color(1, 1, 1, 1)
-
-	return seleccionadas
-
-func registrar_click_intercambio(boton: Button) -> void:
-	if not modo_intercambio:
-		return
-	if boton in seleccionadas_para_intercambio:
-		seleccionadas_para_intercambio.erase(boton)
-		boton.modulate = Color(1, 1, 1, 1)
-	else:
-		seleccionadas_para_intercambio.append(boton)
-		boton.modulate = Color(1, 0.6, 0.6, 1)
-
-# Ejecutar intercambio (puedes llamarlo desde pantalla_de_juego.gd)
 func intercambiar_fichas(botones: Array[Button]) -> void:
 	if botones.is_empty():
 		print("⚠️ No seleccionaste fichas para intercambiar.")
@@ -170,7 +140,26 @@ func intercambiar_fichas(botones: Array[Button]) -> void:
 		b.tooltip_text = "Letra: %s\nPuntos: %d" % [f["letra"], f["puntos"]]
 		b.set_meta("letra", f["letra"])
 
-	print("✅ Intercambio completado: %d fichas nuevas." % botones.size())
+# ----------------------------
+# Modo INTERCAMBIO
+# ----------------------------
+func seleccionar_fichas_para_intercambio() -> Array:
+	# Entrar en modo intercambio (aseguramos que NO estemos en reordenar)
+	modo_reordenar = false
+	modo_intercambio = true
+	seleccionadas_para_intercambio.clear()
+	print("✳️ Modo intercambio: selecciona las fichas que quieres cambiar. Pulsa ENTER o ESC para confirmar/salir.")
+
+	await _esperar_salida_intercambio()
+
+	# Salir
+	modo_intercambio = false
+	# restaurar colores
+	for b in huecos:
+		b.modulate = Color(1, 1, 1, 1)
+
+	print("✅ Intercambio finalizado. Seleccionadas: %d" % seleccionadas_para_intercambio.size())
+	return seleccionadas_para_intercambio.duplicate()
 
 # ----------------------------
 # Modo REORDENAR
@@ -204,71 +193,95 @@ func registrar_click_reordenar(boton: Button) -> void:
 		ficha_reordenar_1 = boton
 		boton.modulate = Color(0.6, 1, 0.6, 1)  # verde claro
 	else:
-		# Intercambiar fichas en el GridContainer
+		# Intercambiar fichas en el GridContainer (ahora por contenido)
 		_intercambiar_fichas_en_atril(ficha_reordenar_1, boton)
 		# reset visual
 		ficha_reordenar_1.modulate = Color(1, 1, 1, 1)
 		boton.modulate = Color(1, 1, 1, 1)
 		ficha_reordenar_1 = null
 
+func registrar_click_intercambio(boton: Button) -> void:
+	if not modo_intercambio:
+		return
+
+	# Ignorar huecos vacíos
+	if boton.icon == null:
+		return
+
+	# Alternar selección
+	if seleccionadas_para_intercambio.has(boton):
+		seleccionadas_para_intercambio.erase(boton)
+		boton.modulate = Color(1, 1, 1, 1)
+	else:
+		seleccionadas_para_intercambio.append(boton)
+		boton.modulate = Color(0.6, 1, 0.6, 1)
+
+# ----------------------------
+# Intercambio por contenido (reemplaza mover nodos)
+# ----------------------------
 func _intercambiar_fichas_en_atril(b1: Button, b2: Button) -> void:
 	if b1 == null or b2 == null or b1 == b2:
 		return
 
+	# Intercambiamos solo el contenido de las fichas para evitar problemas con la estructura de nodos
+	var tmp_icon = b1.icon
+	var tmp_text = b1.text
+	var tmp_tooltip = b1.tooltip_text
+	var tmp_meta_letra = null
+	if b1.has_meta("letra"):
+		tmp_meta_letra = b1.get_meta("letra")
+	var tmp_disabled = b1.disabled
+	var tmp_modulate = b1.modulate
+
+	# Copiar contenido de b2 a b1
+	b1.icon = b2.icon
+	b1.text = b2.text
+	b1.tooltip_text = b2.tooltip_text
+	if b2.has_meta("letra"):
+		b1.set_meta("letra", b2.get_meta("letra"))
+	else:
+		if b1.has_meta("letra"):
+			b1.remove_meta("letra")
+	b1.disabled = b2.disabled
+	b1.modulate = b2.modulate
+
+	# Restaurar contenido original en b2
+	b2.icon = tmp_icon
+	b2.text = tmp_text
+	b2.tooltip_text = tmp_tooltip
+	if tmp_meta_letra != null:
+		b2.set_meta("letra", tmp_meta_letra)
+	else:
+		if b2.has_meta("letra"):
+			b2.remove_meta("letra")
+	b2.disabled = tmp_disabled
+	b2.modulate = tmp_modulate
+
+	# Reconstruir lista de huecos (por seguridad, aunque el orden de nodos no cambia)
 	var grid: GridContainer = $VBoxContainer/Panel/GridContainer
-	var children := grid.get_children()
-	var idx1 := children.find(b1)
-	var idx2 := children.find(b2)
-	if idx1 == -1 or idx2 == -1:
-		return
-
-	# Extraer ambos botones para evitar conflicto de índices
-	grid.remove_child(b1)
-	grid.remove_child(b2)
-
-	# Insertar en orden inverso
-	grid.add_child(b1)
-	grid.move_child(b1, idx2)
-	grid.add_child(b2)
-	grid.move_child(b2, idx1)
-
-	# Reconstruir lista de huecos según nuevo orden
 	var nueva_lista: Array[Button] = []
 	for c in grid.get_children():
 		if c is Button and c.name.begins_with("Hueco"):
 			nueva_lista.append(c)
 	huecos = nueva_lista
 
-	print("🔁 Fichas intercambiadas: %s <-> %s" % [b1.name, b2.name])
+	print("🔁 Fichas reordenadas (intercambio por contenido): %s <-> %s" % [b1.name, b2.name])
 
 # ----------------------------
-# Utilidades de espera
+# Utilidades de espera (esperan ENTER o ESC para salir del modo)
+# (Corregido para Godot 4.5: uso de await en lugar de yield)
 # ----------------------------
-func _esperar_confirmacion_enter() -> void:
-	await get_tree().create_timer(0.1).timeout
+func _esperar_salida_intercambio() -> void:
+	# Espera hasta que el usuario presione ENTER o ESC
 	while true:
-		await get_tree().process_frame
-		if Input.is_action_just_pressed("ui_accept"):
-			break
-
-func _esperar_salida_reordenar() -> void:
-	await get_tree().create_timer(0.1).timeout
-	while true:
+		# espera un frame (evita busy loop)
 		await get_tree().process_frame
 		if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_cancel"):
 			break
 
-# ----------------------------
-# Handlers para compatibilidad con Huecos (drag / drop preview)
-# ----------------------------
-func on_ficha_arrastrada(b: Button) -> void:
-	# Mostrar preview en cursor usando DragPreviewManager si existe
-	if drag_preview_manager and b and b.icon:
-		# start_preview(icon: Texture, source: Button, position: Vector2)
-		var mouse_pos: Vector2 = get_viewport().get_mouse_position()
-		drag_preview_manager.start_preview(b.icon, b, mouse_pos)
-
-func on_ficha_soltada(b: Button) -> void:
-	# Detener preview
-	if drag_preview_manager:
-		drag_preview_manager.stop_preview()
+func _esperar_salida_reordenar() -> void:
+	# Igual comportamiento que el de intercambio
+	while true:
+		await get_tree().process_frame
+		if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_cancel"):
+			break

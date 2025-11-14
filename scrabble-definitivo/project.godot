@@ -16,7 +16,6 @@ config/features=PackedStringArray("4.5", "Forward Plus")
 
 [display]
 
-window/size/mode=2
 window/stretch/aspect="expand"
 window/stretch/scale=2.0
 
