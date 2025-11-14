@@ -9,6 +9,34 @@ func _ready() -> void:
 	$PantallaError.visible = false
 	$PantallaError.modulate.a = 0
 	$MensajeError.visible = false
+
+	# --- Conexiones programáticas y robustas de botones (Godot 4.5) ---
+	var btn_opciones := get_node_or_null("Opciones")
+	var btn_intercambiar := get_node_or_null("IntercambiarFichas")
+	var btn_finalizar := get_node_or_null("FinalizarTurno")
+	var btn_reordenar := get_node_or_null("ReordenarFichas")
+
+	if btn_opciones:
+		var c_op := Callable(self, "_on_opciones_pressed")
+		if not btn_opciones.is_connected("pressed", c_op):
+			btn_opciones.connect("pressed", c_op)
+
+	if btn_intercambiar:
+		var c_int := Callable(self, "_on_intercambiar_fichas_pressed")
+		if not btn_intercambiar.is_connected("pressed", c_int):
+			btn_intercambiar.connect("pressed", c_int)
+
+	if btn_finalizar:
+		var c_fin := Callable(self, "_on_finalizar_turno_pressed")
+		if not btn_finalizar.is_connected("pressed", c_fin):
+			btn_finalizar.connect("pressed", c_fin)
+
+	if btn_reordenar:
+		var c_reo := Callable(self, "_on_reordenar_fichas_pressed")
+		if not btn_reordenar.is_connected("pressed", c_reo):
+			btn_reordenar.connect("pressed", c_reo)
+	# --------------------------------------------------------
+
 # ===========================
 # 🔹 Actualizar contador de bolsa
 # ===========================
@@ -23,8 +51,8 @@ func actualizar_contador_bolsa() -> void:
 		push_warning("No se encontró el Label ContadorBolsa")
 		return
 
-	if atril.bolsa:
-		label.text = str(atril.bolsa.quedan())  # 👈 Solo el número
+	if atril.bolsa and atril.bolsa.has_method("quedan"):
+		label.text = str(atril.bolsa.quedan())
 	else:
 		label.text = "0"
 
@@ -34,11 +62,12 @@ func actualizar_contador_bolsa() -> void:
 func set_turno(mi_turno: bool) -> void:
 	es_mi_turno = mi_turno
 	if es_mi_turno:
-		$ColorRect.mostrar_con_fundido()
+		if $ColorRect and $ColorRect.has_method("mostrar_con_fundido"):
+			$ColorRect.mostrar_con_fundido()
 		var tablero := get_tree().current_scene.get_node_or_null("Board")
 		if tablero and tablero.has_method("empezar_turno"):
 			tablero.empezar_turno()
-		actualizar_contador_bolsa() # 👈 aquí
+		actualizar_contador_bolsa()
 
 func _on_opciones_pressed() -> void:
 	var t = OPTIONS_SCENE.instantiate()
@@ -47,7 +76,6 @@ func _on_opciones_pressed() -> void:
 # ===========================
 # 🔹 BOTÓN "FINALIZAR TURNO"
 # ===========================
-
 func _on_finalizar_turno_pressed() -> void:
 	if not es_mi_turno:
 		return
@@ -77,7 +105,7 @@ func _on_finalizar_turno_pressed() -> void:
 
 	# Validar jugada (devuelve bool)
 	var ok := await _validar_jugada(tablero)
-	
+
 	if ok and tablero.has_method("limpiar_fichas_turno"):
 		tablero.limpiar_fichas_turno()
 
@@ -91,11 +119,10 @@ func _on_finalizar_turno_pressed() -> void:
 
 	# Reactivar turno SIEMPRE para permitir seguir jugando/corrigiendo
 	_reactivar_turno()
-	
+
 	if atril and atril.has_method("reponer_fichas_colocadas"):
 		atril.reponer_fichas_colocadas()
-		actualizar_contador_bolsa() # 👈 correcto
-
+		actualizar_contador_bolsa()
 
 # ===========================
 # 🔹 VALIDACIÓN DE JUGADA
@@ -172,7 +199,7 @@ func _validar_jugada(tablero: Node) -> bool:
 			tablero.set("es_primer_turno", false)
 		else:
 			tablero.es_primer_turno = false
-			
+
 	return true
 
 # ===========================
@@ -196,7 +223,6 @@ func _reactivar_turno() -> void:
 # ===========================
 # 🔹 INTERCAMBIAR FICHAS
 # ===========================
-
 func _on_intercambiar_fichas_pressed() -> void:
 	var atril := get_tree().current_scene.get_node_or_null("PanelContainer")
 	if atril == null:
@@ -212,9 +238,18 @@ func _on_intercambiar_fichas_pressed() -> void:
 		tablero.modulate = Color(1, 1, 1, 0.5)
 		tablero.set_process_input(false)
 
-	# Esperamos selección de fichas
-	var fichas_a_cambiar: Array = await atril.seleccionar_fichas_para_intercambio()
+	# Esperamos selección de fichas. NOTA: no tipamos la variable para poder aceptar null.
+	var fichas_a_cambiar = await atril.seleccionar_fichas_para_intercambio()
 
+	# Si el usuario canceló con ESC -> fichas_a_cambiar == null -> no mostrar error, solo restaurar
+	if fichas_a_cambiar == null:
+		if tablero:
+			tablero.modulate = Color(1, 1, 1, 1)
+			tablero.set_process_input(true)
+		print("Intercambio cancelado por el usuario.")
+		return
+
+	# Si devolvió array vacío (confirmó pero no seleccionó fichas) -> mostrar mensaje
 	if fichas_a_cambiar.is_empty():
 		mostrar_error("No seleccionaste fichas para intercambiar.")
 		if tablero:
@@ -223,7 +258,10 @@ func _on_intercambiar_fichas_pressed() -> void:
 		return
 
 	# Ejecutar el intercambio
-	atril.intercambiar_fichas(fichas_a_cambiar)
+	if atril.has_method("intercambiar_fichas"):
+		atril.intercambiar_fichas(fichas_a_cambiar)
+	else:
+		print("Atril no tiene método 'intercambiar_fichas'.")
 
 	# Reactivar tablero y actualizar contador
 	if tablero:
@@ -232,7 +270,6 @@ func _on_intercambiar_fichas_pressed() -> void:
 
 	actualizar_contador_bolsa()
 	print("Fichas intercambiadas correctamente.")
-
 
 # ===========================
 # REORDENAR FICHAS
@@ -244,17 +281,32 @@ func _on_reordenar_fichas_pressed() -> void:
 		return
 
 	var tablero := get_tree().current_scene.get_node_or_null("Board")
+
+	# Si ya estamos en modo reordenar, pulsar otra vez cancela el modo
+	if atril.modo_reordenar:
+		if atril.has_method("cancelar_reordenar"):
+			atril.cancelar_reordenar()
+		if tablero:
+			tablero.modulate = Color(1, 1, 1, 1)
+			tablero.set_process_input(true)
+		print("Reordenamiento cancelado (botón).")
+		return
+
+	# Si no estaba en modo reordenar, entrar en modo reordenar como antes
 	if tablero:
 		tablero.modulate = Color(1, 1, 1, 0.5)
 		tablero.set_process_input(false)
 
-	await atril.seleccionar_fichas_para_reordenar()
+	if atril.has_method("seleccionar_fichas_para_reordenar"):
+		await atril.seleccionar_fichas_para_reordenar()
+	else:
+		print("Atril no tiene método 'seleccionar_fichas_para_reordenar'.")
 
 	if tablero:
 		tablero.modulate = Color(1, 1, 1, 1)
 		tablero.set_process_input(true)
 
-	print("🔁 Reordenamiento completado.")
+	print("🔁 Reordenamiento finalizado o cancelado.")
 
 # ===========================
 # 🔹 MENSAJE DE ERROR
