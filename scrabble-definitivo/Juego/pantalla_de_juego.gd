@@ -61,7 +61,7 @@ func actualizar_ui_puntuacion():
 		label_puntuacion.name = "LabelPuntuacion"
 		label_puntuacion.add_theme_font_size_override("font_size", 24)
 		label_puntuacion.add_theme_color_override("font_color", Color(1, 1, 1))
-		label_puntuacion.position = Vector2(20, 20)  # Esquina superior izquierda
+		label_puntuacion.position = Vector2(200, 50)  # Esquina superior izquierda
 		add_child(label_puntuacion)
 	
 	# Actualizar texto
