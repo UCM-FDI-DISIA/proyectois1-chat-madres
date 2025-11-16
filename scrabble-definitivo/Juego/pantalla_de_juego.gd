@@ -265,9 +265,12 @@ func _reactivar_turno() -> void:
 
 	if tablero:
 		tablero.modulate = Color(1, 1, 1, 1)
+		if tablero.has_method("empezar_turno"):
+			tablero.empezar_turno()   # ← aquí se actualiza snapshot_ocupadas_previas y es_primer_turno
 
 	es_mi_turno = true
 	print("Turno reactivado.")
+
 
 # ===========================
 # 🔹 INTERCAMBIAR FICHAS

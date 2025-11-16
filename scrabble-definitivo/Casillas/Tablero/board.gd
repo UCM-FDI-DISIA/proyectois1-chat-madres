@@ -14,6 +14,74 @@ const LETTER_VALUES = {
 	"X": 8, "Y": 4, "Z": 10
 }
 
+# ---------------- tipos de casilla ----------------
+const TILE_SOURCE_2L := 0
+const TILE_SOURCE_2W := 1
+const TILE_SOURCE_3L := 2
+const TILE_SOURCE_3W := 3
+const TILE_SOURCE_ESTRELLA := 4
+const TILE_SOURCE_NORMAL := 5
+const TILE_SOURCE_FONDO := 6
+const TILE_SOURCE_CIAN := 7
+
+# Mapea el source_id del TileSet a un tipo de casilla.
+# OJO: tendrás que ajustar este diccionario a los IDs reales de tu TileSet.
+const TILE_TYPE_BY_SOURCE_ID := {
+	0: "2L",  # doble letra
+	1: "2W",  # doble palabra
+	2: "3L",  # triple letra
+	3: "3W",  # triple palabra
+	4: "2W",  # estrella -> doble palabra
+	5: "N",   # normal
+	6: "N",   # fondo
+	7: "N",   # cian
+}
+
+func _get_multiplicadores_casilla(cell: Vector2i) -> Dictionary:
+	# Si la ficha no es nueva, no hay bonus
+	if not fichas_turno_actual.has(cell):
+		return {
+			"mult_letra": 1,
+			"mult_palabra": 1,
+		}
+
+	if tilemap == null:
+		return {
+			"mult_letra": 1,
+			"mult_palabra": 1,
+		}
+
+	var source_id: int = tilemap.get_cell_source_id(0, cell)
+
+	# ID inválido
+	if source_id == -1:
+		return {
+			"mult_letra": 1,
+			"mult_palabra": 1,
+		}
+
+	var tipo: String = String(TILE_TYPE_BY_SOURCE_ID.get(source_id, "N"))
+
+	var mult_letra: int = 1
+	var mult_palabra: int = 1
+
+	match tipo:
+		"2L":
+			mult_letra = 2
+		"3L":
+			mult_letra = 3
+		"2W":
+			mult_palabra = 2
+		"3W":
+			mult_palabra = 3
+		_:
+			pass
+
+	return {
+		"mult_letra": mult_letra,
+		"mult_palabra": mult_palabra,
+	}
+
 # Estado de turno
 var fichas_turno_actual: Array = []
 var palabras_turno_actual: Array = []
@@ -290,9 +358,17 @@ func registrar_palabras_turno_actual() -> void:
 
 # ---------------- conexión / centro ----------------
 func empezar_turno() -> void:
-	snapshot_ocupadas_previas = []
+	# Guardar cómo estaba el tablero al inicio del turno
+	snapshot_ocupadas_previas.clear()
 	for k in celdas_ocupadas.keys():
-		snapshot_ocupadas_previas.append(k as Vector2i)
+		var c: Vector2i = k
+		snapshot_ocupadas_previas.append(c)
+
+	# Si al empezar el turno no había nada en el tablero → es el primer turno
+	# Si ya había fichas → NO es primer turno
+	es_primer_turno = snapshot_ocupadas_previas.is_empty()
+
+
 
 func _get_celda_centro() -> Vector2i:
 	if tilemap == null: return Vector2i.ZERO
@@ -636,19 +712,169 @@ func _collect_buttons_recursive(root: Node, out: Array) -> void:
 
 # nuevo
 func calcular_puntuacion_turno() -> int:
-	var total_score := 0
-	
-	for palabra in palabras_turno_actual:
-		var palabra_score = calcular_puntuacion_palabra(palabra)
+	var total_score: int = 0
+
+	# Sacamos todas las palabras formadas este turno
+	var palabras_info: Array = _get_palabras_y_celdas_turno()
+
+	# Actualizamos palabras_turno_actual para que el resto de tu código la use igual que antes
+	palabras_turno_actual.clear()
+
+	for info in palabras_info:
+		var celdas: Array = info["celdas"]
+		var texto: String = info["texto"]
+
+		palabras_turno_actual.append(texto)
+
+		var palabra_score: int = calcular_puntuacion_palabra(celdas)
 		total_score += palabra_score
-		print("Palabra '%s' = %d puntos" % [palabra, palabra_score])
-	
-	print("Puntuación total del turno: %d puntos" % total_score)
+		# DEBUG: descomenta si quieres ver detalle
+		# print("Palabra '%s' = %d puntos" % [texto, palabra_score])
+
+	# DEBUG general
+	# print("Puntuación total del turno: %d puntos" % total_score)
+
 	return total_score
 
-func calcular_puntuacion_palabra(palabra: String) -> int:
-	var score := 0
-	for i in range(palabra.length()):
-		var letra = palabra[i]
-		score += LETTER_VALUES.get(letra, 0)  # 0 si no encuentra la letra
-	return score
+
+func calcular_puntuacion_palabra(celdas: Array) -> int:
+	var suma_letras: int = 0
+	var mult_palabra_total: int = 1
+
+	for any in celdas:
+		var cell: Vector2i = any as Vector2i
+		var letra: String = _obtener_letra_de_celda(cell)
+		if letra == "":
+			continue
+
+		var puntos_base: int = int(LETTER_VALUES.get(letra, 0))
+
+		var mults: Dictionary = _get_multiplicadores_casilla(cell)
+		var mult_letra: int = int(mults["mult_letra"])
+		var mult_palabra: int = int(mults["mult_palabra"])
+
+		suma_letras += puntos_base * mult_letra
+		mult_palabra_total *= mult_palabra
+
+	return suma_letras * mult_palabra_total
+
+
+func _celdas_palabra_horizontal(celda: Vector2i) -> Array:
+	var min_x := celda.x
+	var max_x := celda.x
+	while celdas_ocupadas.has(Vector2i(min_x - 1, celda.y)):
+		min_x -= 1
+	while celdas_ocupadas.has(Vector2i(max_x + 1, celda.y)):
+		max_x += 1
+	if max_x == min_x:
+		return []
+	var celdas: Array = []
+	for x in range(min_x, max_x + 1):
+		celdas.append(Vector2i(x, celda.y))
+	return celdas
+
+func _celdas_palabra_vertical(celda: Vector2i) -> Array:
+	var min_y := celda.y
+	var max_y := celda.y
+	while celdas_ocupadas.has(Vector2i(celda.x, min_y - 1)):
+		min_y -= 1
+	while celdas_ocupadas.has(Vector2i(celda.x, max_y + 1)):
+		max_y += 1
+	if max_y == min_y:
+		return []
+	var celdas: Array = []
+	for y in range(min_y, max_y + 1):
+		celdas.append(Vector2i(celda.x, y))
+	return celdas
+
+
+# Devuelve un Array de Diccionarios:
+# [ { "celdas": [Vector2i, ...], "texto": "CASA" }, ... ]
+func _get_palabras_y_celdas_turno() -> Array:
+	var resultado: Array = []
+	if fichas_turno_actual.is_empty():
+		return resultado
+
+	var ya_vistas: Dictionary = {}
+
+	for any in fichas_turno_actual:
+		var c: Vector2i = any as Vector2i
+
+		# ---- palabra horizontal que pasa por c ----
+		var min_x := c.x
+		var max_x := c.x
+		while celdas_ocupadas.has(Vector2i(min_x - 1, c.y)):
+			min_x -= 1
+		while celdas_ocupadas.has(Vector2i(max_x + 1, c.y)):
+			max_x += 1
+
+		if max_x > min_x:
+			var clave_h := "H_%d_%d_%d" % [c.y, min_x, max_x]
+			if not ya_vistas.has(clave_h):
+				ya_vistas[clave_h] = true
+				var celdas_h: Array = []
+				for x in range(min_x, max_x + 1):
+					celdas_h.append(Vector2i(x, c.y))
+				var texto_h := _texto_desde_celdas(celdas_h)
+				resultado.append({
+					"celdas": celdas_h,
+					"texto": texto_h,
+				})
+
+		# ---- palabra vertical que pasa por c ----
+		var min_y := c.y
+		var max_y := c.y
+		while celdas_ocupadas.has(Vector2i(c.x, min_y - 1)):
+			min_y -= 1
+		while celdas_ocupadas.has(Vector2i(c.x, max_y + 1)):
+			max_y += 1
+
+		if max_y > min_y:
+			var clave_v := "V_%d_%d_%d" % [c.x, min_y, max_y]
+			if not ya_vistas.has(clave_v):
+				ya_vistas[clave_v] = true
+				var celdas_v: Array = []
+				for y in range(min_y, max_y + 1):
+					celdas_v.append(Vector2i(c.x, y))
+				var texto_v := _texto_desde_celdas(celdas_v)
+				resultado.append({
+					"celdas": celdas_v,
+					"texto": texto_v,
+				})
+
+	return resultado
+	
+func _texto_desde_celdas(celdas: Array) -> String:
+	var letras: Array[String] = []
+	for any in celdas:
+		var pos: Vector2i = any as Vector2i
+		var letra: String = _obtener_letra_de_celda(pos)
+		letras.append(letra)
+	return "".join(letras)
+# =========================================================
+# VALIDAR FIN DE TURNO (centro en el primero, conexión en los demás)
+# =========================================================
+func validar_fin_de_turno() -> bool:
+	# No se ha colocado nada
+	if fichas_turno_actual.is_empty():
+		print("⚠️ No has puesto ninguna ficha este turno.")
+		return false
+
+	# PRIMER TURNO → debe tocar la casilla central
+	if es_primer_turno:
+		if not _toca_centro_en_turno():
+			print("❌ La primera jugada debe pasar por la casilla central.")
+			devolver_fichas_turno()
+			return false
+	else:
+		# TURNOS SIGUIENTES → deben tocar el tablero anterior
+		if not _hay_conexion_con_tablero_previo():
+			print("❌ Las fichas nuevas tienen que tocar una palabra ya existente.")
+			devolver_fichas_turno()
+			return false
+
+	# Si hemos llegado aquí, la jugada es válida
+	registrar_palabras_turno_actual()
+	es_primer_turno = false
+	print("✅ Jugada válida.")
+	return true
