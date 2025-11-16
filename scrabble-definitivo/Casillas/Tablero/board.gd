@@ -1,9 +1,18 @@
+
 extends Node2D
 
 const TILEMAP_PATH: String = "TileMap"
 
 @onready var tilemap: TileMap = get_node_or_null(TILEMAP_PATH)
 var celdas_ocupadas: Dictionary = {}  # Vector2i -> Sprite2D
+
+# nuevo
+const LETTER_VALUES = {
+	"A": 1, "B": 3, "C": 3, "D": 2, "E": 1, "F": 4, "G": 2, "H": 4,
+	"I": 1, "J": 8, "K": 5, "L": 1, "M": 3, "N": 1, "Ñ": 8, "O": 1,
+	"P": 3, "Q": 5, "R": 1, "S": 1, "T": 1, "U": 1, "V": 4, "W": 10,
+	"X": 8, "Y": 4, "Z": 10
+}
 
 # Estado de turno
 var fichas_turno_actual: Array = []
@@ -623,3 +632,23 @@ func _collect_buttons_recursive(root: Node, out: Array) -> void:
 		if ch is Button:
 			out.append(ch)
 		_collect_buttons_recursive(ch, out)
+
+
+# nuevo
+func calcular_puntuacion_turno() -> int:
+	var total_score := 0
+	
+	for palabra in palabras_turno_actual:
+		var palabra_score = calcular_puntuacion_palabra(palabra)
+		total_score += palabra_score
+		print("Palabra '%s' = %d puntos" % [palabra, palabra_score])
+	
+	print("Puntuación total del turno: %d puntos" % total_score)
+	return total_score
+
+func calcular_puntuacion_palabra(palabra: String) -> int:
+	var score := 0
+	for i in range(palabra.length()):
+		var letra = palabra[i]
+		score += LETTER_VALUES.get(letra, 0)  # 0 si no encuentra la letra
+	return score

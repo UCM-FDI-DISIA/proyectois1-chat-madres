@@ -13,7 +13,7 @@
 [ext_resource type="Script" uid="uid://bwiutq554vxcn" path="res://Juego/hueco_5.gd" id="10_qpeoq"]
 [ext_resource type="Script" uid="uid://tcty2e426dqf" path="res://Juego/hueco_6.gd" id="11_vcpce"]
 [ext_resource type="Script" uid="uid://cuplq10yvrdil" path="res://Juego/hueco_7.gd" id="12_y3uwc"]
-[ext_resource type="Script" uid="uid://dhut774qwcevi" path="res://Juego/drag_preview_manager.gd" id="14_dadpr"]
+[ext_resource type="Script" path="res://Juego/drag_preview_manager.gd" id="14_dadpr"]
 [ext_resource type="Texture2D" uid="uid://2om1aivw88ro" path="res://scripts/Bolsa_1.1.8.png" id="16_qxxvd"]
 
 [node name="PantallaDeJuego" type="Control"]

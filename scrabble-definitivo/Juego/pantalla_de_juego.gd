@@ -1,6 +1,9 @@
 extends Control
 
 var es_mi_turno: bool = false
+var puntuacion_jugador_actual: int = 0
+var num_jugadores: int = 1
+var jugador_actual: int = 0
 
 const OPTIONS_SCENE := preload("res://Opciones/opciones.tscn")
 
@@ -9,7 +12,10 @@ func _ready() -> void:
 	$PantallaError.visible = false
 	$PantallaError.modulate.a = 0
 	$MensajeError.visible = false
-
+	
+	# Inicializar sistema de puntuación
+	inicializar_sistema_puntuacion()
+	
 	# --- Conexiones programáticas y robustas de botones (Godot 4.5) ---
 	var btn_opciones := get_node_or_null("Opciones")
 	var btn_intercambiar := get_node_or_null("IntercambiarFichas")
@@ -36,6 +42,35 @@ func _ready() -> void:
 		if not btn_reordenar.is_connected("pressed", c_reo):
 			btn_reordenar.connect("pressed", c_reo)
 	# --------------------------------------------------------
+
+# ===========================
+# 🔹 Sistema de Puntuación
+# ===========================
+func inicializar_sistema_puntuacion():
+	puntuacion_jugador_actual = 0
+	jugador_actual = 0
+	actualizar_ui_puntuacion()
+
+func actualizar_ui_puntuacion():
+	# Buscar o crear un Label para mostrar la puntuación
+	var label_puntuacion = get_node_or_null("LabelPuntuacion")
+	
+	if label_puntuacion == null:
+		# Si no existe, lo creamos
+		label_puntuacion = Label.new()
+		label_puntuacion.name = "LabelPuntuacion"
+		label_puntuacion.add_theme_font_size_override("font_size", 24)
+		label_puntuacion.add_theme_color_override("font_color", Color(1, 1, 1))
+		label_puntuacion.position = Vector2(20, 20)  # Esquina superior izquierda
+		add_child(label_puntuacion)
+	
+	# Actualizar texto
+	label_puntuacion.text = "Jugador %d: %d puntos" % [jugador_actual + 1, puntuacion_jugador_actual]
+
+func sumar_puntos(puntos: int):
+	puntuacion_jugador_actual += puntos
+	actualizar_ui_puntuacion()
+	print("Puntos sumados: %d - Total: %d" % [puntos, puntuacion_jugador_actual])
 
 # ===========================
 # 🔹 Actualizar contador de bolsa
@@ -68,6 +103,7 @@ func set_turno(mi_turno: bool) -> void:
 		if tablero and tablero.has_method("empezar_turno"):
 			tablero.empezar_turno()
 		actualizar_contador_bolsa()
+		actualizar_ui_puntuacion()  # ← Actualizar UI al empezar turno
 
 func _on_opciones_pressed() -> void:
 	var t = OPTIONS_SCENE.instantiate()
@@ -106,23 +142,36 @@ func _on_finalizar_turno_pressed() -> void:
 	# Validar jugada (devuelve bool)
 	var ok := await _validar_jugada(tablero)
 
-	if ok and tablero.has_method("limpiar_fichas_turno"):
-		tablero.limpiar_fichas_turno()
+	if ok:
+		# ✅ JUGADA VÁLIDA - CALCULAR Y SUMAR PUNTOS
+		if tablero.has_method("calcular_puntuacion_turno"):
+			var puntos_turno = tablero.calcular_puntuacion_turno()
+			sumar_puntos(puntos_turno)
+			print("✅ Jugada válida! Sumados %d puntos. Total: %d" % [puntos_turno, puntuacion_jugador_actual])
+		
+		# Registrar palabras y limpiar turno
+		if tablero.has_method("registrar_palabras_turno_actual"):
+			tablero.registrar_palabras_turno_actual()
+		
+		if tablero.has_method("limpiar_fichas_turno"):
+			tablero.limpiar_fichas_turno()
+		
+		# Marcar fin del primer turno si era el primero
+		if tablero.es_primer_turno:
+			tablero.es_primer_turno = false
+	else:
+		# ❌ JUGADA INVÁLIDA - Devolver fichas
+		print("❌ Jugada inválida, devolviendo fichas...")
+		if tablero.has_method("devolver_fichas_turno"):
+			tablero.devolver_fichas_turno()
 
-	# Reponer fichas colocadas
-	if atril and atril.has_method("reponer_fichas_colocadas"):
-		atril.reponer_fichas_colocadas()
-
-	# Si es válida, limpiamos estado de turno en el Board
-	if ok and tablero.has_method("limpiar_fichas_turno"):
-		tablero.limpiar_fichas_turno()
-
-	# Reactivar turno SIEMPRE para permitir seguir jugando/corrigiendo
-	_reactivar_turno()
-
+	# Reponer fichas colocadas SIEMPRE
 	if atril and atril.has_method("reponer_fichas_colocadas"):
 		atril.reponer_fichas_colocadas()
 		actualizar_contador_bolsa()
+
+	# Reactivar turno
+	_reactivar_turno()
 
 # ===========================
 # 🔹 VALIDACIÓN DE JUGADA
