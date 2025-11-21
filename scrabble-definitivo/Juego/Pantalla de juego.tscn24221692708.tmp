@@ -43,20 +43,6 @@ texture = ExtResource("2_a8u10")
 position = Vector2(525, 329.99994)
 scale = Vector2(0.015, 0.015)
 
-[node name="Labelturno" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -602.0
-offset_top = 50.0
-offset_right = -252.0
-offset_bottom = 92.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 30
-text = "Es el turno del jugador X"
-horizontal_alignment = 1
-
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 0
 offset_right = 40.0
@@ -118,11 +104,6 @@ offset_top = 84.0
 offset_right = 1224.0
 offset_bottom = 115.0
 text = "⚙️"
-
-[node name="Atril" type="PanelContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -206,6 +187,13 @@ theme_override_font_sizes/font_size = 22
 text = "La palabra introducida no es válida."
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="LabelturnoActual" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Es el turno del jugador X"
+horizontal_alignment = 1
 
 [connection signal="pressed" from="Opciones" to="." method="_on_opciones_pressed"]
 [connection signal="pressed" from="IntercambiarFichas" to="." method="_on_intercambiar_fichas_pressed"]

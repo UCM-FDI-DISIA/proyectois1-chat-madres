@@ -1,20 +1,53 @@
 extends Control
 
+#Variables
 var es_mi_turno: bool = false
 var puntuacion_jugador_actual: int = 0
-var num_jugadores: int = 1
-var jugador_actual: int = 0
+var puntuaciones: Array = []
 
+#Constantes
 const OPTIONS_SCENE := preload("res://Opciones/opciones.tscn")
 
+# ===========================
+# 🔹 Funciones del ciclo de vida
+# ===========================
 func _ready() -> void:
-	set_turno(true)
-	$PantallaError.visible = false
-	$PantallaError.modulate.a = 0
-	$MensajeError.visible = false
+	#1 inicializar los datos del juego
+	GameData.inicializar_juego()
+	print("Número de jugadores:", GameData.num_jugadores)
+	print("Jugador actual:", GameData.jugador_actual + 1)
+
+	# 2. Crear el array de atriles vacíos para cada jugador
+	#GameData.atriles_jugadores.clear()
+	#for i in range(GameData.num_jugadores):
+		#GameData.atriles_jugadores.append([])
+
+	# 3. Generar atril inicial de cada jugador desde la misma bolsa
+	#var atril = $PanelContainer/Atril
+
+	#for i in range(GameData.num_jugadores):
+		# Simular que ese jugador está robando fichas
+		#GameData.jugador_actual = i
+
+		#atril._rellenar_atril()
+		#
+		# Dejar el atril vacío para que no quede el del último jugador
+		#
+	# 4. Volver al jugador 0
+	#GameData.jugador_actual = 0
+	#atril.cargar_atril(GameData.atriles_jugadores[0])
+
+	#5 Resto:
 	
 	# Inicializar sistema de puntuación
 	inicializar_sistema_puntuacion()
+	# Activar turno del primer jugador
+	set_turno(true)
+	actualizar_label_turno()
+	
+	$PantallaError.visible = false
+	$PantallaError.modulate.a = 0
+	$MensajeError.visible = false
 	
 	# --- Conexiones programáticas y robustas de botones (Godot 4.5) ---
 	var btn_opciones := get_node_or_null("Opciones")
@@ -48,7 +81,12 @@ func _ready() -> void:
 # ===========================
 func inicializar_sistema_puntuacion():
 	puntuacion_jugador_actual = 0
-	jugador_actual = 0
+	GameData.jugador_actual = 0
+	puntuaciones.clear()
+	
+	for i in GameData.num_jugadores:
+		puntuaciones.append(0)
+	
 	actualizar_ui_puntuacion()
 
 func actualizar_ui_puntuacion():
@@ -63,25 +101,78 @@ func actualizar_ui_puntuacion():
 		label_puntuacion.add_theme_color_override("font_color", Color(1, 1, 1))
 		label_puntuacion.position = Vector2(200, 50)  # Esquina superior izquierda
 		add_child(label_puntuacion)
-	
 	# Actualizar texto
-	label_puntuacion.text = "Jugador %d: %d puntos" % [jugador_actual + 1, puntuacion_jugador_actual]
+	label_puntuacion.text = "Jugador %d: %d puntos" % [GameData.jugador_actual + 1, puntuaciones[GameData.jugador_actual]]
 
 func sumar_puntos(puntos: int):
-	puntuacion_jugador_actual += puntos
+	puntuaciones[GameData.jugador_actual]+= puntos
 	actualizar_ui_puntuacion()
-	print("Puntos sumados: %d - Total: %d" % [puntos, puntuacion_jugador_actual])
+	print("Puntos sumados: %d - Total: %d" % [puntos, puntuaciones[GameData.jugador_actual]])
+
+
+
+# ===========================
+# 🔹 Actualizar LabelTurno
+# ===========================
+func actualizar_label_turno():
+	var label = get_node_or_null("Labelturno")
+	if label:
+		label.text = "Turno del jugador %d" % (GameData.jugador_actual + 1)
+
+
+
+# ===========================
+# 🔹 Control de turno
+# ===========================
+func set_turno(mi_turno: bool) -> void:
+	es_mi_turno = mi_turno
+	var tablero = get_tree().current_scene.get_node_or_null("Board")
+	if es_mi_turno:
+		if $ColorRect and $ColorRect.has_method("mostrar_con_fundido"):
+			$ColorRect.mostrar_con_fundido()
+		if tablero and tablero.has_method("empezar_turno"):
+			tablero.empezar_turno()
+	actualizar_contador_bolsa()
+	actualizar_ui_puntuacion()
+
+#func _siguiente_jugador():
+	#GameData.jugador_actual += 1
+	#if GameData.jugador_actual >= GameData.num_jugadores:
+		#GameData.jugador_actual = 0
+		
+	#actualizar_label_turno()
+	#set_turno(true)
+
+func _siguiente_jugador():
+	# 1) Guardar atril del jugador que termina turno
+	#var atril = get_tree().current_scene.get_node("PanelContainer/Atril")
+	#if atril:
+		#GameData.atriles_jugadores[GameData.jugador_actual] = atril.exportar_atril()
+
+	# 2) Avanzar al siguiente jugador
+	GameData.jugador_actual += 1
+	if GameData.jugador_actual >= GameData.num_jugadores:
+		GameData.jugador_actual = 0
+
+	# 3) Cargar atril del nuevo jugador
+	#if atril:
+		#atril.cargar_atril(GameData.atriles_jugadores[GameData.jugador_actual])
+
+	# 4) Actualizar UI de turno
+	actualizar_label_turno()
+	set_turno(true)
+
 
 # ===========================
 # 🔹 Actualizar contador de bolsa
 # ===========================
 func actualizar_contador_bolsa() -> void:
 	var atril := get_tree().current_scene.get_node_or_null("PanelContainer")
+	var label = get_node_or_null("ContadorBolsa")
 	if atril == null:
 		push_warning("No se encontró el nodo Atril")
 		return
-
-	var label := get_node_or_null("ContadorBolsa")
+		
 	if label == null:
 		push_warning("No se encontró el Label ContadorBolsa")
 		return
@@ -92,26 +183,13 @@ func actualizar_contador_bolsa() -> void:
 		label.text = "0"
 
 # ===========================
-# 🔹 Control de turno
+# 🔹 Botones
 # ===========================
-func set_turno(mi_turno: bool) -> void:
-	es_mi_turno = mi_turno
-	if es_mi_turno:
-		if $ColorRect and $ColorRect.has_method("mostrar_con_fundido"):
-			$ColorRect.mostrar_con_fundido()
-		var tablero := get_tree().current_scene.get_node_or_null("Board")
-		if tablero and tablero.has_method("empezar_turno"):
-			tablero.empezar_turno()
-		actualizar_contador_bolsa()
-		actualizar_ui_puntuacion()  # ← Actualizar UI al empezar turno
 
 func _on_opciones_pressed() -> void:
 	var t = OPTIONS_SCENE.instantiate()
 	get_tree().current_scene.add_child(t)
 
-# ===========================
-# 🔹 BOTÓN "FINALIZAR TURNO"
-# ===========================
 func _on_finalizar_turno_pressed() -> void:
 	if not es_mi_turno:
 		return
@@ -126,7 +204,7 @@ func _on_finalizar_turno_pressed() -> void:
 		push_warning("No se encontró el nodo 'PanelContainer' (atril)")
 		return
 
-	# Bloquear la colocación
+	# Bloquear la colocación, bloquear el turno
 	es_mi_turno = false
 
 	# Bloquear botones del atril
@@ -168,10 +246,10 @@ func _on_finalizar_turno_pressed() -> void:
 	# Reponer fichas colocadas SIEMPRE
 	if atril and atril.has_method("reponer_fichas_colocadas"):
 		atril.reponer_fichas_colocadas()
-		actualizar_contador_bolsa()
+	actualizar_contador_bolsa()
 
-	# Reactivar turno
-	_reactivar_turno()
+	# Reactivar turno ahora es _siguiente_jugador()
+	_siguiente_jugador()
 
 # ===========================
 # 🔹 VALIDACIÓN DE JUGADA
@@ -270,6 +348,7 @@ func _reactivar_turno() -> void:
 
 	es_mi_turno = true
 	print("Turno reactivado.")
+
 
 
 # ===========================
@@ -387,3 +466,17 @@ func mostrar_error(mensaje: String) -> void:
 func _ocultar_error() -> void:
 	$PantallaError.visible = false
 	$MensajeError.visible = false
+	
+
+
+
+
+#func guardar_atril_jugador():
+	#var atril = $PanelContainer/Atril
+	#GameData.atriles_jugadores[GameData.jugador_actual] = atril.exportar_atril()
+
+
+#func cargar_atril_jugador():
+	#var atril = $PanelContainer/Atril
+	#var datos = GameData.atriles_jugadores[GameData.jugador_actual]
+	#atril.cargar_atril(datos)

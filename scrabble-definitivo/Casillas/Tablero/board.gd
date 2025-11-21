@@ -83,7 +83,7 @@ func _get_multiplicadores_casilla(cell: Vector2i) -> Dictionary:
 	}
 
 # Estado de turno
-var fichas_turno_actual: Array = []
+var fichas_turno_actual: Array = [] 
 var palabras_turno_actual: Array = []
 var palabras_jugadas_globales: Array = []
 
@@ -367,6 +367,13 @@ func empezar_turno() -> void:
 	# Si al empezar el turno no había nada en el tablero → es el primer turno
 	# Si ya había fichas → NO es primer turno
 	es_primer_turno = snapshot_ocupadas_previas.is_empty()
+
+#se supone que ahora debemos usar esta
+#func empezar_turno():
+	#fichas_turno_actual.clear()
+	#if not es_turno_actual:
+		#set_process_input(false)
+	#else: set_process_input(true)
 
 
 

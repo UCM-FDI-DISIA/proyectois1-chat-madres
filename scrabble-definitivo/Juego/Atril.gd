@@ -335,3 +335,39 @@ func _esperar_salida_reordenar() -> void:
 func _wait_mouse_released() -> void:
 	while Input.is_mouse_button_pressed(1):
 		await get_tree().process_frame
+
+
+#func cargar_atril(lista_letras: Array) -> void:
+	#limpiar_atril()
+#for i in range(min(lista_letras.size(), huecos.size())):
+		#if letra == null:
+			#continue
+
+		# Buscar diccionario de ficha correspondiente en la bolsa
+		#if bolsa and bolsa.has_method("crear_ficha_por_letra"):
+			#var f = bolsa.crear_ficha_por_letra(letra)
+			#if f is Dictionary:
+				#var b = huecos[i]
+				#b.tooltip_text = "Letra: %s\nPuntos: %d" % [
+					#f.get("letra"),
+					#int(f.get("puntos", 0))
+				#]
+				#b.set_meta("letra", letra)
+
+func limpiar_atril() -> void:
+	for b in huecos:
+		b.icon = null
+		b.text = ""
+		b.tooltip_text = ""
+		if b.has_meta("letra"):
+			b.remove_meta("letra")
+
+
+#func exportar_atril() -> Array:
+	#var resultado: Array = []
+	#for b in huecos:
+		#if b.icon != null and b.has_meta("letra"):
+			#resultado.append(b.get_meta("letra"))
+		#else:
+			#resultado.append(null)
+	#return resultado

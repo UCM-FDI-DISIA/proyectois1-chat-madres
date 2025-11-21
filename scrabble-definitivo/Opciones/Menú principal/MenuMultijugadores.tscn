@@ -1,0 +1,84 @@
+[gd_scene load_steps=3 format=3 uid="uid://54aa4imur3tr"]
+
+[ext_resource type="Script" uid="uid://yiebtm3jfr8g" path="res://Opciones/Menú principal/MenuMultijugadores.gd" id="1_aa58b"]
+[ext_resource type="Texture2D" uid="uid://dk5d501rlkab2" path="res://Opciones/Menú principal/fondo menu multijugador.png" id="1_tdhd4"]
+
+[node name="MenuMultijugadores" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_aa58b")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0.627451)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("1_tdhd4")
+stretch_mode = 6
+
+[node name="VBox_Botones" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(700, 700)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -487.0
+offset_top = -350.0
+offset_right = 487.0
+offset_bottom = 350.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="titulo" type="Label" parent="VBox_Botones"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 50
+text = "SELECCIONE EL NUMERO DE JUGADORES"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="boton_1" type="Button" parent="VBox_Botones"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 45
+text = "1 JUGADOR"
+
+[node name="boton_2" type="Button" parent="VBox_Botones"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 45
+text = "2 JUGADORES"
+
+[node name="boton_3" type="Button" parent="VBox_Botones"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 45
+text = "3 JUGADORES"
+
+[node name="boton_4" type="Button" parent="VBox_Botones"]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 45
+text = "4 JUGADORES"
+
+[connection signal="pressed" from="VBox_Botones/boton_1" to="." method="_on_boton_1_pressed"]
+[connection signal="pressed" from="VBox_Botones/boton_2" to="." method="_on_boton_2_pressed"]
+[connection signal="pressed" from="VBox_Botones/boton_3" to="." method="_on_boton_3_pressed"]
+[connection signal="pressed" from="VBox_Botones/boton_4" to="." method="_on_boton_4_pressed"]

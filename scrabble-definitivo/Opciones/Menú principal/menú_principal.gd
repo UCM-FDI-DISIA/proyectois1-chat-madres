@@ -2,6 +2,7 @@ extends Control
 
 const TUTORIAL_SCENE := preload("res://Opciones/Tutorial/Tutorial.tscn")
 const CREDITS_SCENE := preload("res://Créditos/Créditos.tscn")
+const MENU_JUGADORES_SCENE := preload("res://Opciones/Menú principal/MenuMultijugadores.tscn")
 
 func _on_tutorial_pressed() -> void:
 	var t = TUTORIAL_SCENE.instantiate()
@@ -13,3 +14,8 @@ func _on_créditos_pressed() -> void:
 
 func _on_salir_pressed() -> void:
 	get_tree().quit()
+
+func _on_jugar_pressed() -> void:
+	#Cambia a la escena donde eliges 1,2,3 o 4 jugadores
+	#get_tree().change_scene_to_file("res://Opciones/Menú Principal/MenuMultijugadores.tscn")
+	get_tree().change_scene_to_packed(MENU_JUGADORES_SCENE)

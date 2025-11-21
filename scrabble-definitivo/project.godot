@@ -14,10 +14,14 @@ config/name="Scrabble_definitivo"
 run/main_scene="uid://c0cjfrkwb0hpq"
 config/features=PackedStringArray("4.5", "Forward Plus")
 
+[autoload]
+
+GameData="*res://scripts/GameData.gd"
+
 [display]
 
 window/stretch/aspect="expand"
-window/stretch/scale=0.71
+window/stretch/scale=1.86
 
 [internationalization]
 
