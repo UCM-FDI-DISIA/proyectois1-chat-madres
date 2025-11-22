@@ -9,5 +9,14 @@ func _ready():
   })
 
   SilentWolf.configure_scores({
-	"open_scene_on_close": "res://scenes/MainPage.tscn"
+	"open_scene_on_close": "res://Opciones/Menú principal/Menú principal.tscn"
   })
+
+  SilentWolf.configure_auth({
+		"redirect_to_scene": "res://Opciones/Menú principal/Menú principal.tscn",
+		"login_scene": "res://addons/silent_wolf/Auth/Login.tscn",
+		"email_confirmation_scene": "res://addons/silent_wolf/Auth/ConfirmEmail.tscn",
+		"reset_password_scene": "res://addons/silent_wolf/Auth/ResetPassword.tscn",
+		"session_duration_seconds": 0,
+		"saved_session_expiration_days": 30
+})
