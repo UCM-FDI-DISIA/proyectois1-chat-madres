@@ -411,7 +411,8 @@ func _on_intercambiar_fichas_pressed() -> void:
 
 	actualizar_contador_bolsa()
 	print("Fichas intercambiadas correctamente.")
-
+	
+	_on_finalizar_turno_pressed()
 
 # ===========================
 # REORDENAR FICHAS

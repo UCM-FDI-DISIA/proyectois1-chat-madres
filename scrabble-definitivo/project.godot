@@ -17,10 +17,15 @@ config/features=PackedStringArray("4.5", "Forward Plus")
 [autoload]
 
 GameData="*res://scripts/GameData.gd"
+SilentWolf="*res://addons/silent_wolf/SilentWolf.gd"
 
 [display]
 
 window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/silent_wolf/plugin.cfg")
 
 [internationalization]
 

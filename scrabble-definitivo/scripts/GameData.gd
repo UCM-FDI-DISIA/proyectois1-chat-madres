@@ -1,4 +1,3 @@
-
 extends Node
 
 var num_jugadores: int = 1   # valor por defecto
