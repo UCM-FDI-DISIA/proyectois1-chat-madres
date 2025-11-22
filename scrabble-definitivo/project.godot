@@ -21,7 +21,6 @@ GameData="*res://scripts/GameData.gd"
 [display]
 
 window/stretch/aspect="expand"
-window/stretch/scale=1.86
 
 [internationalization]
 

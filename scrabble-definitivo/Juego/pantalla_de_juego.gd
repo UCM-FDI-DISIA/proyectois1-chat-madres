@@ -360,6 +360,12 @@ func _on_intercambiar_fichas_pressed() -> void:
 		mostrar_error("No se encontró el atril.")
 		return
 
+	# --- NUEVO: Mostrar mensaje en pantalla ---
+	var mensaje := get_tree().current_scene.get_node_or_null("MensajeIntercambio")
+	if mensaje:
+		mensaje.text = "Presiona ENTER para intercambiar fichas"
+		mensaje.visible = true
+
 	# Pedir al jugador seleccionar las fichas a intercambiar
 	print("Selecciona las fichas que deseas intercambiar (clic).")
 
@@ -369,10 +375,14 @@ func _on_intercambiar_fichas_pressed() -> void:
 		tablero.modulate = Color(1, 1, 1, 0.5)
 		tablero.set_process_input(false)
 
-	# Esperamos selección de fichas. NOTA: no tipamos la variable para poder aceptar null.
+	# Esperamos selección de fichas
 	var fichas_a_cambiar = await atril.seleccionar_fichas_para_intercambio()
 
-	# Si el usuario canceló con ESC -> fichas_a_cambiar == null -> no mostrar error, solo restaurar
+	# --- OCULTAR MENSAJE DESPUÉS ---
+	if mensaje:
+		mensaje.visible = false
+
+	# Si el usuario canceló con ESC -> null
 	if fichas_a_cambiar == null:
 		if tablero:
 			tablero.modulate = Color(1, 1, 1, 1)
@@ -380,7 +390,7 @@ func _on_intercambiar_fichas_pressed() -> void:
 		print("Intercambio cancelado por el usuario.")
 		return
 
-	# Si devolvió array vacío (confirmó pero no seleccionó fichas) -> mostrar mensaje
+	# Si devolvió array vacío (confirmó pero no seleccionó fichas)
 	if fichas_a_cambiar.is_empty():
 		mostrar_error("No seleccionaste fichas para intercambiar.")
 		if tablero:
@@ -401,6 +411,7 @@ func _on_intercambiar_fichas_pressed() -> void:
 
 	actualizar_contador_bolsa()
 	print("Fichas intercambiadas correctamente.")
+
 
 # ===========================
 # REORDENAR FICHAS
