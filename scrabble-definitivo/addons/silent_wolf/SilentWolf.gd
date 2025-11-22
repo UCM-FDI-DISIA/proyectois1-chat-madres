@@ -27,22 +27,22 @@ const SWLogger = preload("res://addons/silent_wolf/utils/SWLogger.gd")
 # See https://silentwolf.com for more details
 #
 var config = {
-	"api_key": "FmKF4gtm0Z2RbUAEU62kZ2OZoYLj4PYOURAPIKEY",
-	"game_id": "YOURGAMEID",
-	"log_level": 0
+	"api_key": "djQ8M0Ouqx6xZUY1SzZXp7RXcQCQ9vZG8NUXBtfM",
+	"game_id": "Scrabble",
+	"log_level": 1
 }
 
 var scores_config = {
-	"open_scene_on_close": "res://scenes/Splash.tscn"
+	"open_scene_on_close": "res://Opciones/Menú principal/Menú principal.tscn"
 }
 
 var auth_config = {
-	"redirect_to_scene": "res://scenes/Splash.tscn",
-	"login_scene": "res://addons/silent_wolf/Auth/Login.tscn",
-	"email_confirmation_scene": "res://addons/silent_wolf/Auth/ConfirmEmail.tscn",
-	"reset_password_scene": "res://addons/silent_wolf/Auth/ResetPassword.tscn",
-	"session_duration_seconds": 0,
-	"saved_session_expiration_days": 30
+		"redirect_to_scene": "res://Opciones/Menú principal/Menú principal.tscn",
+		"login_scene": "res://addons/silent_wolf/Auth/Login.tscn",
+		"email_confirmation_scene": "res://addons/silent_wolf/Auth/ConfirmEmail.tscn",
+		"reset_password_scene": "res://addons/silent_wolf/Auth/ResetPassword.tscn",
+		"session_duration_seconds": 0,
+		"saved_session_expiration_days": 30
 }
 
 var auth_script = load("res://addons/silent_wolf/Auth/Auth.gd")

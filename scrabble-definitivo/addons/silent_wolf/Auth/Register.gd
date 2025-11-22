@@ -30,14 +30,14 @@ func _on_registration_complete(sw_result: Dictionary) -> void:
 	if sw_result.success:
 		registration_success()
 	else:
-		registration_failure(sw_result.error)
+		registration_failure(str(sw_result.get("error", "Unknown error")))
 
 
 func _on_registration_user_pwd_complete(sw_result: Dictionary) -> void:
 	if sw_result.success:
 		registration_user_pwd_success()
 	else:
-		registration_failure(sw_result.error)
+		registration_failure(str(sw_result.get("error", "Unknown error")))
 
 
 func registration_success() -> void:

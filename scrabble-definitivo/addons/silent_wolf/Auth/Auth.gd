@@ -83,7 +83,7 @@ func _on_RegisterPlayer_request_completed(result, response_code, headers, body) 
 		# also get a JWT token here, when available in backend
 		# send a different signal depending on registration success or failure
 		var sw_result: Dictionary = SilentWolf.build_result(json_body)
-		if json_body.success:
+		if json_body.get("success", false):
 			SWLogger.info("SilentWolf register player success, player_name: " + str(json_body.player_name))
 			#sw_token = json_body.swtoken
 			var anon = json_body.anon
@@ -106,7 +106,7 @@ func _on_RegisterPlayer_request_completed(result, response_code, headers, body) 
 					SWLogger.info("Player registration succeeded, email verification is disabled")
 					logged_in_player = tmp_username
 		else:
-			SWLogger.error("SilentWolf player registration failure: " + str(json_body.error))
+			SWLogger.error("SilentWolf player registration failure: " + str(json_body.get("error", "")))
 		sw_registration_complete.emit(sw_result)
 
 
@@ -132,13 +132,13 @@ func _on_RegisterPlayerUserPassword_request_completed(result, response_code, hea
 		# also get a JWT token here
 		# send a different signal depending on registration success or failure
 		var sw_result: Dictionary = SilentWolf.build_result(json_body)
-		if json_body.success:
+		if json_body.get("success", false):
 			# if email confirmation is enabled for the game, we can't log in the player just yet
 			var email_conf_enabled = json_body.email_conf_enabled
 			SWLogger.info("Player registration with username/password succeeded, player account autoconfirmed.")
 			logged_in_player = tmp_username
 		else:
-			SWLogger.error("SilentWolf username/password player registration failure: " + str(json_body.error))
+			SWLogger.error("SilentWolf username/password player registration failure: " + str(json_body.get("error", "")))
 		sw_registration_user_pwd_complete.emit(sw_result)
 
 
@@ -160,15 +160,15 @@ func _on_VerifyEmail_request_completed(result, response_code, headers, body) -> 
 	
 	if status_check:
 		var json_body = JSON.parse_string(body.get_string_from_utf8())
-		SWLogger.info("SilentWolf verify email success? : " + str(json_body.success))
+		SWLogger.info("SilentWolf verify email success? : " + str(json_body.get("success", false)))
 		# also get a JWT token here
 		# send a different signal depending on registration success or failure
 		var sw_result: Dictionary = SilentWolf.build_result(json_body)
-		if json_body.success:
+		if json_body.get("success", false):
 			SWLogger.info("SilentWolf email verification success.")
 			logged_in_player  = tmp_username
 		else:
-			SWLogger.error("SilentWolf email verification failure: " + str(json_body.error))
+			SWLogger.error("SilentWolf email verification failure: " + str(json_body.get("error", "")))
 		sw_email_verif_complete.emit(sw_result)
 
 
@@ -194,10 +194,10 @@ func _on_ResendConfCode_request_completed(result, response_code, headers, body) 
 		# also get a JWT token here
 		# send a different signal depending on registration success or failure
 		var sw_result: Dictionary = SilentWolf.build_result(json_body)
-		if json_body.success:
+		if json_body.get("success", false):
 			SWLogger.info("SilentWolf resend conf code success.")
 		else:
-			SWLogger.error("SilentWolf resend conf code failure: " + str(json_body.error))
+			SWLogger.error("SilentWolf resend conf code failure: " + str(json_body.get("error", "")))
 		sw_resend_conf_code_complete.emit(sw_result)
 
 
@@ -234,13 +234,13 @@ func _on_LoginPlayer_request_completed(result, response_code, headers, body) -> 
 			SWLogger.debug("remember me validator: " + str(json_body.validator))
 		# send a different signal depending on login success or failure
 		var sw_result: Dictionary = SilentWolf.build_result(json_body)
-		if json_body.success:
+		if json_body.get("success", false):
 			SWLogger.info("SilentWolf resend conf code success.")
 			sw_access_token = json_body.swtoken
 			sw_id_token = json_body.swidtoken
 			set_player_logged_in(tmp_username)
 		else:
-			SWLogger.error("SilentWolf login player failure: " + str(json_body.error))
+			SWLogger.error("SilentWolf login player failure: " + str(json_body.get("error", "")))
 		sw_login_complete.emit(sw_result)
 
 
@@ -277,10 +277,10 @@ func _on_RequestPasswordReset_request_completed(result, response_code, headers, 
 	if status_check:
 		var json_body = JSON.parse_string(body.get_string_from_utf8())
 		var sw_result: Dictionary = SilentWolf.build_result(json_body)
-		if json_body.success:
+		if json_body.get("success", false):
 			SWLogger.info("SilentWolf request player password reset success.")
 		else:
-			SWLogger.error("SilentWolf request password reset failure: " + str(json_body.error))
+			SWLogger.error("SilentWolf request password reset failure: " + str(json_body.get("error", "")))
 		sw_request_password_reset_complete.emit(sw_result)
 
 
@@ -304,10 +304,10 @@ func _on_ResetPassword_completed(result, response_code, headers, body) -> void:
 	if status_check:
 		var json_body = JSON.parse_string(body.get_string_from_utf8())
 		var sw_result: Dictionary = SilentWolf.build_result(json_body)
-		if json_body.success:
+		if json_body.get("success", false):
 			SWLogger.info("SilentWolf reset player password success.")
 		else:
-			SWLogger.error("SilentWolf reset password failure: " + str(json_body.error))
+			SWLogger.error("SilentWolf reset password failure: " + str(json_body.get("error", "")))
 		sw_reset_password_complete.emit(sw_result)
 
 
@@ -330,11 +330,11 @@ func _on_GetPlayerDetails_request_completed(result, response_code, headers, body
 	if status_check:
 		var json_body = JSON.parse_string(body.get_string_from_utf8())
 		var sw_result: Dictionary = SilentWolf.build_result(json_body)
-		if json_body.success:
+		if json_body.get("success", false):
 			SWLogger.info("SilentWolf get player details success: " + str(json_body.player_details))
 			sw_result["player_details"] = json_body.player_details
 		else:
-			SWLogger.error("SilentWolf get player details failure: " + str(json_body.error))
+			SWLogger.error("SilentWolf get player details failure: " + str(json_body.get("error", "")))
 		sw_get_player_details_complete.emit(sw_result)
 
 
@@ -358,12 +358,12 @@ func _on_ValidateSession_request_completed(result, response_code, headers, body)
 	if status_check:
 		var json_body = JSON.parse_string(body.get_string_from_utf8())
 		var sw_result: Dictionary = SilentWolf.build_result(json_body)
-		if json_body.success:
+		if json_body.get("success", false):
 			SWLogger.info("SilentWolf validate session success.")	
 			set_player_logged_in(json_body.player_name)
 			sw_result["logged_in_player"] = logged_in_player
 		else:
-			SWLogger.error("SilentWolf validate session failure: " + str(json_body.error))
+			SWLogger.error("SilentWolf validate session failure: " + str(json_body.get("error", "")))
 		complete_session_check(sw_result)
 
 
