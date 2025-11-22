@@ -80,6 +80,22 @@ text = "CRÉDITOS"
 layout_mode = 2
 text = "SALIR"
 
+[node name="Donacion" type="Button" parent="."]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 586.0
+offset_right = 164.0
+offset_bottom = 636.0
+text = "Apóyanos!!! :)"
+
+[node name="Cuenta" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1054.0
+offset_top = 18.0
+offset_right = 1129.0
+offset_bottom = 92.0
+text = "Cuenta"
+
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Jugar" to="." method="_on_jugar_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Tutorial" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Créditos" to="." method="_on_créditos_pressed"]

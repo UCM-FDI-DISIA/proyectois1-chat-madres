@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://catuiiw1bkejl"]
+[gd_scene load_steps=5 format=3 uid="uid://catuiiw1bkejl"]
 
 [ext_resource type="Script" uid="uid://dgwgu4sm157gx" path="res://Opciones/Tutorial/opciones.gd" id="1_qj4ti"]
+[ext_resource type="Texture2D" uid="uid://c8aopobx6gr3u" path="res://Opciones/Menú principal/Titulo_1.1.2.png" id="2_t7x2g"]
 
 [sub_resource type="Animation" id="Animation_t7x2g"]
 resource_name = "Blur"
@@ -24,6 +25,10 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_qj4ti")
 
+[node name="Titulo1_1_2" type="Sprite2D" parent="."]
+position = Vector2(555, 218)
+texture = ExtResource("2_t7x2g")
+
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 14
@@ -43,23 +48,35 @@ size_flags_vertical = 4
 
 [node name="Button2" type="Button" parent="PanelContainer/Popup menu"]
 layout_mode = 2
-text = "Funcionalidad2"
+text = "MISIONES"
 
 [node name="Button3" type="Button" parent="PanelContainer/Popup menu"]
 layout_mode = 2
-text = "Funcionalidad3"
+text = "TIENDA"
 
 [node name="Tutorial" type="Button" parent="PanelContainer/Popup menu"]
 layout_mode = 2
-text = "Tutorial"
+text = "TUTORIAL"
+
+[node name="Opciones" type="Button" parent="PanelContainer/Popup menu"]
+layout_mode = 2
+text = "OPCIONES"
 
 [node name="Salir" type="Button" parent="PanelContainer/Popup menu"]
 layout_mode = 2
-text = "Reanudar"
+text = "REANUDAR"
 
-[node name="Button4" type="Button" parent="PanelContainer/Popup menu"]
+[node name="Menu" type="Button" parent="PanelContainer/Popup menu"]
 layout_mode = 2
-text = "Menú Inicial"
+text = "VOLVER AL MENÚ"
+
+[node name="Donacion" type="Button" parent="."]
+layout_mode = 0
+offset_left = 41.0
+offset_top = 540.0
+offset_right = 152.0
+offset_bottom = 600.0
+text = "Apóyanos!!! :)"
 
 [node name="Animacion (por terminar)" type="AnimationPlayer" parent="."]
 libraries = {
@@ -68,4 +85,4 @@ libraries = {
 
 [connection signal="pressed" from="PanelContainer/Popup menu/Tutorial" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="PanelContainer/Popup menu/Salir" to="." method="_on_salir_pressed"]
-[connection signal="pressed" from="PanelContainer/Popup menu/Button4" to="." method="_on_button_4_pressed"]
+[connection signal="pressed" from="PanelContainer/Popup menu/Menu" to="." method="_on_button_4_pressed"]

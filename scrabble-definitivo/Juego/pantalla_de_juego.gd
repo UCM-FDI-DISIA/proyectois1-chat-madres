@@ -187,8 +187,7 @@ func actualizar_contador_bolsa() -> void:
 # ===========================
 
 func _on_opciones_pressed() -> void:
-	var t = OPTIONS_SCENE.instantiate()
-	get_tree().current_scene.add_child(t)
+	get_tree().change_scene_to_packed(OPTIONS_SCENE)
 
 func _on_finalizar_turno_pressed() -> void:
 	if not es_mi_turno:
