@@ -1,4 +1,3 @@
-
 extends Node2D
 
 const TILEMAP_PATH: String = "TileMap"
@@ -6,13 +5,19 @@ const TILEMAP_PATH: String = "TileMap"
 @onready var tilemap: TileMap = get_node_or_null(TILEMAP_PATH)
 var celdas_ocupadas: Dictionary = {}  # Vector2i -> Sprite2D
 
-# nuevo
-const LETTER_VALUES = {
+# ---------------- puntuaciones por letra ----------------
+const LETTER_VALUES := {
 	"A": 1, "B": 3, "C": 3, "D": 2, "E": 1, "F": 4, "G": 2, "H": 4,
 	"I": 1, "J": 8, "K": 5, "L": 1, "M": 3, "N": 1, "Ñ": 8, "O": 1,
 	"P": 3, "Q": 5, "R": 1, "S": 1, "T": 1, "U": 1, "V": 4, "W": 10,
 	"X": 8, "Y": 4, "Z": 10
 }
+
+# letras posibles para sustituir el comodín "*"
+const COMODIN_LETRAS_POSIBLES: Array[String] = [
+	"A","B","C","D","E","F","G","H","I","J","K","L","M",
+	"N","Ñ","O","P","Q","R","S","T","U","V","W","X","Y","Z"
+]
 
 # ---------------- tipos de casilla ----------------
 const TILE_SOURCE_2L := 0
@@ -25,7 +30,6 @@ const TILE_SOURCE_FONDO := 6
 const TILE_SOURCE_CIAN := 7
 
 # Mapea el source_id del TileSet a un tipo de casilla.
-# OJO: tendrás que ajustar este diccionario a los IDs reales de tu TileSet.
 const TILE_TYPE_BY_SOURCE_ID := {
 	0: "2L",  # doble letra
 	1: "2W",  # doble palabra
@@ -34,7 +38,7 @@ const TILE_TYPE_BY_SOURCE_ID := {
 	4: "2W",  # estrella -> doble palabra
 	5: "N",   # normal
 	6: "N",   # fondo
-	7: "N",   # cian
+	7: "N"    # cian
 }
 
 func _get_multiplicadores_casilla(cell: Vector2i) -> Dictionary:
@@ -82,7 +86,7 @@ func _get_multiplicadores_casilla(cell: Vector2i) -> Dictionary:
 		"mult_palabra": mult_palabra,
 	}
 
-# Estado de turno
+# ---------------- estado de turno ----------------
 var fichas_turno_actual: Array = [] 
 var palabras_turno_actual: Array = []
 var palabras_jugadas_globales: Array = []
@@ -106,7 +110,10 @@ var snapshot_ocupadas_previas: Array[Vector2i] = []
 
 # ---------------- util tildes ----------------
 func _quitar_tildes(texto: String) -> String:
-	var reemplazos := {"á":"a","é":"e","í":"i","ó":"o","ú":"u","Á":"A","É":"E","Í":"I","Ó":"O","Ú":"U"}
+	var reemplazos := {
+		"á": "a", "é": "e", "í": "i", "ó": "o", "ú": "u",
+		"Á": "A", "É": "E", "Í": "I", "Ó": "O", "Ú": "U"
+	}
 	for original in reemplazos.keys():
 		texto = texto.replace(original, reemplazos[original])
 	return texto
@@ -119,7 +126,7 @@ func _cargar_diccionario() -> void:
 		return
 	var f := FileAccess.open(ruta, FileAccess.READ)
 	while not f.eof_reached():
-		var p := f.get_line().strip_edges()
+		var p: String = f.get_line().strip_edges()
 		if p != "":
 			p = _quitar_tildes(p)
 			palabras_validas.append(p.to_upper())
@@ -179,8 +186,11 @@ func soltar_ficha_en_tablero(global_position: Vector2, textura: Texture2D, orige
 	elif origen_boton and origen_boton.text != "":
 		s.set_meta("letra", origen_boton.text)
 	else:
-		var tex_name := textura.resource_path.get_file().get_basename()
-		s.set_meta("letra", tex_name.substr(0, 1).to_upper())
+		var base_name: String = textura.resource_path.get_file().get_basename()
+		if base_name == "NULL":
+			s.set_meta("letra", "*")  # comodín visual -> "*"
+		else:
+			s.set_meta("letra", base_name.substr(0, 1).to_upper())
 
 	# Registrar ocupación
 	celdas_ocupadas[cell] = s
@@ -203,7 +213,8 @@ func soltar_ficha_en_tablero(global_position: Vector2, textura: Texture2D, orige
 # ---------------- helpers TileMap ----------------
 func _buscar_tilemap() -> TileMap:
 	var tm: TileMap = get_node_or_null("TileMap")
-	if tm: return tm
+	if tm:
+		return tm
 	return _find_tilemap_recursive(self)
 
 func _find_tilemap_recursive(n: Node) -> TileMap:
@@ -211,7 +222,8 @@ func _find_tilemap_recursive(n: Node) -> TileMap:
 		if ch is TileMap:
 			return ch
 		var f := _find_tilemap_recursive(ch)
-		if f: return f
+		if f:
+			return f
 	return null
 
 # ---------------- contigüidad ----------------
@@ -243,8 +255,10 @@ func _ficha_valida_para_turno(fichas_turno: Array, nueva_celda: Vector2i) -> boo
 	var same_col := true
 	for any in placed:
 		var c2: Vector2i = (any as Vector2i)
-		if c2.y != primera.y: same_row = false
-		if c2.x != primera.x: same_col = false
+		if c2.y != primera.y:
+			same_row = false
+		if c2.x != primera.x:
+			same_col = false
 	if not same_row and not same_col:
 		return false
 
@@ -254,16 +268,21 @@ func _ficha_valida_para_turno(fichas_turno: Array, nueva_celda: Vector2i) -> boo
 		var max_x := min_x
 		for any2 in placed:
 			var c3: Vector2i = (any2 as Vector2i)
-			if c3.y != y: return false
+			if c3.y != y:
+				return false
 			min_x = min(min_x, c3.x)
 			max_x = max(max_x, c3.x)
 		for xi in range(min_x, max_x + 1):
 			var pos := Vector2i(xi, y)
-			if celdas_ocupadas.has(pos): continue
+			if celdas_ocupadas.has(pos):
+				continue
 			var in_placed := false
 			for anyp in placed:
-				if (anyp as Vector2i) == pos: in_placed = true; break
-			if not in_placed: return false
+				if (anyp as Vector2i) == pos:
+					in_placed = true
+					break
+			if not in_placed:
+				return false
 		return true
 	else:
 		var x := primera.x
@@ -271,16 +290,21 @@ func _ficha_valida_para_turno(fichas_turno: Array, nueva_celda: Vector2i) -> boo
 		var max_y := min_y
 		for any3 in placed:
 			var c4: Vector2i = (any3 as Vector2i)
-			if c4.x != x: return false
+			if c4.x != x:
+				return false
 			min_y = min(min_y, c4.y)
 			max_y = max(max_y, c4.y)
 		for yi in range(min_y, max_y + 1):
 			var pos2 := Vector2i(x, yi)
-			if celdas_ocupadas.has(pos2): continue
+			if celdas_ocupadas.has(pos2):
+				continue
 			var in_placed2 := false
 			for anyp2 in placed:
-				if (anyp2 as Vector2i) == pos2: in_placed2 = true; break
-			if not in_placed2: return false
+				if (anyp2 as Vector2i) == pos2:
+					in_placed2 = true
+					break
+			if not in_placed2:
+				return false
 		return true
 
 # ---------------- letras / palabras ----------------
@@ -291,18 +315,23 @@ func _obtener_letra_de_celda(pos: Vector2i) -> String:
 	if s == null:
 		return ""
 	if s.has_meta("letra"):
-		return str(s.get_meta("letra"))
+		return str(s.get_meta("letra"))  # puede ser "*"
 	if s.texture:
-		var name := s.texture.resource_path.get_file().get_basename()
-		return name.substr(0,1).to_upper()
+		var base_name: String = s.texture.resource_path.get_file().get_basename()
+		if base_name == "NULL":
+			return "*"  # comodín visual -> "*"
+		return base_name.substr(0,1).to_upper()
 	return ""
 
 func _palabra_horizontal(celda: Vector2i) -> String:
 	var min_x := celda.x
 	var max_x := celda.x
-	while celdas_ocupadas.has(Vector2i(min_x - 1, celda.y)): min_x -= 1
-	while celdas_ocupadas.has(Vector2i(max_x + 1, celda.y)): max_x += 1
-	if max_x == min_x: return ""
+	while celdas_ocupadas.has(Vector2i(min_x - 1, celda.y)):
+		min_x -= 1
+	while celdas_ocupadas.has(Vector2i(max_x + 1, celda.y)):
+		max_x += 1
+	if max_x == min_x:
+		return ""
 	var letras: Array[String] = []
 	for x in range(min_x, max_x + 1):
 		letras.append(_obtener_letra_de_celda(Vector2i(x, celda.y)))
@@ -311,9 +340,12 @@ func _palabra_horizontal(celda: Vector2i) -> String:
 func _palabra_vertical(celda: Vector2i) -> String:
 	var min_y := celda.y
 	var max_y := celda.y
-	while celdas_ocupadas.has(Vector2i(celda.x, min_y - 1)): min_y -= 1
-	while celdas_ocupadas.has(Vector2i(celda.x, max_y + 1)): max_y += 1
-	if max_y == min_y: return ""
+	while celdas_ocupadas.has(Vector2i(celda.x, min_y - 1)):
+		min_y -= 1
+	while celdas_ocupadas.has(Vector2i(celda.x, max_y + 1)):
+		max_y += 1
+	if max_y == min_y:
+		return ""
 	var letras: Array[String] = []
 	for y in range(min_y, max_y + 1):
 		letras.append(_obtener_letra_de_celda(Vector2i(celda.x, y)))
@@ -326,10 +358,12 @@ func _reconstruir_palabras_turno() -> void:
 		var c: Vector2i = (any as Vector2i)
 		var ph := _palabra_horizontal(c)
 		if ph.length() >= 2 and not ya.has(ph):
-			palabras_turno_actual.append(ph); ya[ph] = true
+			palabras_turno_actual.append(ph)
+			ya[ph] = true
 		var pv := _palabra_vertical(c)
 		if pv.length() >= 2 and not ya.has(pv):
-			palabras_turno_actual.append(pv); ya[pv] = true
+			palabras_turno_actual.append(pv)
+			ya[pv] = true
 
 # ---------------- util turnos ----------------
 func limpiar_fichas_turno() -> void:
@@ -345,7 +379,8 @@ func _imprimir_palabras_turno() -> void:
 # ---------------- registro / repetidas ----------------
 func es_palabra_repetida(palabra: String) -> bool:
 	for j in palabras_jugadas_globales:
-		if palabra == j: return true
+		if palabra == j:
+			return true
 	return false
 
 func registrar_palabras_turno_actual() -> void:
@@ -365,7 +400,6 @@ func empezar_turno() -> void:
 		snapshot_ocupadas_previas.append(c)
 
 	# Si al empezar el turno no había nada en el tablero → es el primer turno
-	# Si ya había fichas → NO es primer turno
 	es_primer_turno = snapshot_ocupadas_previas.is_empty()
 
 #se supone que ahora debemos usar esta
@@ -375,35 +409,45 @@ func empezar_turno() -> void:
 		#set_process_input(false)
 	#else: set_process_input(true)
 
-
-
 func _get_celda_centro() -> Vector2i:
-	if tilemap == null: return Vector2i.ZERO
+	if tilemap == null:
+		return Vector2i.ZERO
 	var r := tilemap.get_used_rect()
 	return Vector2i(r.position.x + r.size.x / 2, r.position.y + r.size.y / 2)
 
 func _toca_centro_en_turno() -> bool:
 	var centro := _get_celda_centro()
 	for any in fichas_turno_actual:
-		if (any as Vector2i) == centro: return true
+		if (any as Vector2i) == centro:
+			return true
 	return false
 
 func _hay_conexion_con_tablero_previo() -> bool:
-	if snapshot_ocupadas_previas.is_empty(): return true
-	var prev := {}
-	for p in snapshot_ocupadas_previas: prev[p] = true
+	if snapshot_ocupadas_previas.is_empty():
+		return true
+	var prev: Dictionary = {}
+	for p in snapshot_ocupadas_previas:
+		prev[p] = true
 	for any in fichas_turno_actual:
 		var c: Vector2i = (any as Vector2i)
-		var v := [Vector2i(c.x+1,c.y), Vector2i(c.x-1,c.y), Vector2i(c.x,c.y+1), Vector2i(c.x,c.y-1)]
+		var v := [
+			Vector2i(c.x + 1, c.y),
+			Vector2i(c.x - 1, c.y),
+			Vector2i(c.x, c.y + 1),
+			Vector2i(c.x, c.y - 1)
+		]
 		for n in v:
-			if prev.has(n): return true
+			if prev.has(n):
+				return true
 	return false
 
 func devolver_fichas_turno() -> void:
-	if fichas_turno_actual.is_empty(): return
+	if fichas_turno_actual.is_empty():
+		return
 	for any in fichas_turno_actual:
 		var cell: Vector2i = (any as Vector2i)
-		if not celdas_ocupadas.has(cell): continue
+		if not celdas_ocupadas.has(cell):
+			continue
 		var s: Sprite2D = celdas_ocupadas[cell]
 		celdas_ocupadas.erase(cell)
 
@@ -421,17 +465,53 @@ func devolver_fichas_turno() -> void:
 	fichas_turno_actual.clear()
 	palabras_turno_actual.clear()
 
-# ---------------- RAE ----------------
+# ---------------- RAE + comodines ----------------
 func es_palabra_valida_RAE(palabra: String) -> bool:
-	palabra = _quitar_tildes(palabra).to_upper()
-	return palabra in palabras_validas
+	# Normalizamos (tildes quitadas + mayúsculas)
+	var normalizada: String = _quitar_tildes(palabra).to_upper()
+
+	# Sin comodín → comprobación directa
+	if normalizada.find("*") == -1:
+		return normalizada in palabras_validas
+
+	# Con comodín → probar todas las sustituciones posibles
+	return _es_comodin_valido(normalizada)
+
+# Comprueba si una palabra con "*" puede ser alguna palabra válida
+func _es_comodin_valido(palabra_con_ast: String) -> bool:
+	var indices: Array[int] = []
+	for i in range(palabra_con_ast.length()):
+		if palabra_con_ast[i] == "*":
+			indices.append(i)
+
+	if indices.is_empty():
+		return palabra_con_ast in palabras_validas
+
+	return _probar_combinaciones_comodin(palabra_con_ast, indices, 0)
+
+# Backtracking para sustituir "*" por letras posibles
+func _probar_combinaciones_comodin(base: String, indices: Array[int], indice_actual: int) -> bool:
+	if indice_actual >= indices.size():
+		return base in palabras_validas
+
+	var pos: int = indices[indice_actual]
+	var antes: String = base.substr(0, pos)
+	var despues: String = base.substr(pos + 1)
+
+	for letra in COMODIN_LETRAS_POSIBLES:
+		var nueva: String = antes + letra + despues
+		if _probar_combinaciones_comodin(nueva, indices, indice_actual + 1):
+			return true
+
+	return false
 
 # ---------------- foco UI ----------------
 func _clear_gui_focus() -> void:
 	var vp := get_viewport()
 	if vp and vp.has_method("gui_get_focus_owner"):
 		var owner := vp.gui_get_focus_owner()
-		if owner: owner.release_focus()
+		if owner:
+			owner.release_focus()
 
 # =========================================================
 # MODO “clic/teclado” + FANTASMA
@@ -499,16 +579,19 @@ func _input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			_actualizar_cursor_a_raton()
 			_intentar_colocar_en_cursor()
-			if get_viewport(): get_viewport().set_input_as_handled()
+			if get_viewport():
+				get_viewport().set_input_as_handled()
 			return
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			_cancelar_seleccion()
-			if get_viewport(): get_viewport().set_input_as_handled()
+			if get_viewport():
+				get_viewport().set_input_as_handled()
 			return
 
 	# teclado: Enter arma, flechas mueven, Enter/Espacio colocan, ESC cancela
 	if event is InputEventKey and event.pressed:
-		if get_viewport(): get_viewport().set_input_as_handled()
+		if get_viewport():
+			get_viewport().set_input_as_handled()
 		match event.keycode:
 			KEY_ESCAPE:
 				_cancelar_seleccion()
@@ -595,12 +678,18 @@ func _intentar_colocar_en_cursor() -> void:
 		elif ficha_origen.text != "":
 			s.set_meta("letra", ficha_origen.text)
 		elif ficha_tex and ficha_tex.resource_path != "":
-			var name := ficha_tex.resource_path.get_file().get_basename()
-			s.set_meta("letra", name.substr(0,1).to_upper())
+			var base_name: String = ficha_tex.resource_path.get_file().get_basename()
+			if base_name == "NULL":
+				s.set_meta("letra", "*")
+			else:
+				s.set_meta("letra", base_name.substr(0,1).to_upper())
 	else:
 		if ficha_tex and ficha_tex.resource_path != "":
-			var name2 := ficha_tex.resource_path.get_file().get_basename()
-			s.set_meta("letra", name2.substr(0,1).to_upper())
+			var base_name2: String = ficha_tex.resource_path.get_file().get_basename()
+			if base_name2 == "NULL":
+				s.set_meta("letra", "*")
+			else:
+				s.set_meta("letra", base_name2.substr(0,1).to_upper())
 
 	celdas_ocupadas[cursor_cell] = s
 	if not fichas_turno_actual.has(cursor_cell):
@@ -632,7 +721,8 @@ func _ajustar_cursor_a_tablero() -> void:
 	if tilemap == null:
 		return
 	var r := tilemap.get_used_rect()
-	if r.size == Vector2i.ZERO: return
+	if r.size == Vector2i.ZERO:
+		return
 	cursor_cell.x = clamp(cursor_cell.x, r.position.x, r.position.x + r.size.x - 1)
 	cursor_cell.y = clamp(cursor_cell.y, r.position.y, r.position.y + r.size.y - 1)
 
@@ -651,7 +741,8 @@ func _cancelar_seleccion() -> void:
 	ficha_origen = null
 	cursor_visible = false
 	modo_teclado_activo = false
-	if ghost: ghost.visible = false
+	if ghost:
+		ghost.visible = false
 	queue_redraw()
 
 # --- selección por teclado (y búsqueda robusta de huecos) ---
@@ -664,7 +755,8 @@ func _select_from_keyboard(idx: int) -> void:
 		_actualizar_cursor_a_raton()
 		_actualizar_fantasma()
 		queue_redraw()
-	if get_viewport(): get_viewport().set_input_as_handled()
+	if get_viewport():
+		get_viewport().set_input_as_handled()
 
 func _seleccionar_hueco_por_indice(idx: int) -> void:
 	_select_from_keyboard(idx)
@@ -707,7 +799,8 @@ func _find_node_recursive(root: Node, name_to_find: String) -> Node:
 		return root
 	for ch in root.get_children():
 		var r := _find_node_recursive(ch, name_to_find)
-		if r: return r
+		if r:
+			return r
 	return null
 
 func _collect_buttons_recursive(root: Node, out: Array) -> void:
@@ -716,8 +809,7 @@ func _collect_buttons_recursive(root: Node, out: Array) -> void:
 			out.append(ch)
 		_collect_buttons_recursive(ch, out)
 
-
-# nuevo
+# ---------------- PUNTUACIÓN ----------------
 func calcular_puntuacion_turno() -> int:
 	var total_score: int = 0
 
@@ -735,14 +827,14 @@ func calcular_puntuacion_turno() -> int:
 
 		var palabra_score: int = calcular_puntuacion_palabra(celdas)
 		total_score += palabra_score
-		# DEBUG: descomenta si quieres ver detalle
+		
+# DEBUG: descomenta si quieres ver detalle
 		# print("Palabra '%s' = %d puntos" % [texto, palabra_score])
 
 	# DEBUG general
 	# print("Puntuación total del turno: %d puntos" % total_score)
-
+	
 	return total_score
-
 
 func calcular_puntuacion_palabra(celdas: Array) -> int:
 	var suma_letras: int = 0
@@ -754,7 +846,10 @@ func calcular_puntuacion_palabra(celdas: Array) -> int:
 		if letra == "":
 			continue
 
-		var puntos_base: int = int(LETTER_VALUES.get(letra, 0))
+		# IMPORTANTE: el comodín "*" siempre vale 0 puntos
+		var puntos_base: int = 0
+		if letra != "*":
+			puntos_base = int(LETTER_VALUES.get(letra, 0))
 
 		var mults: Dictionary = _get_multiplicadores_casilla(cell)
 		var mult_letra: int = int(mults["mult_letra"])
@@ -764,7 +859,6 @@ func calcular_puntuacion_palabra(celdas: Array) -> int:
 		mult_palabra_total *= mult_palabra
 
 	return suma_letras * mult_palabra_total
-
 
 func _celdas_palabra_horizontal(celda: Vector2i) -> Array:
 	var min_x := celda.x
@@ -793,7 +887,6 @@ func _celdas_palabra_vertical(celda: Vector2i) -> Array:
 	for y in range(min_y, max_y + 1):
 		celdas.append(Vector2i(celda.x, y))
 	return celdas
-
 
 # Devuelve un Array de Diccionarios:
 # [ { "celdas": [Vector2i, ...], "texto": "CASA" }, ... ]
@@ -850,7 +943,7 @@ func _get_palabras_y_celdas_turno() -> Array:
 				})
 
 	return resultado
-	
+
 func _texto_desde_celdas(celdas: Array) -> String:
 	var letras: Array[String] = []
 	for any in celdas:
@@ -858,6 +951,7 @@ func _texto_desde_celdas(celdas: Array) -> String:
 		var letra: String = _obtener_letra_de_celda(pos)
 		letras.append(letra)
 	return "".join(letras)
+
 # =========================================================
 # VALIDAR FIN DE TURNO (centro en el primero, conexión en los demás)
 # =========================================================
