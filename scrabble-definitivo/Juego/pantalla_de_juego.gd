@@ -224,6 +224,7 @@ func _on_finalizar_turno_pressed() -> void:
 		if tablero.has_method("calcular_puntuacion_turno"):
 			var puntos_turno = tablero.calcular_puntuacion_turno()
 			sumar_puntos(puntos_turno)
+			puntuacion_jugador_actual = puntuaciones[GameData.jugador_actual]
 			print("✅ Jugada válida! Sumados %d puntos. Total: %d" % [puntos_turno, puntuacion_jugador_actual])
 		
 		# Registrar palabras y limpiar turno
