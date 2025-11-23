@@ -3,8 +3,10 @@ class_name BolsaFichas
 
 # =======================================================
 # CONFIGURACIÓN: letras, puntuaciones y cantidades
+# (Usamos "NULL" para la imagen, "*" internamente)
 # =======================================================
-const FICHAS_DATOS = {
+
+const FICHAS_DATOS := {
 	"J": {"puntos": 8, "cantidad": 1},
 	"LL": {"puntos": 8, "cantidad": 1},
 	"Ñ": {"puntos": 8, "cantidad": 1},
@@ -33,44 +35,79 @@ const FICHAS_DATOS = {
 	"Y": {"puntos": 4, "cantidad": 1},
 	"CH": {"puntos": 5, "cantidad": 1},
 	"Q": {"puntos": 5, "cantidad": 1},
-	"NULL": {"puntos": 0, "cantidad": 2}  # comodines
+	"NULL": {"puntos": 0, "cantidad": 2}  # comodines visuales (NULL.png)
 }
 
 # Carpeta donde están las imágenes
-const ICONS_PATH = "res://Casillas/Fichas"
+const ICONS_PATH := "res://Casillas/Fichas"
 
-var bolsa: Array = []  # contendrá objetos tipo {letra, puntos, textura}
+# La bolsa será una array de diccionarios:
+# { "letra": STR, "puntos": INT, "texture": Texture2D }
+var bolsa: Array = []
+
 
 func _ready() -> void:
 	_inicializar_bolsa()
 
+
+# =======================================================
+# Construcción real de la bolsa
+# =======================================================
 func _inicializar_bolsa() -> void:
 	bolsa.clear()
-	for letra in FICHAS_DATOS.keys():
-		var datos = FICHAS_DATOS[letra]
-		for i in range(datos.cantidad):
-			var tex := load(ICONS_PATH.path_join("%s.png" % letra))
+
+	for clave in FICHAS_DATOS.keys():
+		var datos: Dictionary = FICHAS_DATOS[clave]
+
+		for i in range(datos["cantidad"]):
+
+			# --- Cargar textura PNG según nombre original ---
+			var tex_path := ICONS_PATH.path_join("%s.png" % clave)
+			var tex := load(tex_path)
+
 			if tex == null:
-				push_warning("⚠️ No se encontró textura para '%s'" % letra)
+				push_warning("⚠️ No se encontró textura para '%s' (%s)" % [clave, tex_path])
+
+			# --- Convertimos "NULL" internamente en "*" ---
+			var letra_real: String = clave
+			if clave == "NULL":
+				letra_real = "*"   # ← comodín interno real
+
+			# --- Añadir ficha completa ---
 			bolsa.append({
-				"letra": letra,
-				"puntos": datos.puntos,
+				"letra": letra_real,
+				"puntos": datos["puntos"],
 				"texture": tex
 			})
+
 	bolsa.shuffle()
 
+
+# =======================================================
+# Robar fichas
+# =======================================================
 func sacar_fichas(cantidad: int) -> Array:
 	var fichas: Array = []
+
 	for i in range(cantidad):
 		if bolsa.is_empty():
 			break
 		fichas.append(bolsa.pop_back())
+
 	return fichas
 
+
+# =======================================================
+# Devolver fichas a la bolsa
+# =======================================================
 func devolver_fichas(fichas: Array) -> void:
 	for f in fichas:
 		bolsa.append(f)
 	bolsa.shuffle()
 
+
+# =======================================================
+# Cuántas quedan
+# =======================================================
 func quedan() -> int:
 	return bolsa.size()
