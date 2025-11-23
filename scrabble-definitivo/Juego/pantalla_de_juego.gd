@@ -90,19 +90,56 @@ func inicializar_sistema_puntuacion():
 	actualizar_ui_puntuacion()
 
 func actualizar_ui_puntuacion():
-	# Buscar o crear un Label para mostrar la puntuación
-	var label_puntuacion = get_node_or_null("LabelPuntuacion")
-	
-	if label_puntuacion == null:
-		# Si no existe, lo creamos
-		label_puntuacion = Label.new()
-		label_puntuacion.name = "LabelPuntuacion"
-		label_puntuacion.add_theme_font_size_override("font_size", 24)
-		label_puntuacion.add_theme_color_override("font_color", Color(1, 1, 1))
-		label_puntuacion.position = Vector2(200, 50)  # Esquina superior izquierda
-		add_child(label_puntuacion)
-	# Actualizar texto
-	label_puntuacion.text = "Jugador %d: %d puntos" % [GameData.jugador_actual + 1, puntuaciones[GameData.jugador_actual]]
+	var tabla = get_node_or_null("TablaPuntuacion")
+	if tabla == null:
+		push_error("No existe TablaPuntuacion en la escena.")
+		return
+
+	# 1️⃣ Limpiar la tabla
+	for c in tabla.get_children():
+		c.queue_free()
+
+	# 2️⃣ Crear la lista indexada
+	var lista = []
+	for i in range(puntuaciones.size()):
+		lista.append({
+			"jugador": i,
+			"puntos": puntuaciones[i]
+		})
+
+	# 3️⃣ Ordenar de mayor a menor puntuación
+	lista.sort_custom(func(a, b):
+		return a["puntos"] > b["puntos"]
+	)
+
+	# 4️⃣ Rellenar tabla
+	for entry in lista:
+		var fila = HBoxContainer.new()
+		fila.custom_minimum_size = Vector2(350, 40)  # ancho de fila (modifícalo si quieres)
+
+		# Izquierda: nombre de jugador
+		var nombre = Label.new()
+		nombre.text = "Jugador %d" % (entry["jugador"] + 1)
+		nombre.add_theme_font_size_override("font_size", 24)
+
+		# Derecha: puntos (totalmente a la derecha)
+		var puntos = Label.new()
+		puntos.text = str(entry["puntos"])
+		puntos.add_theme_font_size_override("font_size", 24)
+		puntos.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		puntos.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+		fila.add_child(nombre)
+		fila.add_child(puntos)
+
+		# Fondo bonito (opcional)
+		var fondo = ColorRect.new()
+		fondo.color = Color(0, 0, 0, 0.3)
+		fondo.custom_minimum_size = Vector2(350, 40)
+		fondo.add_child(fila)
+
+		tabla.add_child(fondo)
+
 
 func sumar_puntos(puntos: int):
 	puntuaciones[GameData.jugador_actual]+= puntos
