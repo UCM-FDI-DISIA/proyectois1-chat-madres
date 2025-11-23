@@ -30,7 +30,7 @@ grow_vertical = 2
 script = ExtResource("1_wg8rh")
 
 [node name="Fondo(2)" type="Sprite2D" parent="."]
-position = Vector2(790, 365)
+position = Vector2(759, 367)
 scale = Vector2(1.321875, 1.2981483)
 texture = ExtResource("1_5u6n2")
 
@@ -48,10 +48,10 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -602.0
-offset_top = 50.0
-offset_right = -252.0
-offset_bottom = 92.0
+offset_left = -601.0
+offset_top = 38.0
+offset_right = -251.0
+offset_bottom = 80.0
 grow_horizontal = 0
 theme_override_font_sizes/font_size = 30
 text = "Es el turno del jugador X"
@@ -125,6 +125,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="ColorRect" type="ColorRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -182,12 +183,14 @@ offset_bottom = 672.0
 text = "Reordenar Fichas"
 
 [node name="PantallaError" type="ColorRect" parent="."]
+visible = false
 layout_mode = 0
 offset_right = 1794.0
 offset_bottom = 828.0
 color = Color(0.89534765, 0, 0.13026825, 1)
 
 [node name="MensajeError" type="Label" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -208,11 +211,20 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MensajeIntercambio" type="Label" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 565.0
 offset_top = 351.0
 offset_right = 605.0
 offset_bottom = 374.0
+
+[node name="LeaderboardContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Jugador1" type="HBoxContainer" parent="LeaderboardContainer"]
+layout_mode = 2
 
 [connection signal="pressed" from="Opciones" to="." method="_on_opciones_pressed"]
 [connection signal="pressed" from="IntercambiarFichas" to="." method="_on_intercambiar_fichas_pressed"]

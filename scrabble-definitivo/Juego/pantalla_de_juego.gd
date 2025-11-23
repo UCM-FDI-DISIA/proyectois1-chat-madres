@@ -109,8 +109,6 @@ func sumar_puntos(puntos: int):
 	actualizar_ui_puntuacion()
 	print("Puntos sumados: %d - Total: %d" % [puntos, puntuaciones[GameData.jugador_actual]])
 
-
-
 # ===========================
 # 🔹 Actualizar LabelTurno
 # ===========================
@@ -187,7 +185,8 @@ func actualizar_contador_bolsa() -> void:
 # ===========================
 
 func _on_opciones_pressed() -> void:
-	get_tree().change_scene_to_packed(OPTIONS_SCENE)
+	var tutorial = OPTIONS_SCENE.instantiate()
+	add_child(tutorial)
 
 func _on_finalizar_turno_pressed() -> void:
 	if not es_mi_turno:
@@ -479,7 +478,6 @@ func _ocultar_error() -> void:
 	$PantallaError.visible = false
 	$MensajeError.visible = false
 	
-
 
 
 
