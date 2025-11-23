@@ -19,3 +19,7 @@ func _on_submit_pressed() -> void:
 				validation_label.text = "Verification session is invalid"
 			_:
 				validation_label.text = Talo.player_auth.last_error.get_string()
+
+
+func _on_button_pressed() -> void:
+	queue_free()

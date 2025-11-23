@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://b6mypp2qa8m4u"]
+[gd_scene load_steps=4 format=3 uid="uid://b6mypp2qa8m4u"]
 
 [ext_resource type="Script" uid="uid://vflrdq5hi1n4" path="res://addons/talo/samples/authentication/scripts/change_email.gd" id="1_qamph"]
 [ext_resource type="Theme" uid="uid://ce2uyi827vc5x" path="res://addons/talo/samples/authentication/assets/theme.tres" id="2_5w58c"]
+[ext_resource type="Texture2D" uid="uid://bxbyybfxnpdl0" path="res://Juego/Fondo tablero.png" id="2_j3cys"]
 
 [node name="ChangeEmail" type="Node2D"]
 script = ExtResource("1_qamph")
@@ -12,20 +13,18 @@ anchors_preset = 0
 offset_right = 1080.0
 offset_bottom = 720.0
 
-[node name="Background" type="ColorRect" parent="UI"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.121569, 0.160784, 0.215686, 1)
+[node name="FondoTablero" type="Sprite2D" parent="UI"]
+position = Vector2(679.5, 297)
+scale = Vector2(1.915625, 1.6666665)
+texture = ExtResource("2_j3cys")
 
 [node name="MarginContainer" type="MarginContainer" parent="UI"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 32.0
+offset_right = 32.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 40
@@ -42,7 +41,7 @@ theme_override_constants/separation = 24
 layout_mode = 2
 size_flags_vertical = 0
 theme = ExtResource("2_5w58c")
-text = "Change email"
+text = "Cambiar email"
 horizontal_alignment = 1
 
 [node name="Password" type="TextEdit" parent="UI/MarginContainer/VBoxContainer"]
@@ -51,7 +50,7 @@ custom_minimum_size = Vector2(400, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_5w58c")
-placeholder_text = "Current password"
+placeholder_text = "Contraseña"
 
 [node name="NewEmail" type="TextEdit" parent="UI/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -59,21 +58,21 @@ custom_minimum_size = Vector2(400, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_5w58c")
-placeholder_text = "New email"
+placeholder_text = "Nuevo email"
 
 [node name="Submit" type="Button" parent="UI/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_5w58c")
-text = "Submit"
+text = "Confirmar"
 
 [node name="Cancel" type="Button" parent="UI/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_5w58c")
-text = "Cancel"
+text = "Cancelar"
 
 [node name="ValidationLabel" type="Label" parent="UI/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -81,5 +80,14 @@ custom_minimum_size = Vector2(400, 2.08165e-12)
 layout_mode = 2
 size_flags_horizontal = 4
 
+[node name="Button" type="Button" parent="UI"]
+layout_mode = 0
+offset_left = 1088.0
+offset_top = 38.0
+offset_right = 1111.0
+offset_bottom = 79.0
+text = "x"
+
 [connection signal="pressed" from="UI/MarginContainer/VBoxContainer/Submit" to="." method="_on_submit_pressed"]
 [connection signal="pressed" from="UI/MarginContainer/VBoxContainer/Cancel" to="." method="_on_cancel_pressed"]
+[connection signal="pressed" from="UI/Button" to="." method="_on_button_pressed"]

@@ -37,3 +37,7 @@ func _on_forgot_password_pressed() -> void:
 
 func _on_register_pressed() -> void:
 	go_to_register.emit()
+
+
+func _on_button_pressed() -> void:
+	queue_free()

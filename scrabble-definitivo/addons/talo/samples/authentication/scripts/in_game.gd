@@ -14,7 +14,7 @@ func _ready() -> void:
 		_on_player_identified(Talo.current_player)
 
 func _on_player_identified(player: TaloPlayer) -> void:
-	username.text = "What would you like to do,\n%s?" % Talo.current_alias.identifier
+	username.text = "¿Qué deseas realizar,\n%s?" % Talo.current_alias.identifier
 
 func _on_change_password_pressed() -> void:
 	go_to_change_password.emit()
@@ -28,3 +28,7 @@ func _on_logout_pressed() -> void:
 
 func _on_delete_pressed() -> void:
 	go_to_delete.emit()
+
+
+func _on_button_pressed() -> void:
+	queue_free()

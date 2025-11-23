@@ -30,3 +30,6 @@ func _on_submit_pressed() -> void:
 
 func _on_cancel_pressed() -> void:
 	go_to_forgot_password.emit()
+
+func _on_button_pressed() -> void:
+	queue_free()

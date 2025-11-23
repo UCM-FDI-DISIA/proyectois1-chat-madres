@@ -35,3 +35,7 @@ func _on_submit_button_pressed() -> void:
 
 func _on_login_pressed() -> void:
 	go_to_login.emit()
+
+
+func _on_button_pressed() -> void:
+	queue_free()
