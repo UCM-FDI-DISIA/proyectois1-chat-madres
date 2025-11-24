@@ -18,6 +18,50 @@ const COMODIN_LETRAS_POSIBLES: Array[String] = [
 	"A","B","C","D","E","F","G","H","I","J","K","L","M",
 	"N","Ñ","O","P","Q","R","S","T","U","V","W","X","Y","Z"
 ]
+# ---------------- selección de letra para comodín ----------------
+func _elegir_letra_comodin(s: Sprite2D) -> void:
+	# Ventanita para elegir la letra que representará el comodín
+	var dialog := AcceptDialog.new()
+	dialog.title = "Comodín"
+	dialog.dialog_text = "Elige la letra para este comodín:"
+	dialog.min_size = Vector2(260, 140)
+
+	var vb := VBoxContainer.new()
+	vb.custom_minimum_size = Vector2(240, 90)
+
+	var opciones := OptionButton.new()
+	opciones.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+	for letra in COMODIN_LETRAS_POSIBLES:
+		opciones.add_item(letra)
+
+	opciones.selected = 0
+
+	vb.add_child(opciones)
+	dialog.add_child(vb)
+
+	add_child(dialog)
+	dialog.popup_centered()
+
+	# Cuando se pulsa Aceptar, guardamos la letra elegida
+	dialog.confirmed.connect(
+		func() -> void:
+			if not is_instance_valid(s):
+				dialog.queue_free()
+				return
+			var idx := opciones.selected
+			var letra_elegida: String = COMODIN_LETRAS_POSIBLES[idx]
+			s.set_meta("letra", letra_elegida)
+			s.set_meta("es_comodin", true)  # lo marcamos para la puntuación
+			dialog.queue_free()
+	)
+
+	# Si se cierra/cancela, simplemente cerramos el diálogo
+	dialog.canceled.connect(
+		func() -> void:
+			dialog.queue_free()
+	)
+
 
 # ---------------- tipos de casilla ----------------
 const TILE_SOURCE_2L := 0
@@ -202,6 +246,11 @@ func soltar_ficha_en_tablero(global_position: Vector2, textura: Texture2D, orige
 			s.set_meta("letra", "*")  # comodín visual -> "*"
 		else:
 			s.set_meta("letra", base_name.substr(0, 1).to_upper())
+				# Si es comodín ("*"), pedir al jugador qué letra representa
+					# Si es comodín ("*"), pedir al jugador qué letra representa
+	if s.has_meta("letra") and str(s.get_meta("letra")) == "*":
+		_elegir_letra_comodin(s)
+
 
 	# Registrar ocupación
 	celdas_ocupadas[cell] = s
@@ -334,6 +383,15 @@ func _obtener_letra_de_celda(pos: Vector2i) -> String:
 			return "*"  # comodín visual -> "*"
 		return base_name.substr(0,1).to_upper()
 	return ""
+	
+func _es_comodin_en_celda(pos: Vector2i) -> bool:
+	if not celdas_ocupadas.has(pos):
+		return false
+	var s: Sprite2D = celdas_ocupadas[pos] as Sprite2D
+	if s == null:
+		return false
+	return s.has_meta("es_comodin") and bool(s.get_meta("es_comodin"))
+
 
 func _palabra_horizontal(celda: Vector2i) -> String:
 	var min_x := celda.x
@@ -456,8 +514,9 @@ func _hay_conexion_con_tablero_previo() -> bool:
 func devolver_fichas_turno() -> void:
 	if fichas_turno_actual.is_empty():
 		return
+
 	for any in fichas_turno_actual:
-		var cell: Vector2i = (any as Vector2i)
+		var cell: Vector2i = any as Vector2i
 		if not celdas_ocupadas.has(cell):
 			continue
 		var s: Sprite2D = celdas_ocupadas[cell]
@@ -469,11 +528,18 @@ func devolver_fichas_turno() -> void:
 			if b:
 				b.disabled = false
 				b.icon = s.texture
-				b.text = ""  # <- no mostramos la letra en el atril
-				if s.has_meta("letra"):
+				b.text = ""  # no mostramos la letra en el atril
+
+				var es_comodin := s.has_meta("es_comodin") and bool(s.get_meta("es_comodin"))
+
+				if es_comodin:
+					# El comodín vuelve al atril como "*"
+					b.set_meta("letra", "*")
+				elif s.has_meta("letra"):
 					b.set_meta("letra", s.get_meta("letra"))
 
 		s.queue_free()
+
 	fichas_turno_actual.clear()
 	palabras_turno_actual.clear()
 
@@ -702,6 +768,10 @@ func _intentar_colocar_en_cursor() -> void:
 				s.set_meta("letra", "*")
 			else:
 				s.set_meta("letra", base_name2.substr(0,1).to_upper())
+					# Si es comodín ("*"), pedir la letra que representa
+	if s.has_meta("letra") and str(s.get_meta("letra")) == "*":
+		_elegir_letra_comodin(s)
+
 
 	celdas_ocupadas[cursor_cell] = s
 	if not fichas_turno_actual.has(cursor_cell):
@@ -857,10 +927,12 @@ func calcular_puntuacion_palabra(celdas: Array) -> int:
 		if letra == "":
 			continue
 
-		# IMPORTANTE: el comodín "*" siempre vale 0 puntos
+		var es_comodin := _es_comodin_en_celda(cell)
+
 		var puntos_base: int = 0
-		if letra != "*":
+		if not es_comodin:
 			puntos_base = int(LETTER_VALUES.get(letra, 0))
+		# si es comodín, puntos_base se queda en 0
 
 		var mults: Dictionary = _get_multiplicadores_casilla(cell)
 		var mult_letra: int = int(mults["mult_letra"])
