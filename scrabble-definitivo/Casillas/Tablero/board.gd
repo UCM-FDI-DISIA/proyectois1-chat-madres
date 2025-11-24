@@ -41,6 +41,17 @@ const TILE_TYPE_BY_SOURCE_ID := {
 	7: "N"    # cian
 }
 
+func _get_atril_actual() -> Node:
+	# Busca atriles en el grupo "atril_jugador" y devuelve el del jugador actual
+	var atriles := get_tree().get_nodes_in_group("atril_jugador")
+	for atril in atriles:
+		# cada atril tiene @export var indice_jugador
+		if atril.indice_jugador == GameData.jugador_actual:
+			return atril
+	# Fallback por si acaso (modo 1 jugador)
+	return get_tree().current_scene.get_node_or_null("PanelContainer")
+
+
 func _get_multiplicadores_casilla(cell: Vector2i) -> Dictionary:
 	# Si la ficha no es nueva, no hay bonus
 	if not fichas_turno_actual.has(cell):
@@ -203,9 +214,10 @@ func soltar_ficha_en_tablero(global_position: Vector2, textura: Texture2D, orige
 		origen_boton.disabled = true
 		origen_boton.icon = null
 		origen_boton.text = ""  # <- ocultar letra visible
-		var atril := get_tree().current_scene.get_node_or_null("PanelContainer")
+		var atril := _get_atril_actual()
 		if atril and atril.has_method("vaciar_hueco"):
 			atril.vaciar_hueco(origen_boton)
+
 
 	_reconstruir_palabras_turno()
 	return true
@@ -701,9 +713,10 @@ func _intentar_colocar_en_cursor() -> void:
 		ficha_origen.disabled = true
 		ficha_origen.icon = null
 		ficha_origen.text = ""  # <- ocultar letra visible
-		var atril := get_tree().current_scene.get_node_or_null("PanelContainer")
+		var atril := _get_atril_actual()
 		if atril and atril.has_method("vaciar_hueco"):
 			atril.vaciar_hueco(ficha_origen)
+
 
 	_cancelar_seleccion()
 	_reconstruir_palabras_turno()
@@ -762,37 +775,35 @@ func _seleccionar_hueco_por_indice(idx: int) -> void:
 	_select_from_keyboard(idx)
 
 func _buscar_hueco_por_orden(idx: int) -> Button:
-	# 1) Si existe el path típico del proyecto, úsalo
-	var grid := get_tree().current_scene.get_node_or_null("PanelContainer/VBoxContainer/Panel/GridContainer")
-	if grid and grid is GridContainer:
-		var por_nombre := grid.get_node_or_null("Hueco_%d" % idx)
-		if por_nombre and por_nombre is Button:
-			return por_nombre
-		var botones_local: Array[Button] = []
-		for c in grid.get_children():
-			if c is Button:
-				botones_local.append(c)
-		if idx >= 1 and idx <= botones_local.size():
-			return botones_local[idx - 1]
+	# 1) Intentar buscar dentro del ATRIL ACTUAL
+	var atril := _get_atril_actual()
+	if atril:
+		var grid := atril.get_node_or_null("VBoxContainer/Panel/GridContainer")
+		if grid and grid is GridContainer:
+			var por_nombre := grid.get_node_or_null("Hueco_%d" % idx)
+			if por_nombre and por_nombre is Button:
+				return por_nombre
+			var botones_local: Array[Button] = []
+			for c in grid.get_children():
+				if c is Button:
+					botones_local.append(c)
+			if idx >= 1 and idx <= botones_local.size():
+				return botones_local[idx - 1]
 
-	# 2) Fallback: buscar recursivamente en PanelContainer
-	var atril := get_tree().current_scene.get_node_or_null("PanelContainer")
-	if atril == null:
-		atril = get_tree().current_scene.get_node_or_null("Atril")
+	# 2) Fallback: búsqueda recursiva en todo el subárbol del atril
 	if atril == null:
 		return null
 
-	# a) por nombre exacto Hueco_X en todo el subárbol
 	var found := _find_node_recursive(atril, "Hueco_%d" % idx)
 	if found and found is Button:
 		return found
 
-	# b) por orden: primer, segundo... botón que encontremos en recorrido
 	var all_buttons: Array[Button] = []
 	_collect_buttons_recursive(atril, all_buttons)
 	if idx >= 1 and idx <= all_buttons.size():
 		return all_buttons[idx - 1]
 	return null
+
 
 func _find_node_recursive(root: Node, name_to_find: String) -> Node:
 	if root.name == name_to_find:

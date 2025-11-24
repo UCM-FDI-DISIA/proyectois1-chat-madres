@@ -8,6 +8,13 @@ var puntuaciones: Array = []
 #Constantes
 const OPTIONS_SCENE := preload("res://Opciones/opciones.tscn")
 
+#bolsa compartida para todos los jugadores
+@onready var bolsa := preload("res://scripts/BolsaFichas.gd").new()
+
+#lista de atriles (uno por jugador)
+var atriles: Array = []
+
+
 # ===========================
 # 🔹 Funciones del ciclo de vida
 # ===========================
@@ -16,6 +23,25 @@ func _ready() -> void:
 	GameData.inicializar_juego()
 	print("Número de jugadores:", GameData.num_jugadores)
 	print("Jugador actual:", GameData.jugador_actual + 1)
+		# === ATRIL ÚNICO EN ESCENA: PanelContainer/Atril ===
+	var atril: Node = get_tree().current_scene.get_node_or_null("PanelContainer")
+	if atril == null:
+		push_error("No se encontró PanelContainer/Atril")
+	else:
+		# Inicializar array de atriles por jugador en GameData
+		GameData.atriles_jugadores.clear()
+		for i in range(GameData.num_jugadores):
+			GameData.atriles_jugadores.append([])
+
+		# Empezamos siempre en jugador 0
+		GameData.jugador_actual = 0
+
+		# Rellenamos el atril visual para el jugador 0
+		# (el atril ya llama a _rellenar_atril() en su _ready,
+		#  pero por si acaso nos aseguramos después)
+		if atril.has_method("exportar_atril"):
+			GameData.atriles_jugadores[0] = atril.exportar_atril()
+
 
 	# 2. Crear el array de atriles vacíos para cada jugador
 	#GameData.atriles_jugadores.clear()
@@ -107,11 +133,6 @@ func actualizar_ui_puntuacion():
 			"puntos": puntuaciones[i]
 		})
 
-	# 3️⃣ Ordenar de mayor a menor puntuación
-	lista.sort_custom(func(a, b):
-		return a["puntos"] > b["puntos"]
-	)
-
 	# 4️⃣ Rellenar tabla
 	for entry in lista:
 		var fila = HBoxContainer.new()
@@ -179,24 +200,40 @@ func set_turno(mi_turno: bool) -> void:
 	#set_turno(true)
 
 func _siguiente_jugador():
-	# 1) Guardar atril del jugador que termina turno
-	#var atril = get_tree().current_scene.get_node("PanelContainer/Atril")
-	#if atril:
-		#GameData.atriles_jugadores[GameData.jugador_actual] = atril.exportar_atril()
+	var atril: Node = get_tree().current_scene.get_node_or_null("PanelContainer")
 
-	# 2) Avanzar al siguiente jugador
+	# 1) Guardar atril del jugador que termina turno
+	if atril and atril.has_method("exportar_atril"):
+		var estado_atril: Array = atril.exportar_atril()
+
+		# Comprobar si TODO son null (atril vacío) → NO machacamos el guardado
+		var todas_nulas := true
+		for l in estado_atril:
+			if l != null:
+				todas_nulas = false
+				break
+
+		if not todas_nulas:
+			GameData.atriles_jugadores[GameData.jugador_actual] = estado_atril
+			# Opcional: debug
+			#print("DEBUG Guardando atril jugador", GameData.jugador_actual, ":", estado_atril)
+		else:
+			#print("DEBUG NO guardo atril de jugador", GameData.jugador_actual, "(todo null)")
+			pass
+
+	# 2) Cambiar de jugador
 	GameData.jugador_actual += 1
 	if GameData.jugador_actual >= GameData.num_jugadores:
 		GameData.jugador_actual = 0
 
 	# 3) Cargar atril del nuevo jugador
-	#if atril:
-		#atril.cargar_atril(GameData.atriles_jugadores[GameData.jugador_actual])
+	if atril and atril.has_method("cargar_atril"):
+		var datos = GameData.atriles_jugadores[GameData.jugador_actual]
+		atril.cargar_atril(datos)
 
 	# 4) Actualizar UI de turno
 	actualizar_label_turno()
 	set_turno(true)
-
 
 # ===========================
 # 🔹 Actualizar contador de bolsa
@@ -204,6 +241,7 @@ func _siguiente_jugador():
 func actualizar_contador_bolsa() -> void:
 	var atril := get_tree().current_scene.get_node_or_null("PanelContainer")
 	var label = get_node_or_null("ContadorBolsa")
+
 	if atril == null:
 		push_warning("No se encontró el nodo Atril")
 		return
@@ -213,8 +251,11 @@ func actualizar_contador_bolsa() -> void:
 		return
 
 	if atril.bolsa and atril.bolsa.has_method("quedan"):
-		label.text = str(atril.bolsa.quedan())
+		var restantes: int = atril.bolsa.quedan()
+		print("DEBUG Contador: quedan en bolsa =", restantes)
+		label.text = str(restantes)
 	else:
+		print("DEBUG Contador: atril no tiene bolsa o no tiene método 'quedan'")
 		label.text = "0"
 
 # ===========================
@@ -395,7 +436,7 @@ func _on_intercambiar_fichas_pressed() -> void:
 	if atril == null:
 		mostrar_error("No se encontró el atril.")
 		return
-
+		
 	# --- NUEVO: Mostrar mensaje en pantalla ---
 	var mensaje := get_tree().current_scene.get_node_or_null("MensajeIntercambio")
 	if mensaje:
@@ -527,3 +568,5 @@ func _ocultar_error() -> void:
 	#var atril = $PanelContainer/Atril
 	#var datos = GameData.atriles_jugadores[GameData.jugador_actual]
 	#atril.cargar_atril(datos)
+	
+	

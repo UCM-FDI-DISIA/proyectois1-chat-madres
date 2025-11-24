@@ -22,20 +22,20 @@ var cancelar_reordenar_flag: bool = false
 # READY / INICIALIZACIÓN
 # ----------------------------
 func _ready() -> void:
-	# Inicializar bolsa si hace falta (si la clase bolsa lo requiere)
+	# ✅ Inicializar SIEMPRE la bolsa del atril
 	if bolsa and bolsa.has_method("_inicializar_bolsa"):
-		# comprobación defensiva: si la bolsa tiene lista interna 'bolsa' y está vacía, inicializarla
-		if "bolsa" in bolsa and bolsa.bolsa is Array and bolsa.bolsa.is_empty():
-			bolsa._inicializar_bolsa()
+		bolsa._inicializar_bolsa()
+		print("DEBUG Bolsa en atril inicializada, quedan:", bolsa.quedan())
 
 	# Recoger huecos y asignar manager
 	var grid: GridContainer = $VBoxContainer/Panel/GridContainer
+	huecos.clear()
 	for child in grid.get_children():
 		if child is Button and child.name.begins_with("Hueco"):
 			huecos.append(child)
-			# asignar manager para que los huecos puedan notificar acciones
 			child.manager = self
 
+	# Rellenar atril al empezar
 	_rellenar_atril()
 
 # ----------------------------
@@ -77,6 +77,8 @@ func vaciar_hueco(boton: Button) -> void:
 	boton.text = ""
 	boton.tooltip_text = ""
 	boton.disabled = false
+	if boton.has_meta("letra"):
+		boton.remove_meta("letra")
 
 func reponer_fichas_colocadas() -> void:
 	var huecos_vacios: Array[Button] = []
@@ -103,6 +105,72 @@ func reponer_fichas_colocadas() -> void:
 		b.disabled = false
 
 # ----------------------------
+# EXPORTAR / CARGAR ATRIL (multi-jugador con 1 atril visual)
+# ----------------------------
+
+func exportar_atril() -> Array:
+	var resultado: Array = []
+	for b in huecos:
+		if b.icon != null and b.has_meta("letra"):
+			resultado.append(b.get_meta("letra"))
+		else:
+			resultado.append(null)
+	return resultado
+
+func cargar_atril(lista_letras: Array) -> void:
+	# Vaciar visualmente el atril
+	limpiar_atril()
+
+	# Caso 1: no hay datos guardados
+	if lista_letras == null:
+		_rellenar_atril()
+		return
+
+	# Caso 2: la lista está vacía o TODAS las entradas son null
+	var todas_nulas := true
+	if not lista_letras.is_empty():
+		for l in lista_letras:
+			if l != null:
+				todas_nulas = false
+				break
+
+	if lista_letras.is_empty() or todas_nulas:
+		# No tiene sentido dejar el atril vacío: repartir fichas nuevas
+		_rellenar_atril()
+		return
+
+	# Caso 3: hay letras válidas -> las cargamos
+	var n: int = lista_letras.size()
+	if huecos.size() < n:
+		n = huecos.size()
+
+	for i in range(n):
+		var letra = lista_letras[i]
+		if letra == null:
+			continue
+
+		var f: Dictionary = {}
+		if bolsa and bolsa.has_method("crear_ficha_por_letra"):
+			f = bolsa.crear_ficha_por_letra(letra)
+		else:
+			f = {
+				"letra": letra,
+				"puntos": 0,
+				"texture": null,
+			}
+
+		var b: Button = huecos[i]
+		var tex: Texture2D = f.get("texture", null)
+		var puntos: int = int(f.get("puntos", 0))
+
+		b.icon = tex
+		b.text = ""
+		b.tooltip_text = "Letra: %s\nPuntos: %d" % [str(letra), puntos]
+		b.set_meta("letra", str(letra))
+		b.disabled = false
+
+
+# ----------------------------
 # Drag preview helpers (huecos llaman a esto)
 # ----------------------------
 func on_ficha_arrastrada(boton: Button) -> void:
@@ -118,25 +186,17 @@ func on_ficha_soltada(boton: Button) -> void:
 # ----------------------------
 # Modo SELECCIÓN para INTERCAMBIO (devuelve Array o null si cancela)
 # ----------------------------
-# Nota: sin tipo de retorno explícito para permitir return null en caso de cancelación
 func seleccionar_fichas_para_intercambio():
-	# Activa modo intercambio y permite seleccionar fichas.
-	# Devuelve:
-	#  - Array con botones seleccionados si confirma con ENTER
-	#  - null si cancela con ESC (ui_cancel)
 	modo_reordenar = false
 	modo_intercambio = true
 	seleccionadas_para_intercambio = []
 
-	# Evitar click "bleed-through" del botón que activa el modo
 	await _wait_mouse_released()
 
 	print("🔁 Modo intercambio: selecciona las fichas que quieras cambiar. Pulsa ENTER para confirmar, ESC para cancelar.")
 
-	# Esperar confirmación (devuelve true si aceptó, false si canceló)
 	var confirmado := await _esperar_salida_intercambio()
 
-	# Si canceló, restaurar visual y devolver null
 	if not confirmado:
 		modo_intercambio = false
 		seleccionadas_para_intercambio = []
@@ -144,7 +204,6 @@ func seleccionar_fichas_para_intercambio():
 			b.modulate = Color(1, 1, 1, 1)
 		return null
 
-	# Si confirmó, copiamos la selección y salimos
 	var result: Array = seleccionadas_para_intercambio.duplicate()
 	modo_intercambio = false
 	seleccionadas_para_intercambio = []
@@ -166,18 +225,16 @@ func registrar_click_intercambio(boton: Button) -> void:
 		boton.modulate = Color(1, 0.8, 0.4, 1)
 
 func _esperar_salida_intercambio() -> bool:
-	# Devuelve true si el usuario presionó ui_accept (ENTER), false si ui_cancel (ESC).
 	while true:
 		await get_tree().process_frame
 		if Input.is_action_just_pressed("ui_accept"):
 			return true
 		if Input.is_action_just_pressed("ui_cancel"):
 			return false
-	# Defensa adicional
 	return false
 
 # ----------------------------
-# Ejecutar intercambio (separado: usado por pantalla_de_juego)
+# Ejecutar intercambio
 # ----------------------------
 func intercambiar_fichas(botones: Array) -> void:
 	if botones == null or botones.is_empty():
@@ -209,6 +266,8 @@ func intercambiar_fichas(botones: Array) -> void:
 		b.text = ""
 		b.tooltip_text = ""
 		b.modulate = Color(1, 1, 1, 1)
+		if b.has_meta("letra"):
+			b.remove_meta("letra")
 
 	if bolsa and bolsa.has_method("devolver_fichas"):
 		bolsa.devolver_fichas(fichas_devueltas)
@@ -233,7 +292,7 @@ func intercambiar_fichas(botones: Array) -> void:
 	print("✅ Intercambio completado: %d fichas nuevas." % botones.size())
 
 # ----------------------------
-# Modo REORDENAR (intercambia posiciones dentro del atril)
+# Modo REORDENAR
 # ----------------------------
 func seleccionar_fichas_para_reordenar() -> void:
 	modo_intercambio = false
@@ -241,10 +300,9 @@ func seleccionar_fichas_para_reordenar() -> void:
 	ficha_reordenar_1 = null
 	cancelar_reordenar_flag = false
 
-	# Evitar bleed-through del click del botón que activa este modo
 	await _wait_mouse_released()
 
-	print("🔄 Modo reordenar: haz clic en la primera ficha y luego en la segunda para intercambiar. Pulsa ENTER o ESC para salir (o pulsa otra vez el botón Reordenar para cancelar).")
+	print("🔄 Modo reordenar: haz clic en la primera ficha y luego en la segunda para intercambiar. Pulsa ENTER o ESC para salir.")
 
 	await _esperar_salida_reordenar()
 
@@ -272,7 +330,6 @@ func registrar_click_reordenar(boton: Button) -> void:
 		boton.modulate = Color(1, 1, 1, 1)
 		ficha_reordenar_1 = null
 
-# Intercambia visual y datos entre dos huecos (botones)
 func _intercambiar_fichas_en_atril(a: Button, b: Button) -> void:
 	if a == null or b == null:
 		return
@@ -336,24 +393,6 @@ func _wait_mouse_released() -> void:
 	while Input.is_mouse_button_pressed(1):
 		await get_tree().process_frame
 
-
-#func cargar_atril(lista_letras: Array) -> void:
-	#limpiar_atril()
-#for i in range(min(lista_letras.size(), huecos.size())):
-		#if letra == null:
-			#continue
-
-		# Buscar diccionario de ficha correspondiente en la bolsa
-		#if bolsa and bolsa.has_method("crear_ficha_por_letra"):
-			#var f = bolsa.crear_ficha_por_letra(letra)
-			#if f is Dictionary:
-				#var b = huecos[i]
-				#b.tooltip_text = "Letra: %s\nPuntos: %d" % [
-					#f.get("letra"),
-					#int(f.get("puntos", 0))
-				#]
-				#b.set_meta("letra", letra)
-
 func limpiar_atril() -> void:
 	for b in huecos:
 		b.icon = null
@@ -361,13 +400,3 @@ func limpiar_atril() -> void:
 		b.tooltip_text = ""
 		if b.has_meta("letra"):
 			b.remove_meta("letra")
-
-
-#func exportar_atril() -> Array:
-	#var resultado: Array = []
-	#for b in huecos:
-		#if b.icon != null and b.has_meta("letra"):
-			#resultado.append(b.get_meta("letra"))
-		#else:
-			#resultado.append(null)
-	#return resultado

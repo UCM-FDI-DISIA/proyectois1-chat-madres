@@ -111,3 +111,35 @@ func devolver_fichas(fichas: Array) -> void:
 # =======================================================
 func quedan() -> int:
 	return bolsa.size()
+	
+# =======================================================
+# Crear una ficha a partir de una letra (para recargar atriles)
+# =======================================================
+func crear_ficha_por_letra(letra: String) -> Dictionary:
+	# Mapeo interno: el comodín "*" usa la clave "NULL" y textura NULL.png
+	var clave := letra
+	if letra == "*":
+		clave = "NULL"
+
+	# Datos base de la letra (puntos y cantidad)
+	if not FICHAS_DATOS.has(clave):
+		# Letra desconocida -> ficha sin textura y 0 puntos (defensivo)
+		return {
+			"letra": letra,
+			"puntos": 0,
+			"texture": null,
+		}
+
+	var datos: Dictionary = FICHAS_DATOS[clave]
+
+	# Cargar textura correspondiente
+	var tex_path := ICONS_PATH.path_join("%s.png" % clave)
+	var tex := load(tex_path)
+	if tex == null:
+		push_warning("⚠️ crear_ficha_por_letra: no se encontró textura para '%s' (%s)" % [clave, tex_path])
+
+	return {
+		"letra": letra,                # usamos la letra lógica ("*", "A", "B", …)
+		"puntos": int(datos["puntos"]),
+		"texture": tex,
+	}
