@@ -280,18 +280,17 @@ func _on_finalizar_turno_pressed() -> void:
 		push_warning("No se encontró el nodo 'PanelContainer' (atril)")
 		return
 
-	# Bloquear la colocación, bloquear el turno
+	# Bloquear turno mientras validamos
 	es_mi_turno = false
 
 	# Bloquear botones del atril
-	if atril:
-		for child in atril.get_children():
-			if child is Button:
-				child.disabled = true
+	for child in atril.get_children():
+		if child is Button:
+			child.disabled = true
 
 	# Atenuar el tablero
-	if tablero:
-		tablero.modulate = Color(1, 1, 1, 0.6)
+	tablero.modulate = Color(1, 1, 1, 0.6)
+	tablero.set_process_input(false)
 
 	# Validar jugada (devuelve bool)
 	var ok := await _validar_jugada(tablero)
@@ -314,19 +313,32 @@ func _on_finalizar_turno_pressed() -> void:
 		# Marcar fin del primer turno si era el primero
 		if tablero.es_primer_turno:
 			tablero.es_primer_turno = false
+
+		# Reponer fichas colocadas SOLO si la jugada fue válida
+		if atril.has_method("reponer_fichas_colocadas"):
+			atril.reponer_fichas_colocadas()
+		actualizar_contador_bolsa()
+
+		# Pasar al siguiente jugador
+		_siguiente_jugador()
 	else:
-		# ❌ JUGADA INVÁLIDA - Devolver fichas
-		print("❌ Jugada inválida, devolviendo fichas...")
-		if tablero.has_method("devolver_fichas_turno"):
-			tablero.devolver_fichas_turno()
+		# ❌ JUGADA INVÁLIDA
+		print("❌ Jugada inválida. Manteniendo turno del mismo jugador.")
 
-	# Reponer fichas colocadas SIEMPRE
-	if atril and atril.has_method("reponer_fichas_colocadas"):
-		atril.reponer_fichas_colocadas()
-	actualizar_contador_bolsa()
+		# OJO: _validar_jugada ya llama a devolver_fichas_turno()
+		# en los casos importantes, así que aquí no repetimos eso.
 
-	# Reactivar turno ahora es _siguiente_jugador()
-	_siguiente_jugador()
+		# Reactivar botones del atril
+		for child in atril.get_children():
+			if child is Button:
+				child.disabled = false
+
+		# Restaurar tablero para que pueda volver a colocar
+		tablero.modulate = Color(1, 1, 1, 1)
+		tablero.set_process_input(true)
+
+		# Le devolvemos el turno al mismo jugador
+		es_mi_turno = true
 
 # ===========================
 # 🔹 VALIDACIÓN DE JUGADA
@@ -432,19 +444,20 @@ func _reactivar_turno() -> void:
 # 🔹 INTERCAMBIAR FICHAS
 # ===========================
 func _on_intercambiar_fichas_pressed() -> void:
+	# Si no es mi turno, no hago nada
+	if not es_mi_turno:
+		return
+
 	var atril := get_tree().current_scene.get_node_or_null("PanelContainer")
 	if atril == null:
 		mostrar_error("No se encontró el atril.")
 		return
-		
-	# --- NUEVO: Mostrar mensaje en pantalla ---
+
+	# --- Mostrar mensaje en pantalla ---
 	var mensaje := get_tree().current_scene.get_node_or_null("MensajeIntercambio")
 	if mensaje:
-		mensaje.text = "Presiona ENTER para intercambiar fichas"
+		mensaje.text = "Selecciona fichas y pulsa ENTER para intercambiar (ESC para cancelar)"
 		mensaje.visible = true
-
-	# Pedir al jugador seleccionar las fichas a intercambiar
-	print("Selecciona las fichas que deseas intercambiar (clic).")
 
 	# Desactivar tablero mientras se eligen fichas
 	var tablero := get_tree().current_scene.get_node_or_null("Board")
@@ -452,10 +465,12 @@ func _on_intercambiar_fichas_pressed() -> void:
 		tablero.modulate = Color(1, 1, 1, 0.5)
 		tablero.set_process_input(false)
 
+	print("Selecciona las fichas que deseas intercambiar (clic).")
+
 	# Esperamos selección de fichas
 	var fichas_a_cambiar = await atril.seleccionar_fichas_para_intercambio()
 
-	# --- OCULTAR MENSAJE DESPUÉS ---
+	# Ocultar mensaje
 	if mensaje:
 		mensaje.visible = false
 
@@ -475,21 +490,41 @@ func _on_intercambiar_fichas_pressed() -> void:
 			tablero.set_process_input(true)
 		return
 
-	# Ejecutar el intercambio
+	# Comprobar que hay suficientes fichas en la bolsa ANTES de intercambiar
+	if atril.bolsa and atril.bolsa.has_method("quedan") and atril.bolsa.quedan() < 7:
+		mostrar_error("No puedes intercambiar: quedan menos de 7 fichas en la bolsa.")
+		if tablero:
+			tablero.modulate = Color(1, 1, 1, 1)
+			tablero.set_process_input(true)
+		return
+
+	# Ejecutar el intercambio de verdad
 	if atril.has_method("intercambiar_fichas"):
 		atril.intercambiar_fichas(fichas_a_cambiar)
 	else:
 		print("Atril no tiene método 'intercambiar_fichas'.")
+		if tablero:
+			tablero.modulate = Color(1, 1, 1, 1)
+			tablero.set_process_input(true)
+		return
 
-	# Reactivar tablero y actualizar contador
+	# Reactivar tablero (aunque en nada pasaremos el turno)
 	if tablero:
 		tablero.modulate = Color(1, 1, 1, 1)
-		tablero.set_process_input(true)
+		tablero.set_process_input(false)  # lo dejamos desactivado hasta el siguiente jugador
 
+	# Actualizar contador de bolsa
 	actualizar_contador_bolsa()
 	print("Fichas intercambiadas correctamente.")
-	
-	_on_finalizar_turno_pressed()
+
+	# 🔹 Este turno termina aquí (intercambiar cuenta como turno)
+	es_mi_turno = false
+
+	# 🔹 Dejarte ver tus fichas nuevas un momento
+	await get_tree().create_timer(0.9).timeout
+
+	# 🔹 Pasar al siguiente jugador (guardando/cargando atril como siempre)
+	_siguiente_jugador()
 
 # ===========================
 # REORDENAR FICHAS
