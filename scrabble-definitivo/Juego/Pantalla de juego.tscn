@@ -175,6 +175,14 @@ offset_right = 494.0
 offset_bottom = 672.0
 text = "Finalizar Turno"
 
+[node name="Cancelarcolocacion" type="Button" parent="."]
+layout_mode = 0
+offset_left = 750.0
+offset_top = 633.0
+offset_right = 912.0
+offset_bottom = 664.0
+text = "Cancelar colocación"
+
 [node name="ReordenarFichas" type="Button" parent="."]
 layout_mode = 0
 offset_left = 961.0
