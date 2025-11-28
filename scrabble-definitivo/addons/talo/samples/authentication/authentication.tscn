@@ -60,3 +60,12 @@ visible = false
 [node name="DeleteAccount" parent="UI/States" instance=ExtResource("10_gndcp")]
 unique_name_in_owner = true
 visible = false
+
+[node name="Button" type="Button" parent="."]
+offset_left = 1081.0
+offset_top = 41.0
+offset_right = 1118.0
+offset_bottom = 80.0
+text = "X"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
