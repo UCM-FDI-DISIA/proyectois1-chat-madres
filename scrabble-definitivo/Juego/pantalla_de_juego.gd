@@ -80,6 +80,7 @@ func _ready() -> void:
 	var btn_intercambiar := get_node_or_null("IntercambiarFichas")
 	var btn_finalizar := get_node_or_null("FinalizarTurno")
 	var btn_reordenar := get_node_or_null("ReordenarFichas")
+	var btn_cancelar := get_node_or_null("Cancelarcolocacion")
 
 	if btn_opciones:
 		var c_op := Callable(self, "_on_opciones_pressed")
@@ -100,6 +101,11 @@ func _ready() -> void:
 		var c_reo := Callable(self, "_on_reordenar_fichas_pressed")
 		if not btn_reordenar.is_connected("pressed", c_reo):
 			btn_reordenar.connect("pressed", c_reo)
+
+	if btn_cancelar:
+		var c_can := Callable(self, "_on_cancelar_colocacion_pressed")
+		if not btn_cancelar.is_connected("pressed", c_can):
+			btn_cancelar.connect("pressed", c_can)
 	# --------------------------------------------------------
 
 # ===========================
@@ -339,6 +345,29 @@ func _on_finalizar_turno_pressed() -> void:
 
 		# Le devolvemos el turno al mismo jugador
 		es_mi_turno = true
+
+# NUEVO
+func _on_cancelar_colocacion_pressed() -> void:
+	if not es_mi_turno:
+		print("Cancelar ignorado: no es mi turno.")
+		return
+
+	var tablero := get_tree().current_scene.get_node_or_null("Board")
+	if tablero == null:
+		push_warning("No se encontró el nodo 'Board'")
+		return
+
+	# Devuelve las fichas colocadas en este turno al atril
+	if tablero.has_method("devolver_fichas_turno"):
+		tablero.devolver_fichas_turno()
+	else:
+		push_warning("El Board no tiene 'devolver_fichas_turno'")
+
+	# Reactiva el turno para seguir colocando
+	_reactivar_turno()
+	print("🔄 Colocación cancelada: fichas devueltas y turno reactivado.")
+
+
 
 # ===========================
 # 🔹 VALIDACIÓN DE JUGADA
