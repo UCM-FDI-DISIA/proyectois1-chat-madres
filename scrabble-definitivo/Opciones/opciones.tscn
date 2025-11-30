@@ -45,6 +45,10 @@ size_flags_vertical = 4
 layout_mode = 2
 text = "TUTORIAL"
 
+[node name="Controles" type="Button" parent="PanelContainer/Popup menu"]
+layout_mode = 2
+text = "CONTROLES"
+
 [node name="Opciones" type="Button" parent="PanelContainer/Popup menu"]
 layout_mode = 2
 text = "OPCIONES"
@@ -71,5 +75,6 @@ libraries = {
 }
 
 [connection signal="pressed" from="PanelContainer/Popup menu/Tutorial" to="." method="_on_tutorial_pressed"]
+[connection signal="pressed" from="PanelContainer/Popup menu/Controles" to="." method="_on_controles_pressed"]
 [connection signal="pressed" from="PanelContainer/Popup menu/Salir" to="." method="_on_salir_pressed"]
 [connection signal="pressed" from="PanelContainer/Popup menu/Menu" to="." method="_on_button_4_pressed"]

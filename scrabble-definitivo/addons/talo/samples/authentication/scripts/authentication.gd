@@ -51,3 +51,7 @@ func _configure_signals():
 	delete_account.go_to_game.connect(func (): _make_state_visible(in_game))
 
 	Talo.players.identified.connect(func (player): _make_state_visible(in_game))
+
+
+func _on_button_pressed() -> void:
+		queue_free()

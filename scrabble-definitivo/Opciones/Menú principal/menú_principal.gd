@@ -4,6 +4,7 @@ const TUTORIAL_SCENE := preload("res://Opciones/Tutorial/Tutorial.tscn")
 const CREDITS_SCENE := preload("res://Créditos/Créditos.tscn")
 const MENU_JUGADORES_SCENE := preload("res://Opciones/Menú principal/MenuMultijugadores.tscn")
 const CUENTA_SCENE := preload ("res://addons/talo/samples/authentication/authentication.tscn")
+const CONTROLES_SCENE := preload ("res://Opciones/Tutorial/controles.tscn")
 
 func _on_tutorial_pressed() -> void:
 	$SFXPlayer.play()
@@ -28,4 +29,10 @@ func _on_jugar_pressed() -> void:
 func _on_cuenta_pressed() -> void:
 	$SFXPlayer.play()
 	var t = CUENTA_SCENE.instantiate()
+	get_tree().current_scene.add_child(t)
+
+
+func _on_controles_pressed() -> void:
+	$SFXPlayer.play()
+	var t = CONTROLES_SCENE.instantiate()
 	get_tree().current_scene.add_child(t)

@@ -70,6 +70,10 @@ text = "PERSONALIZAR
 layout_mode = 2
 text = "TUTORIAL"
 
+[node name="Controles" type="Button" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "CONTROLES"
+
 [node name="Opciones" type="Button" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "OPCIONES"
@@ -107,6 +111,7 @@ stream = ExtResource("4_msmj0")
 
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Jugar" to="." method="_on_jugar_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Tutorial" to="." method="_on_tutorial_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Controles" to="." method="_on_controles_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Créditos" to="." method="_on_créditos_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Salir" to="." method="_on_salir_pressed"]
 [connection signal="pressed" from="Cuenta" to="." method="_on_cuenta_pressed"]
