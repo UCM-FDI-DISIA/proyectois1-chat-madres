@@ -891,6 +891,17 @@ func _collect_buttons_recursive(root: Node, out: Array) -> void:
 		_collect_buttons_recursive(ch, out)
 
 # ---------------- PUNTUACIÓN ----------------
+var metodo_actual = GameData.metodo_puntuacion
+const METODOS_PUNTUACION := [
+	"Clasico",
+	"Bonus Palabra Larga",
+	"Solo Vocales",
+	"Palabra Perfecta",
+	"Triple Letra Inicial",
+	"Puntaje Progresivo",
+    "Letra Duplicada"
+]
+
 func calcular_puntuacion_turno() -> int:
 	var total_score: int = 0
 
@@ -918,6 +929,28 @@ func calcular_puntuacion_turno() -> int:
 	return total_score
 
 func calcular_puntuacion_palabra(celdas: Array) -> int:
+	
+	
+	match metodo_actual:
+		"Clasico":
+			return _puntuacion_clasico(celdas)
+		"Bonus Palabra Larga":
+			return _puntuacion_bonus_larga(celdas)
+		"Solo Vocales":
+			return _puntuacion_solo_vocales(celdas)
+		"Palabra Perfecta":
+			return _puntuacion_palabra_perfecta(celdas)
+		"Triple Letra Inicial":
+			return _puntuacion_triple_letra_inicial(celdas)
+		"Puntaje Progresivo":
+			return _puntuacion_progresiva(celdas)
+		"Letra Duplicada":
+			return _puntuacion_letra_duplicada(celdas)
+		_:
+			return _puntuacion_clasico(celdas)
+
+# 1. Clasico (tu versión original)
+func _puntuacion_clasico(celdas: Array) -> int:
 	var suma_letras: int = 0
 	var mult_palabra_total: int = 1
 
@@ -928,11 +961,9 @@ func calcular_puntuacion_palabra(celdas: Array) -> int:
 			continue
 
 		var es_comodin := _es_comodin_en_celda(cell)
-
 		var puntos_base: int = 0
 		if not es_comodin:
 			puntos_base = int(LETTER_VALUES.get(letra, 0))
-		# si es comodín, puntos_base se queda en 0
 
 		var mults: Dictionary = _get_multiplicadores_casilla(cell)
 		var mult_letra: int = int(mults["mult_letra"])
@@ -942,6 +973,136 @@ func calcular_puntuacion_palabra(celdas: Array) -> int:
 		mult_palabra_total *= mult_palabra
 
 	return suma_letras * mult_palabra_total
+
+
+# 2. Bonus Palabra Larga: +10 si tiene 7 letras o más
+func _puntuacion_bonus_larga(celdas: Array) -> int:
+	var base := _puntuacion_clasico(celdas)
+	if celdas.size() >= 7:
+		base += 10
+	return base
+
+
+# 3. Solo Vocales: solo suman las vocales
+func _puntuacion_solo_vocales(celdas: Array) -> int:
+	var suma_letras: int = 0
+	var mult_palabra_total: int = 1
+	var vocales := ["A","E","I","O","U"]
+
+	for any in celdas:
+		var cell: Vector2i = any as Vector2i
+		var letra: String = _obtener_letra_de_celda(cell).to_upper()
+		if letra == "" or letra not in vocales:
+			continue
+
+		var es_comodin := _es_comodin_en_celda(cell)
+		var puntos_base: int = 0
+		if not es_comodin:
+			puntos_base = int(LETTER_VALUES.get(letra, 0))
+
+		var mults: Dictionary = _get_multiplicadores_casilla(cell)
+		suma_letras += puntos_base * int(mults["mult_letra"])
+		mult_palabra_total *= int(mults["mult_palabra"])
+
+	return suma_letras * mult_palabra_total
+
+
+# 4. Palabra Perfecta: si todas las letras son mayúsculas, x2
+func _puntuacion_palabra_perfecta(celdas: Array) -> int:
+	var base := _puntuacion_clasico(celdas)
+	var perfecto := true
+
+	for any in celdas:
+		var letra := _obtener_letra_de_celda(any as Vector2i)
+		if letra != "" and letra != letra.to_upper():
+			perfecto = false
+			break
+
+	if perfecto and celdas.size() > 0:
+		base *= 2
+
+	return base
+
+
+# 5. Triple Letra Inicial: triplica la primera letra
+func _puntuacion_triple_letra_inicial(celdas: Array) -> int:
+	if celdas.size() == 0:
+		return 0
+
+	var suma_letras: int = 0
+	var mult_palabra_total: int = 1
+
+	for i in range(celdas.size()):
+		var cell: Vector2i = celdas[i] as Vector2i
+		var letra: String = _obtener_letra_de_celda(cell)
+		if letra == "":
+			continue
+
+		var es_comodin := _es_comodin_en_celda(cell)
+		var puntos_base: int = 0
+		if not es_comodin:
+			puntos_base = int(LETTER_VALUES.get(letra, 0))
+
+		var mults: Dictionary = _get_multiplicadores_casilla(cell)
+		var mult_letra: int = int(mults["mult_letra"])
+		if i == 0:
+			mult_letra *= 3  # triplica la primera letra
+
+		suma_letras += puntos_base * mult_letra
+		mult_palabra_total *= int(mults["mult_palabra"])
+
+	return suma_letras * mult_palabra_total
+
+
+# 6. Puntaje Progresivo: la letra i vale i puntos
+func _puntuacion_progresiva(celdas: Array) -> int:
+	if celdas.size() == 0:
+		return 0
+
+	var suma_letras: int = 0
+	var mult_palabra_total: int = 1
+
+	for i in range(celdas.size()):
+		var cell: Vector2i = celdas[i] as Vector2i
+		var letra: String = _obtener_letra_de_celda(cell)
+		if letra == "":
+			continue
+
+		var es_comodin := _es_comodin_en_celda(cell)
+		var puntos_base: int = 0
+		if not es_comodin:
+			puntos_base = i + 1  # letra i vale i+1 puntos
+
+		var mults: Dictionary = _get_multiplicadores_casilla(cell)
+		var mult_letra: int = int(mults["mult_letra"])
+		suma_letras += puntos_base * mult_letra
+		mult_palabra_total *= int(mults["mult_palabra"])
+
+	return suma_letras * mult_palabra_total
+
+
+# 7. Letra Duplicada: +2 por cada letra repetida en la palabra
+func _puntuacion_letra_duplicada(celdas: Array) -> int:
+	var base := _puntuacion_clasico(celdas)
+	var letras_dict := {}
+
+	for any in celdas:
+		var letra := _obtener_letra_de_celda(any as Vector2i)
+		if letra == "":
+			continue
+
+		letra = letra.to_upper()
+		if letras_dict.has(letra):
+			letras_dict[letra] += 1
+		else:
+			letras_dict[letra] = 1
+
+	for letra in letras_dict.keys():
+		if letras_dict[letra] > 1:
+			base += 2 * (letras_dict[letra] - 1)  # +2 por cada repetida
+
+	return base
+
 
 func _celdas_palabra_horizontal(celda: Vector2i) -> Array:
 	var min_x := celda.x
