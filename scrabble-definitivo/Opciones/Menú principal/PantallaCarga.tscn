@@ -1,0 +1,41 @@
+[gd_scene load_steps=4 format=3 uid="uid://o4bjg70kcmr2"]
+
+[ext_resource type="Texture2D" uid="uid://b50xaxjvququm" path="res://Casillas/Tablero/Fondo_1.1.1.png" id="1_6ro8b"]
+[ext_resource type="Script" uid="uid://dc4a3xj3mw74a" path="res://Opciones/Menú principal/pantalla_carga.gd" id="1_t2d5h"]
+[ext_resource type="Texture2D" uid="uid://cf6lqvno50hmo" path="res://scripts/Logo.png" id="2_t2d5h"]
+
+[node name="PantallaCarga" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_t2d5h")
+
+[node name="Fondo1_1_1" type="Sprite2D" parent="."]
+position = Vector2(616, 323)
+texture = ExtResource("1_6ro8b")
+
+[node name="Logo" type="Sprite2D" parent="."]
+position = Vector2(68, 586)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("2_t2d5h")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.231
+anchor_bottom = 0.042000003
+offset_left = 255.0
+offset_top = 307.0
+offset_right = 679.888
+offset_bottom = 306.784
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 557.0
+offset_top = 342.0
+offset_right = 645.0
+offset_bottom = 365.0
+text = "Cargando..."

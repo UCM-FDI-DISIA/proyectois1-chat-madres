@@ -50,7 +50,8 @@ func _on_confirmar_pressed():
 	print("🎯 Modo de juego guardado:", GameData.metodo_puntuacion)
 	
 	# Cambiar a pantalla de juego
-	get_tree().change_scene_to_file("res://Juego/Pantalla de juego.tscn")
+	get_tree().change_scene_to_file("res://Opciones/Menú principal/PantallaCarga.tscn")
+
 
 
 func _on_modo_option_item_selected(index: int):
