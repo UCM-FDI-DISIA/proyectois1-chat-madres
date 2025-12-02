@@ -2,6 +2,8 @@
 
 Este documento recoge los controles y acciones necesarias para jugar al Scrabble implementado en el proyecto. Está pensado para cubrir las interacciones más comunes en escritorio (ratón + teclado) y en dispositivos táctiles, así como accesibilidad y atajos. Adapta los nombres de botones/menús a los que tenga la versión final del juego si difieren.
 
+https://www.canva.com/design/DAG6MTppx5E/ChQWBAuJGdOY983jszQWsQ/edit?utm_content=DAG6MTppx5E&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+
 ## Índice
 - Controles generales
 - Controles en PC (ratón + teclado)
