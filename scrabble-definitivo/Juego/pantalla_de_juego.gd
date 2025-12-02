@@ -4,6 +4,9 @@ extends Control
 var es_mi_turno: bool = false
 var puntuacion_jugador_actual: int = 0
 var puntuaciones: Array = []
+var tiempo_restante: int = 0
+@onready var turno_timer := $TurnoTimer
+@onready var label_tiempo := $LabelTiempo
 
 #Constantes
 const OPTIONS_SCENE := preload("res://Opciones/opciones.tscn")
@@ -106,6 +109,11 @@ func _ready() -> void:
 		var c_can := Callable(self, "_on_cancelar_colocacion_pressed")
 		if not btn_cancelar.is_connected("pressed", c_can):
 			btn_cancelar.connect("pressed", c_can)
+			
+	if turno_timer:
+		turno_timer.connect("timeout", Callable(self, "_on_TurnoTimer_timeout"))
+	else:
+		push_error("No se encontró TurnoTimer")
 	# --------------------------------------------------------
 
 # ===========================
@@ -193,21 +201,30 @@ func actualizar_label_turno():
 func set_turno(mi_turno: bool) -> void:
 	es_mi_turno = mi_turno
 	var tablero = get_tree().current_scene.get_node_or_null("Board")
+
 	if es_mi_turno:
+		# Mostrar color de turno
 		if $ColorRect and $ColorRect.has_method("mostrar_con_fundido"):
 			$ColorRect.mostrar_con_fundido()
+
+		# Empezar turno en el tablero
 		if tablero and tablero.has_method("empezar_turno"):
 			tablero.empezar_turno()
+
+		# === INICIAR TIMER ===
+		if GameData.tiempo_por_turno <= 0:
+			GameData.tiempo_por_turno = 30  # valor por defecto si no está definido
+
+		tiempo_restante = GameData.tiempo_por_turno
+		actualizar_ui_tiempo()
+
+		# Configuramos el timer para contar cada segundo
+		turno_timer.wait_time = 1.0
+		turno_timer.one_shot = false
+		turno_timer.start()
+
 	actualizar_contador_bolsa()
 	actualizar_ui_puntuacion()
-
-#func _siguiente_jugador():
-	#GameData.jugador_actual += 1
-	#if GameData.jugador_actual >= GameData.num_jugadores:
-		#GameData.jugador_actual = 0
-		
-	#actualizar_label_turno()
-	#set_turno(true)
 
 func _siguiente_jugador():
 	var atril: Node = get_tree().current_scene.get_node_or_null("PanelContainer")
@@ -624,17 +641,25 @@ func _ocultar_error() -> void:
 	$PantallaError.visible = false
 	$MensajeError.visible = false
 	
+# ===========================
+# 🔹 Timeout del Timer
+# ===========================
+func _on_TurnoTimer_timeout() -> void:
+	if not es_mi_turno:
+		return
+
+	tiempo_restante -= 1
+	actualizar_ui_tiempo()
+
+	if tiempo_restante <= 0:
+		print("⏱ Tiempo agotado para jugador", GameData.jugador_actual + 1)
+		turno_timer.stop()  # detener timer para no seguir restando
+		_siguiente_jugador()
 
 
-
-#func guardar_atril_jugador():
-	#var atril = $PanelContainer/Atril
-	#GameData.atriles_jugadores[GameData.jugador_actual] = atril.exportar_atril()
-
-
-#func cargar_atril_jugador():
-	#var atril = $PanelContainer/Atril
-	#var datos = GameData.atriles_jugadores[GameData.jugador_actual]
-	#atril.cargar_atril(datos)
-	
-	
+# ===========================
+# 🔹 Actualizar Label de tiempo
+# ===========================
+func actualizar_ui_tiempo() -> void:
+	if label_tiempo:
+		label_tiempo.text = str(tiempo_restante) + "s"

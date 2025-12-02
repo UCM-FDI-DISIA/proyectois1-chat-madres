@@ -1,5 +1,8 @@
 extends Node
 
+# Tiempo por turno en segundos
+var tiempo_por_turno: float = 60.0
+
 # Número de jugadores
 var num_jugadores: int = 1   # valor por defecto
 

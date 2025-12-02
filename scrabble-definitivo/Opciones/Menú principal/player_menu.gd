@@ -41,4 +41,4 @@ func _on_confirmar_pressed() -> void:
 	print("Nombres actualizados:", GameData.player_names)
 
 	# ir a la pantalla de juego
-	get_tree().change_scene_to_file("res://Juego/Pantalla de juego.tscn")
+	get_tree().change_scene_to_file("res://Opciones/Menú principal/Personalizar.tscn")

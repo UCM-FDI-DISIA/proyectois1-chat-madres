@@ -1,0 +1,63 @@
+[gd_scene load_steps=4 format=3 uid="uid://b400mouo0s1bc"]
+
+[ext_resource type="Script" uid="uid://bmihyuiwqtd8v" path="res://Opciones/Menú principal/personalizar.gd" id="1_nukf5"]
+[ext_resource type="Texture2D" uid="uid://bxbyybfxnpdl0" path="res://Juego/Fondo tablero.png" id="2_nukf5"]
+[ext_resource type="Script" uid="uid://bsxgcxhoi5kug" path="res://Opciones/Menú principal/tiempo_spin_box.gd" id="2_uuu5x"]
+
+[node name="Personalizar" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -165.0
+offset_right = -160.0
+offset_bottom = -165.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nukf5")
+
+[node name="FondoTablero" type="Sprite2D" parent="."]
+position = Vector2(777.00006, 518)
+scale = Vector2(1.5354167, 1.6037037)
+texture = ExtResource("2_nukf5")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -113.0
+offset_right = 380.0
+offset_bottom = -71.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 30
+text = "CONFIGURACIÓN DE PARTIDA"
+
+[node name="Tiempo" type="Label" parent="."]
+layout_mode = 0
+offset_left = 565.0
+offset_top = 286.0
+offset_right = 790.0
+offset_bottom = 309.0
+text = "Tiempo por turno (segundos)"
+
+[node name="TiempoSpinBox" type="SpinBox" parent="."]
+layout_mode = 0
+offset_left = 825.0
+offset_top = 283.0
+offset_right = 911.5625
+offset_bottom = 314.0
+script = ExtResource("2_uuu5x")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 676.0
+offset_top = 673.0
+offset_right = 814.0
+offset_bottom = 714.0
+text = "CONFIRMAR"
