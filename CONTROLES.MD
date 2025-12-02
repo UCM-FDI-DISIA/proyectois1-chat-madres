@@ -47,10 +47,10 @@ Ratón (dispositivos celulares)
 - Atril: muestra las fichas del jugador y su puntuación parcial.
 - Tablero: casillas con multiplicadores (DL, TL, DW, TW) claramente marcadas.
 - Panel de acciones:
-   -"Finalizar Turno"
-   -"Cancelar Colocación" 
-   -"Intercambiar Fichas"
-   -"Reordenar Fichas"
+   - "Finalizar Turno"
+   - "Cancelar Colocación" 
+   - "Intercambiar Fichas"
+   - "Reordenar Fichas"
 - Panel lateral/infobar:
    - Puntuaciones de jugadores, turno actual, historial de jugadas.
 - Indicadores:
