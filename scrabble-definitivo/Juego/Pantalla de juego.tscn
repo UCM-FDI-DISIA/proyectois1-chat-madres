@@ -288,11 +288,19 @@ grow_vertical = 2
 
 [node name="Label" type="Label" parent="PantallaFin/TablaPuntuacion"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 36
-text = "FIN DE PARTIDA"
+text = "FIN DE LA PARTIDA"
 
 [node name="Tabla" type="VBoxContainer" parent="PantallaFin/TablaPuntuacion"]
 layout_mode = 2
+
+[node name="Label" type="Label" parent="PantallaFin"]
+layout_mode = 0
+offset_left = 491.0
+offset_top = 230.0
+offset_right = 818.0
+offset_bottom = 280.0
+theme_override_font_sizes/font_size = 36
+text = "FIN DE LA PARTIDA"
 
 [connection signal="pressed" from="Opciones" to="." method="_on_opciones_pressed"]
 [connection signal="pressed" from="IntercambiarFichas" to="." method="_on_intercambiar_fichas_pressed"]
