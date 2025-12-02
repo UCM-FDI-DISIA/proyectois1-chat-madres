@@ -48,14 +48,14 @@ Ratón (dispositivos celulares)
 - Tablero: casillas con multiplicadores (DL, TL, DW, TW) claramente marcadas.
 - Panel de acciones:
    -"Finalizar Turno"
-   -"Cancelar Colocación"
+   -"Cancelar Colocación" 
    -"Intercambiar Fichas"
    -"Reordenar Fichas"
 - Panel lateral/infobar:
-  - Puntuaciones de jugadores, turno actual, historial de jugadas.
+   - Puntuaciones de jugadores, turno actual, historial de jugadas.
 - Indicadores:
-  - Bolsa: número de fichas restantes.
-  - Ficha comodín: opción para elegir letra al jugarla.
+   - Bolsa: número de fichas restantes.
+   - Ficha comodín: opción para elegir letra al jugarla.
 
 ---
 
