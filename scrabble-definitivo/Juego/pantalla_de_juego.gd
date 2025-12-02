@@ -146,8 +146,10 @@ func actualizar_ui_puntuacion():
 
 		# Izquierda: nombre de jugador
 		var nombre = Label.new()
-		nombre.text = "Jugador %d" % (entry["jugador"] + 1)
+		# Usamos el nombre real del jugador
+		nombre.text = GameData.player_names[entry["jugador"]]
 		nombre.add_theme_font_size_override("font_size", 24)
+
 
 		# Derecha: puntos (totalmente a la derecha)
 		var puntos = Label.new()
@@ -179,7 +181,9 @@ func sumar_puntos(puntos: int):
 func actualizar_label_turno():
 	var label = get_node_or_null("Labelturno")
 	if label:
-		label.text = "Turno del jugador %d" % (GameData.jugador_actual + 1)
+		var jugador_actual = GameData.jugador_actual
+		var nombre_jugador = GameData.player_names[jugador_actual]
+		label.text = "Turno de %s" % nombre_jugador
 
 
 

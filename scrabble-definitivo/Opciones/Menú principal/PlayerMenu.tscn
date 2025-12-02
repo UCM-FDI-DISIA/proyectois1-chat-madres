@@ -1,0 +1,99 @@
+[gd_scene load_steps=3 format=3 uid="uid://dwev0bu4uusgl"]
+
+[ext_resource type="Texture2D" uid="uid://b50xaxjvququm" path="res://Casillas/Tablero/Fondo_1.1.1.png" id="1_5plvv"]
+[ext_resource type="Script" path="res://Opciones/Menú principal/player_menu.gd" id="1_mwlru"]
+
+[node name="PlayerMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mwlru")
+
+[node name="Fondo1_1_1" type="Sprite2D" parent="."]
+position = Vector2(462, 402)
+texture = ExtResource("1_5plvv")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 149.0
+offset_top = 101.0
+offset_right = 1051.0
+offset_bottom = 165.0
+theme_override_font_sizes/font_size = 46
+text = "ESCRIBA EL NOMBRE DE LOS JUGADORES"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -195.5
+offset_top = -132.0
+offset_right = 195.5
+offset_bottom = 132.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Jugador 1" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "JUGADOR 1 "
+
+[node name="player1_input" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Jugador 2" type="Label" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "JUGADOR 2 "
+
+[node name="player2_input" type="LineEdit" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Jugador 3" type="Label" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "JUGADOR 3 "
+
+[node name="player3_input" type="LineEdit" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Jugador 4" type="Label" parent="VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "JUGADOR 4 "
+
+[node name="player4_input" type="LineEdit" parent="VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+
+[node name="Confirmar" type="Button" parent="."]
+layout_mode = 0
+offset_left = 401.0
+offset_top = 468.0
+offset_right = 764.0
+offset_bottom = 590.0
+theme_override_font_sizes/font_size = 40
+text = "CONFIRMAR"
+
+[connection signal="pressed" from="Confirmar" to="." method="_on_confirmar_pressed"]
