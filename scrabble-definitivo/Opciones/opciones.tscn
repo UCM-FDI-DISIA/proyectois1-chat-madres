@@ -59,7 +59,7 @@ text = "REANUDAR"
 
 [node name="Menu" type="Button" parent="PanelContainer/Popup menu"]
 layout_mode = 2
-text = "VOLVER AL MENÚ"
+text = "FINALIZAR PARTIDA"
 
 [node name="Donacion" type="Button" parent="."]
 layout_mode = 0

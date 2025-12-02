@@ -1,5 +1,5 @@
 extends Control
-
+const MENU_SCENE := preload("res://Opciones/Menú principal/Menú principal.tscn")
 #Variables
 var es_mi_turno: bool = false
 var puntuacion_jugador_actual: int = 0
@@ -22,6 +22,11 @@ var atriles: Array = []
 # 🔹 Funciones del ciclo de vida
 # ===========================
 func _ready() -> void:
+		# --- Ocultar pantalla de fin de partida al iniciar ---
+	var pantalla_fin = get_node_or_null("PantallaFin")
+	if pantalla_fin:
+		pantalla_fin.visible = false
+
 	#1 inicializar los datos del juego
 	GameData.inicializar_juego()
 	print("Número de jugadores:", GameData.num_jugadores)
@@ -193,7 +198,107 @@ func actualizar_label_turno():
 		var nombre_jugador = GameData.player_names[jugador_actual]
 		label.text = "Turno de %s" % nombre_jugador
 
+# ===========================
+# 🔹 Verificar fin de partida
+# ===========================
+func actualizar_ui_puntuacion_en(pantalla: Node) -> void:
+	var tabla = pantalla.get_node_or_null("TablaPuntuacion")
+	if tabla == null:
+		push_error("No se encontró TablaPuntuacion en PantallaFin.")
+		return
 
+	# Limpiar tabla
+	for c in tabla.get_children():
+		c.queue_free()
+
+	# Rellenar tabla
+	for i in range(puntuaciones.size()):
+		var fila = HBoxContainer.new()
+		fila.custom_minimum_size = Vector2(350, 40)
+
+		var nombre = Label.new()
+		nombre.text = GameData.player_names[i]
+		nombre.add_theme_font_size_override("font_size", 24)
+
+		var puntos = Label.new()
+		puntos.text = str(puntuaciones[i])
+		puntos.add_theme_font_size_override("font_size", 24)
+		puntos.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		puntos.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+		fila.add_child(nombre)
+		fila.add_child(puntos)
+
+		var fondo = ColorRect.new()
+		fondo.color = Color(0, 0, 0, 0.3)
+		fondo.custom_minimum_size = Vector2(350, 40)
+		fondo.add_child(fila)
+
+		tabla.add_child(fondo)
+
+const LETTER_VALUES := {
+	"A": 1, "B": 3, "C": 3, "D": 2, "E": 1, "F": 4, "G": 2, "H": 4,
+	"I": 1, "J": 8, "K": 5, "L": 1, "M": 3, "N": 1, "Ñ": 8, "O": 1,
+	"P": 3, "Q": 5, "R": 1, "S": 1, "T": 1, "U": 1, "V": 4, "W": 10,
+	"X": 8, "Y": 4, "Z": 10
+}
+
+func finalizar_partida() -> void:
+	print("🏁 Partida finalizada")
+
+	# 1️⃣ Aplicar penalización por fichas restantes en los atriles
+	for i in range(GameData.num_jugadores):
+		var atril_j = GameData.atriles_jugadores[i]
+		var penalizacion = 0
+		for letra in atril_j:
+			if letra != null:
+				penalizacion += LETTER_VALUES.get(letra, 0)  # 0 si la letra no tiene valor
+		puntuaciones[i] -= penalizacion
+
+	# 2️⃣ Actualizar tabla de puntuación final dentro de PantallaFinPartida
+	var pantalla_fin = get_node_or_null("PantallaFin")
+	if pantalla_fin:
+		pantalla_fin.visible = true
+		pantalla_fin.modulate.a = 0
+		actualizar_ui_puntuacion_en(pantalla_fin)  # nueva función que apunta a esta pantalla
+		var tween = create_tween()
+		tween.tween_property(pantalla_fin, "modulate:a", 1.0, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	else:
+		push_error("PantallaFin no encontrada en la escena.")
+
+	# 3️⃣ Determinar ganador
+	var max_puntos = -9999
+	var ganador = 0
+	for i in range(GameData.num_jugadores):
+		if puntuaciones[i] > max_puntos:
+			max_puntos = puntuaciones[i]
+			ganador = i
+	print("🎉 Ganador:", GameData.player_names[ganador], "con", puntuaciones[ganador], "puntos")
+
+	# 4️⃣ Esperar unos segundos para que se vea la pantalla
+	var timer = Timer.new()
+	timer.one_shot = true
+	timer.wait_time = 5  # segundos
+	add_child(timer)
+	timer.start()
+	await timer.timeout
+
+	# 5️⃣ Volver al menú principal
+	get_tree().change_scene_to_packed(MENU_SCENE)
+
+
+func verificar_fin_partida():
+	var atril := get_tree().current_scene.get_node_or_null("PanelContainer")
+	if atril and atril.bolsa and atril.bolsa.quedan() == 0:
+		var todos_sin_fichas := true
+		for fichas in GameData.atriles_jugadores:
+			if fichas.size() > 0:
+				todos_sin_fichas = false
+				break
+		if todos_sin_fichas:
+			finalizar_partida()
+			return true
+	return false
 
 # ===========================
 # 🔹 Control de turno
@@ -232,33 +337,29 @@ func _siguiente_jugador():
 	# 1) Guardar atril del jugador que termina turno
 	if atril and atril.has_method("exportar_atril"):
 		var estado_atril: Array = atril.exportar_atril()
-
-		# Comprobar si TODO son null (atril vacío) → NO machacamos el guardado
 		var todas_nulas := true
 		for l in estado_atril:
 			if l != null:
 				todas_nulas = false
 				break
-
 		if not todas_nulas:
 			GameData.atriles_jugadores[GameData.jugador_actual] = estado_atril
-			# Opcional: debug
-			#print("DEBUG Guardando atril jugador", GameData.jugador_actual, ":", estado_atril)
-		else:
-			#print("DEBUG NO guardo atril de jugador", GameData.jugador_actual, "(todo null)")
-			pass
 
-	# 2) Cambiar de jugador
+	# 2) Verificar fin de partida antes de cambiar jugador
+	if verificar_fin_partida():
+		return  # Si terminó la partida, no seguimos con otro turno
+
+	# 3) Cambiar de jugador
 	GameData.jugador_actual += 1
 	if GameData.jugador_actual >= GameData.num_jugadores:
 		GameData.jugador_actual = 0
 
-	# 3) Cargar atril del nuevo jugador
+	# 4) Cargar atril del nuevo jugador
 	if atril and atril.has_method("cargar_atril"):
 		var datos = GameData.atriles_jugadores[GameData.jugador_actual]
 		atril.cargar_atril(datos)
 
-	# 4) Actualizar UI de turno
+	# 5) Actualizar UI de turno
 	actualizar_label_turno()
 	set_turno(true)
 

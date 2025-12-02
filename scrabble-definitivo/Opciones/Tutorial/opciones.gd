@@ -1,7 +1,6 @@
 extends Control
 
 const TUTORIAL_SCENE := preload("res://Opciones/Tutorial/Tutorial.tscn")
-const MENU_SCENE := preload("res://Opciones/Menú principal/Menú principal.tscn")
 const JUEGO_SCENE := preload("res://Juego/Pantalla de juego.tscn")
 const CONTROLES_SCENE := preload("res://Opciones/Tutorial/controles.tscn")
 
@@ -17,4 +16,11 @@ func _on_salir_pressed() -> void:
 	queue_free()
 
 func _on_button_4_pressed() -> void:
-	get_tree().change_scene_to_packed(MENU_SCENE)
+	queue_free()
+	# Obtenemos el nodo raíz de la escena actual (el que tiene el script de juego)
+	var juego_node = get_tree().current_scene
+
+	if juego_node and juego_node.has_method("finalizar_partida"):
+		await juego_node.finalizar_partida()  # llamamos a la función y esperamos a que termine
+	else:
+		print("⚠️ No se encontró el método 'finalizar_partida' en la escena actual.")

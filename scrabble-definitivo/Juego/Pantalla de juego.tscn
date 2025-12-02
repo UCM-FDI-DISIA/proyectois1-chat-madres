@@ -254,6 +254,46 @@ offset_bottom = 425.0
 stream = SubResource("AudioStreamOggVorbis_evtru")
 autoplay = true
 
+[node name="PantallaFin" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 87.0
+offset_top = -19.0
+offset_right = 252.0
+offset_bottom = 107.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="PantallaFin"]
+layout_mode = 0
+offset_right = 1342.0
+offset_bottom = 769.0
+color = Color(0.096204735, 0.09620475, 0.096204735, 1)
+
+[node name="TablaPuntuacion" type="VBoxContainer" parent="PantallaFin"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -137.0
+offset_top = -25.0
+offset_right = 137.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="PantallaFin/TablaPuntuacion"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "FIN DE PARTIDA"
+
+[node name="Tabla" type="VBoxContainer" parent="PantallaFin/TablaPuntuacion"]
+layout_mode = 2
+
 [connection signal="pressed" from="Opciones" to="." method="_on_opciones_pressed"]
 [connection signal="pressed" from="IntercambiarFichas" to="." method="_on_intercambiar_fichas_pressed"]
 [connection signal="pressed" from="FinalizarTurno" to="." method="_on_finalizar_turno_pressed"]
