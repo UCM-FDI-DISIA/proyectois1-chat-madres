@@ -25,10 +25,13 @@ https://www.canva.com/design/DAG6MTppx5E/ChQWBAuJGdOY983jszQWsQ/edit?utm_content
 
 Ratón (dispositivos celulares)
 - Seleccionar ficha (atril): clic izquierdo sobre la ficha.
+
 ⦁	TECLADO: tecla (1-7) según la posición de la ficha de la letra que queramos colocar
 
 - Arrastrar ficha al tablero: mantener clic izquierdo y arrastrar hasta la casilla deseada; soltar para colocar.
-⦁	TECLADO: con las teclas (up,down,left,right) para mover la ficha a la casilla deseada; y ENTER para colocar.
+
+⦁	TECLADO: con las teclas (up,down,left,right) para mover la ficha a la casilla deseada; y ENTER para colocar. Si nos hemos equivocado de letra o queremos cambiar, tecla ESC.
+
 
 - Quitar ficha colocada antes de confirmar: clic derecho sobre la ficha colocada o arrastrar de nuevo al atril.
 - Mostrar información de ficha (letra / puntuación): mantener el ratón sobre la ficha cuando este en el atril.
