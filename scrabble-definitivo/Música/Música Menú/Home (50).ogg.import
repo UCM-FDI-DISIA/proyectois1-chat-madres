@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bqw4s2gss45la"
+path="res://.godot/imported/Home (50).ogg-b5d8ec07b75642893cce87f7dbe2ef8c.oggvorbisstr"
+
+[deps]
+
+source_file="res://Música/Música Menú/Home (50).ogg"
+dest_files=["res://.godot/imported/Home (50).ogg-b5d8ec07b75642893cce87f7dbe2ef8c.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

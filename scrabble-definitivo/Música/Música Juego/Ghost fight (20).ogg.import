@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://c5arx84n5unop"
+path="res://.godot/imported/Ghost fight (20).ogg-d701cb924257a14505d0d89749689a2d.oggvorbisstr"
+
+[deps]
+
+source_file="res://Música/Música Juego/Ghost fight (20).ogg"
+dest_files=["res://.godot/imported/Ghost fight (20).ogg-d701cb924257a14505d0d89749689a2d.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

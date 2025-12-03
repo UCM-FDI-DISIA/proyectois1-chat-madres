@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dek51sagbvjuj"
+path="res://.godot/imported/Snowdin Town (0).ogg-2b1b6fba39871821d27e7b628ac26ef6.oggvorbisstr"
+
+[deps]
+
+source_file="res://Música/Música Menú/Snowdin Town (0).ogg"
+dest_files=["res://.godot/imported/Snowdin Town (0).ogg-2b1b6fba39871821d27e7b628ac26ef6.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

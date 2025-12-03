@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://cb2giq65uc4u3"
+path="res://.godot/imported/Date (20).ogg-306e203a6a3d78670c8f317f0c088344.oggvorbisstr"
+
+[deps]
+
+source_file="res://Música/Música Juego/Date (20).ogg"
+dest_files=["res://.godot/imported/Date (20).ogg-306e203a6a3d78670c8f317f0c088344.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

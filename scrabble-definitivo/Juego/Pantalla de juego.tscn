@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=4 uid="uid://bgu417px3gdnm"]
+[gd_scene load_steps=19 format=4 uid="uid://bgu417px3gdnm"]
 
 [ext_resource type="Texture2D" uid="uid://21c4krb62sdw" path="res://Juego/Fondo (2).png" id="1_5u6n2"]
 [ext_resource type="PackedScene" uid="uid://cmlki6e4x7jqq" path="res://Casillas/Tablero/board.tscn" id="1_d15d8"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://tcty2e426dqf" path="res://Juego/hueco_6.gd" id="11_vcpce"]
 [ext_resource type="Script" uid="uid://cuplq10yvrdil" path="res://Juego/hueco_7.gd" id="12_y3uwc"]
 [ext_resource type="Script" uid="uid://dhut774qwcevi" path="res://Juego/drag_preview_manager.gd" id="14_dadpr"]
+[ext_resource type="AudioStream" uid="uid://dw06ydgfy381" path="res://Música/Música Juego/Dummy (0).ogg" id="16_qpeoq"]
 [ext_resource type="Texture2D" uid="uid://2om1aivw88ro" path="res://scripts/Bolsa_1.1.8.png" id="16_qxxvd"]
 
 [sub_resource type="OggPacketSequence" id="OggPacketSequence_ibro0"]
@@ -301,6 +302,10 @@ offset_right = 818.0
 offset_bottom = 280.0
 theme_override_font_sizes/font_size = 36
 text = "FIN DE LA PARTIDA"
+
+[node name="AudioStreamPlayer2D2" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("16_qpeoq")
+autoplay = true
 
 [connection signal="pressed" from="Opciones" to="." method="_on_opciones_pressed"]
 [connection signal="pressed" from="IntercambiarFichas" to="." method="_on_intercambiar_fichas_pressed"]
