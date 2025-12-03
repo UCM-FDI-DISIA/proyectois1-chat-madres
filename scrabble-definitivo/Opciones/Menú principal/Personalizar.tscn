@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://b400mouo0s1bc"]
+[gd_scene load_steps=5 format=3 uid="uid://b400mouo0s1bc"]
 
 [ext_resource type="Script" uid="uid://bmihyuiwqtd8v" path="res://Opciones/Menú principal/personalizar.gd" id="1_nukf5"]
 [ext_resource type="Texture2D" uid="uid://bxbyybfxnpdl0" path="res://Juego/Fondo tablero.png" id="2_nukf5"]
 [ext_resource type="Script" uid="uid://bsxgcxhoi5kug" path="res://Opciones/Menú principal/tiempo_spin_box.gd" id="2_uuu5x"]
+[ext_resource type="AudioStream" uid="uid://csaggokrvpqa2" path="res://Música/Lobby.ogg" id="4_nyffl"]
 
 [node name="Personalizar" type="Control"]
 layout_mode = 3
@@ -91,5 +92,9 @@ offset_left = 572.0
 offset_top = 654.0
 offset_right = 896.0
 offset_bottom = 677.0
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_nyffl")
+autoplay = true
 
 [connection signal="pressed" from="confirmar" to="." method="_on_confirmar_pressed"]

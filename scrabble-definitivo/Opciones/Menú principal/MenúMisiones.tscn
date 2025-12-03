@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://dhwisx6q1nuii"]
+[gd_scene load_steps=4 format=3 uid="uid://dhwisx6q1nuii"]
 
 [ext_resource type="Script" uid="uid://cibkf7r0j73ti" path="res://Opciones/Menú principal/menú_misiones.gd" id="1_hwsrq"]
 [ext_resource type="Texture2D" uid="uid://bxbyybfxnpdl0" path="res://Juego/Fondo tablero.png" id="2_dtqk1"]
+[ext_resource type="AudioStream" uid="uid://dpswmwl0pwtru" path="res://Efectos de sonido/Click.ogg" id="3_526yv"]
 
 [node name="MenúMisiones" type="Control"]
 layout_mode = 3
@@ -52,5 +53,8 @@ offset_top = 520.0
 offset_right = 647.0
 offset_bottom = 582.0
 text = "VOLVER"
+
+[node name="SFXPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_526yv")
 
 [connection signal="pressed" from="Volver" to="." method="_on_volver_pressed"]

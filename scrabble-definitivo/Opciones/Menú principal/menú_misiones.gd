@@ -63,6 +63,7 @@ func actualizar_ui():
 
 
 func _on_volver_pressed() -> void:
+	$SFXPlayer.play()
 	#Cambia a la escena donde eliges 1,2,3 o 4 jugadores
 	#get_tree().change_scene_to_file("res://Opciones/Menú Principal/MenuMultijugadores.tscn")
 	queue_free()

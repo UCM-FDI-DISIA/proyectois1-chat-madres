@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://54aa4imur3tr"]
+[gd_scene load_steps=5 format=3 uid="uid://54aa4imur3tr"]
 
 [ext_resource type="Script" uid="uid://yiebtm3jfr8g" path="res://Opciones/Menú principal/MenuMultijugadores.gd" id="1_aa58b"]
 [ext_resource type="Texture2D" uid="uid://dk5d501rlkab2" path="res://Opciones/Menú principal/fondo menu multijugador.png" id="1_tdhd4"]
+[ext_resource type="AudioStream" uid="uid://dpswmwl0pwtru" path="res://Efectos de sonido/Click.ogg" id="3_mgiux"]
+[ext_resource type="AudioStream" uid="uid://csaggokrvpqa2" path="res://Música/Lobby.ogg" id="4_xaaqw"]
 
 [node name="MenuMultijugadores" type="Control"]
 layout_mode = 3
@@ -82,6 +84,13 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 45
 text = "4 JUGADORES"
+
+[node name="SFXPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_mgiux")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_xaaqw")
+autoplay = true
 
 [connection signal="pressed" from="VBox_Botones/boton_1" to="." method="_on_boton_1_pressed"]
 [connection signal="pressed" from="VBox_Botones/boton_2" to="." method="_on_boton_2_pressed"]

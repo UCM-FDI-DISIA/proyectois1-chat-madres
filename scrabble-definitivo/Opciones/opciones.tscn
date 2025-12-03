@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://catuiiw1bkejl"]
+[gd_scene load_steps=5 format=3 uid="uid://catuiiw1bkejl"]
 
 [ext_resource type="Script" uid="uid://dgwgu4sm157gx" path="res://Opciones/Tutorial/opciones.gd" id="1_qj4ti"]
+[ext_resource type="AudioStream" uid="uid://dpswmwl0pwtru" path="res://Efectos de sonido/Click.ogg" id="2_t7x2g"]
 
 [sub_resource type="Animation" id="Animation_t7x2g"]
 resource_name = "Blur"
@@ -65,6 +66,9 @@ text = "FINALIZAR PARTIDA"
 libraries = {
 &"": SubResource("AnimationLibrary_3g7yc")
 }
+
+[node name="SFXPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_t7x2g")
 
 [connection signal="pressed" from="PanelContainer/Popup menu/Tutorial" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="PanelContainer/Popup menu/Controles" to="." method="_on_controles_pressed"]

@@ -22,6 +22,7 @@ func _on_créditos_pressed() -> void:
 	get_tree().current_scene.add_child(t)
 
 func _on_salir_pressed() -> void:
+	$SFXPlayer.play()
 	get_tree().quit()
 
 func _on_jugar_pressed() -> void:
@@ -46,6 +47,7 @@ func _on_controles_pressed() -> void:
 
 
 func _on_donacion_pressed() -> void:
+	$SFXPlayer.play()
 	var t = DONACION_SCENE.instantiate()
 	get_tree().current_scene.add_child(t)
 

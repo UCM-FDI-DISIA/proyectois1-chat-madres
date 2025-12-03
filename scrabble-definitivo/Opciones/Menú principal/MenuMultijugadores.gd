@@ -18,13 +18,17 @@ func _seleccionar_jugadores(num):
 
 
 func _on_boton_1_pressed() -> void:
+	$SFXPlayer.play()
 	_seleccionar_jugadores(1)
 
 func _on_boton_2_pressed() -> void:
+	$SFXPlayer.play()
 	_seleccionar_jugadores(2)
 
 func _on_boton_3_pressed() -> void:
+	$SFXPlayer.play()
 	_seleccionar_jugadores(3)
 
 func _on_boton_4_pressed() -> void:
+	$SFXPlayer.play()
 	_seleccionar_jugadores(4)
