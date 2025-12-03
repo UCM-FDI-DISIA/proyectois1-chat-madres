@@ -18,6 +18,9 @@ config/features=PackedStringArray("4.5", "Forward Plus")
 
 GameData="*res://scripts/GameData.gd"
 Talo="*res://addons/talo/talo_manager.gd"
+Partida="*res://PartidaLoadable.gd"
+MisionLoadable="*res://MisionManager.gd"
+SaveGame="*res://SaveGame.gd"
 
 [display]
 

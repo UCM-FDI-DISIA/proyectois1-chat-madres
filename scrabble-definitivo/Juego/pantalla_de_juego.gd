@@ -185,6 +185,7 @@ func actualizar_ui_puntuacion():
 
 func sumar_puntos(puntos: int):
 	puntuaciones[GameData.jugador_actual]+= puntos
+	SaveGame.sumar_puntos(puntos)
 	actualizar_ui_puntuacion()
 	print("Puntos sumados: %d - Total: %d" % [puntos, puntuaciones[GameData.jugador_actual]])
 
@@ -299,7 +300,7 @@ func verificar_fin_partida():
 			finalizar_partida()
 			return true
 	return false
-
+	
 # ===========================
 # 🔹 Control de turno
 # ===========================
@@ -566,6 +567,24 @@ func _validar_jugada(tablero: Node) -> bool:
 			tablero.set("es_primer_turno", false)
 		else:
 			tablero.es_primer_turno = false
+	
+	if tablero.has_method("palabras_turno_actual"):
+		for palabra in tablero.palabras_turno_actual:
+		# Palabra larga (>10 letras)
+			if palabra.length() > 10:
+				SaveGame.estadisticas["PalabrasLargas"] += 1
+
+		# Palabra perfecta (usa todas las fichas del atril)
+			if palabra.length() == 7:
+				SaveGame.estadisticas["PalabraPerfecta"] += 1
+
+# Sumar partidas jugadas al final del turno
+		SaveGame.estadisticas["PartidasJugadas"] += 1
+
+# Guardar y actualizar misiones
+		SaveGame.guardar_datos()
+		MisionLoadable.actualizar_misiones(SaveGame.estadisticas)
+
 
 	return true
 

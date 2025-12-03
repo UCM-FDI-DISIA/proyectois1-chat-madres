@@ -11,12 +11,12 @@ func _init(saved_object: Dictionary) -> void:
 	name = saved_object.get("name", "unknown")
 	_cached_data.assign(saved_object.data)
 
-# Match a loadable with a saved object to hydrate the loadable with the latest data.
-func register_loadable(loadable: TaloLoadable, hydrate = true) -> void:
+func register_loadable(loadable: TaloLoadable, hydrate := true) -> void:
 	self.loadable = loadable
-	_root_path = loadable.get_tree().current_scene.get_path()
+	# _root_path solo sirve si necesitas path, pero aquí no lo necesitas
 	if hydrate:
 		loadable.hydrate(_cached_data)
+
 
 func _get_latest_data() -> Array[Dictionary]:
 	_cached_data.assign(loadable.get_latest_data())

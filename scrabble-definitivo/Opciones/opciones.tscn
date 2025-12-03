@@ -61,14 +61,6 @@ text = "REANUDAR"
 layout_mode = 2
 text = "FINALIZAR PARTIDA"
 
-[node name="Donacion" type="Button" parent="."]
-layout_mode = 0
-offset_left = 304.0
-offset_top = 477.0
-offset_right = 415.0
-offset_bottom = 537.0
-text = "Apóyanos!!! :)"
-
 [node name="Animacion (por terminar)" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_3g7yc")

@@ -1,5 +1,8 @@
 extends Node
 
+# Contador de partidas jugadas
+var partidas_jugadas: int = 0
+
 # Tiempo por turno en segundos
 var tiempo_por_turno: float = 60.0
 
