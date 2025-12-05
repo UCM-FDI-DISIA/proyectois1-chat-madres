@@ -1,23 +1,32 @@
 extends Control
 
-func _ready():
-	# Inicializar SpinBox con valor de GameData si existe
-	if $TiempoSpinBox:
-		$TiempoSpinBox.value = GameData.tiempo_por_turno if "tiempo_por_turno" in GameData else 30
-	
-	# Conectar botón
-	if $ConfirmarBtn:
-		$ConfirmarBtn.pressed.connect(_on_confirmar_pressed)
+@onready var tiempo_spinbox: SpinBox = $TiempoSpinBox
+@onready var boton: Button = $Button
 
-func _on_confirmar_pressed():
+
+func _ready() -> void:
+	# Inicializar SpinBox con el valor actual de GameData
+	if tiempo_spinbox:
+		tiempo_spinbox.value = GameData.tiempo_por_turno
+
+	# Conectar el botón a la función _on_Button_pressed
+	if boton and not boton.pressed.is_connected(_on_Button_pressed):
+		boton.pressed.connect(_on_Button_pressed)
+		print("DEBUG: botón 'Button' conectado a _on_Button_pressed")
+	else:
+		print("DEBUG: NO se ha podido conectar el botón (¿no existe?)")
+
+
+func _on_Button_pressed() -> void:
+	print("DEBUG: _on_Button_pressed llamado")
+
 	# Guardar tiempo por turno
-	if $TiempoSpinBox:
-		GameData.tiempo_por_turno = $TiempoSpinBox.value
+	if tiempo_spinbox:
+		GameData.tiempo_por_turno = tiempo_spinbox.value
 		print("⏱ Tiempo por turno configurado:", GameData.tiempo_por_turno, "segundos")
-	
-	# Ir a la selección de jugadores
-	get_tree().change_scene_to_file("res://Juego/PantallaSeleccionJugadores.tscn")
+	else:
+		print("DEBUG: NO se encontró TiempoSpinBox")
 
-
-func _on_button_pressed() -> void:
-	pass # Replace with function body.
+	# Cambiar a la pantalla de juego
+	var err := get_tree().change_scene_to_file("res://Juego/Pantalla de Juego.tscn")
+	print("DEBUG: change_scene_to_file ->", err)
