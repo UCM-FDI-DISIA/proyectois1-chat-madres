@@ -1,0 +1,46 @@
+[gd_scene load_steps=3 format=3 uid="uid://cpkm2ui4dpls2"]
+
+[ext_resource type="Script" path="res://Opciones/sonido_imagen.gd" id="1_e0wys"]
+[ext_resource type="Texture2D" uid="uid://bxbyybfxnpdl0" path="res://Juego/Fondo tablero.png" id="2_l206f"]
+
+[node name="SonidoImagen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_e0wys")
+
+[node name="FondoTablero" type="Sprite2D" parent="."]
+position = Vector2(591.99994, 320.99997)
+scale = Vector2(1.3447917, 1.3703704)
+texture = ExtResource("2_l206f")
+
+[node name="Imagen" type="Button" parent="."]
+layout_mode = 0
+offset_left = 231.0
+offset_top = 228.0
+offset_right = 472.0
+offset_bottom = 393.0
+text = "🖼️
+Imagen"
+
+[node name="Sonido" type="Button" parent="."]
+layout_mode = 0
+offset_left = 704.0
+offset_top = 232.0
+offset_right = 946.0
+offset_bottom = 395.0
+text = "🎵
+Sonido"
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 526.0
+offset_top = 288.0
+offset_right = 641.0
+offset_bottom = 338.0
+text = "SALIR"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

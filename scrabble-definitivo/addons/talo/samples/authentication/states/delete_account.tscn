@@ -1,0 +1,90 @@
+[gd_scene load_steps=8 format=3 uid="uid://d17bvaxw1qew4"]
+
+[ext_resource type="Script" uid="uid://bnojd38smydqq" path="res://addons/talo/samples/authentication/scripts/delete_account.gd" id="1_ggdf5"]
+[ext_resource type="Texture2D" uid="uid://bxbyybfxnpdl0" path="res://Juego/Fondo tablero.png" id="2_ah5iq"]
+[ext_resource type="Theme" uid="uid://ce2uyi827vc5x" path="res://addons/talo/samples/authentication/assets/theme.tres" id="2_n2cbx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xxxlc"]
+bg_color = Color(0.784314, 0.156863, 0.156863, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hijpl"]
+bg_color = Color(0.603922, 0.105882, 0.105882, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fa3fr"]
+bg_color = Color(0.690196, 0.129412, 0.129412, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wems6"]
+bg_color = Color(0.603922, 0.105882, 0.105882, 1)
+
+[node name="DeleteAccount" type="Node2D"]
+script = ExtResource("1_ggdf5")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1080.0
+offset_bottom = 720.0
+
+[node name="FondoTablero" type="Sprite2D" parent="UI"]
+position = Vector2(617.00006, 327)
+scale = Vector2(1.74375, 1.3166667)
+texture = ExtResource("2_ah5iq")
+
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 24
+
+[node name="Title" type="Label" parent="UI/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme = ExtResource("2_n2cbx")
+text = "Borrar la cuenta"
+horizontal_alignment = 1
+
+[node name="CurrentPassword" type="TextEdit" parent="UI/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_n2cbx")
+placeholder_text = "Contraseña actual"
+
+[node name="Delete" type="Button" parent="UI/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_n2cbx")
+theme_override_styles/normal = SubResource("StyleBoxFlat_xxxlc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_hijpl")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fa3fr")
+theme_override_styles/focus = SubResource("StyleBoxFlat_wems6")
+text = "Eliminar cuenta"
+
+[node name="Cancel" type="Button" parent="UI/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_n2cbx")
+text = "Cancelar"
+
+[node name="ValidationLabel" type="Label" parent="UI/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[connection signal="pressed" from="UI/MarginContainer/VBoxContainer/Delete" to="." method="_on_delete_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/VBoxContainer/Cancel" to="." method="_on_cancel_pressed"]
