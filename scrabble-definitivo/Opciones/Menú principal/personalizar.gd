@@ -28,5 +28,5 @@ func _on_Button_pressed() -> void:
 		print("DEBUG: NO se encontró TiempoSpinBox")
 
 	# Cambiar a la pantalla de juego
-	var err := get_tree().change_scene_to_file("res://Juego/Pantalla de Juego.tscn")
+	var err := get_tree().change_scene_to_file("res://Opciones/Menú principal/Pantalla de carga.tscn")
 	print("DEBUG: change_scene_to_file ->", err)
