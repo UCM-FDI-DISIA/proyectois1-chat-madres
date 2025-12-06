@@ -6,6 +6,7 @@
 
 [node name="PantallaDeFin" type="Control"]
 layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
@@ -51,6 +52,13 @@ theme_override_font_sizes/font_size = 30
 text = "FIN DE LA PARTIDA"
 horizontal_alignment = 1
 autowrap_mode = 2
+
+[node name="LabelGanador" type="Label" parent="CenterContainer/PanelContenido/VBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85490197, 0.050980393, 0.95686275, 1)
+theme_override_font_sizes/font_size = 64
+horizontal_alignment = 1
 
 [node name="BotonMenu" type="Button" parent="CenterContainer/PanelContenido/VBoxContainer"]
 layout_mode = 2
