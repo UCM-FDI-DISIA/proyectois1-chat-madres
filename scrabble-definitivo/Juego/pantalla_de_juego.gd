@@ -10,6 +10,8 @@ var tiempo_restante: int = 0
 
 #Constantes
 const OPTIONS_SCENE := preload("res://Opciones/opciones.tscn")
+const END_SCENE := preload("res://Opciones/Menú principal/Pantalla de fin.tscn")
+
 
 #bolsa compartida para todos los jugadores
 @onready var bolsa := preload("res://scripts/BolsaFichas.gd").new()
@@ -285,6 +287,30 @@ func actualizar_contador_bolsa() -> void:
 		print("DEBUG Contador: atril no tiene bolsa o no tiene método 'quedan'")
 		label.text = "0"
 
+func _es_fin_partida() -> bool:
+	var atril := get_tree().current_scene.get_node_or_null("PanelContainer")
+	if atril == null:
+		return false
+
+	# 1) Si la bolsa aún tiene fichas, seguro que NO es fin de partida
+	if atril.bolsa and atril.bolsa.has_method("quedan"):
+		if atril.bolsa.quedan() > 0:
+			return false
+	else:
+		# Si no hay info de bolsa, por seguridad no terminamos la partida
+		return false
+
+	# 2) Comprobar si el atril del jugador actual está vacío
+	if atril.has_method("exportar_atril"):
+		var letras: Array = atril.exportar_atril()
+		for l in letras:
+			if l != null:
+				# Todavía tiene alguna letra
+				return false
+
+	# Si bolsa vacía Y atril del jugador actual vacío → fin de partida
+	return true
+
 # ===========================
 # 🔹 Botones
 # ===========================
@@ -345,6 +371,12 @@ func _on_finalizar_turno_pressed() -> void:
 		if atril.has_method("reponer_fichas_colocadas"):
 			atril.reponer_fichas_colocadas()
 		actualizar_contador_bolsa()
+		
+				# 🔚 Comprobar si la partida ha terminado
+		if _es_fin_partida():
+			print("🎉 Fin de la partida, cambiando a pantalla de fin.")
+			get_tree().change_scene_to_packed(END_SCENE)
+			return  # Muy importante: no pasar al siguiente jugador
 
 		# Pasar al siguiente jugador
 		_siguiente_jugador()
