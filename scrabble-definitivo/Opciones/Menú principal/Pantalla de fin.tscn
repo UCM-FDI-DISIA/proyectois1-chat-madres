@@ -1,6 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://caf7s6rnf7mch"]
+[gd_scene load_steps=4 format=3 uid="uid://caf7s6rnf7mch"]
 
 [ext_resource type="Script" uid="uid://diylu4k32jev6" path="res://Opciones/Menú principal/pantalla_de_fin.gd" id="1_peihm"]
+
+[sub_resource type="Gradient" id="Gradient_peihm"]
+offsets = PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0.5958904, 1)
+colors = PackedColorArray(0.90588236, 0, 0, 1, 0, 0, 0.79607844, 1, 0.8901961, 0, 0.9098039, 1, 0.78039217, 0.39215687, 0, 1, 0, 0.85490197, 0, 1, 0.7294118, 0.92941177, 0.8784314, 1, 0.9919668, 0.8355746, 0.74919736, 1, 0.06666667, 0.59607846, 0.59607846, 1, 1, 1, 0.05882353, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_peihm"]
 
@@ -29,6 +33,21 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Confeti" type="CPUParticles2D" parent="CenterContainer"]
+amount = 500
+lifetime = 4.0
+preprocess = 2.0
+lifetime_randomness = 1.0
+emission_shape = 3
+emission_rect_extents = Vector2(1500, 10)
+direction = Vector2(0, 1)
+spread = 180.0
+initial_velocity_min = 60.0
+initial_velocity_max = 120.0
+scale_amount_min = 10.0
+scale_amount_max = 10.0
+color_ramp = SubResource("Gradient_peihm")
 
 [node name="PanelContenido" type="Panel" parent="CenterContainer"]
 custom_minimum_size = Vector2(960, 540)
