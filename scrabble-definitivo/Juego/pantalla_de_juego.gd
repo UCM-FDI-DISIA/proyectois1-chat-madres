@@ -333,8 +333,28 @@ func _on_finalizar_turno_pressed() -> void:
 		push_warning("No se encontró el nodo 'PanelContainer' (atril)")
 		return
 
-	# Bloquear turno mientras validamos
-	es_mi_turno = false
+	# ---------------------------------------
+	# 1) ¿Hay fichas colocadas este turno?
+	# ---------------------------------------
+	var hay_fichas_colocadas := false
+	if tablero.has_method("get"):
+		var fichas_colocadas = tablero.get("fichas_turno_actual")
+		if typeof(fichas_colocadas) == TYPE_ARRAY and not fichas_colocadas.is_empty():
+			hay_fichas_colocadas = true
+
+	# CASO A: no hay fichas colocadas → pasar turno
+	if not hay_fichas_colocadas:
+		print("➡ Finalizar turno sin colocar fichas: se pasa el turno.")
+		es_mi_turno = false
+		if turno_timer:
+			turno_timer.stop()
+		_siguiente_jugador()
+		return
+
+	# ---------------------------------------
+	# CASO B/C: hay fichas colocadas → validar
+	# ---------------------------------------
+	es_mi_turno = false  # bloqueamos el turno mientras validamos
 
 	# Bloquear botones del atril
 	for child in atril.get_children():
@@ -345,47 +365,52 @@ func _on_finalizar_turno_pressed() -> void:
 	tablero.modulate = Color(1, 1, 1, 0.6)
 	tablero.set_process_input(false)
 
-	# Validar jugada (devuelve bool)
+	# Validar jugada (true = válida, false = inválida)
 	var ok := await _validar_jugada(tablero)
 
 	if ok:
-		# ✅ JUGADA VÁLIDA - CALCULAR Y SUMAR PUNTOS
+		# ✅ CASO B: jugada válida → sumar puntos y terminar turno
 		if tablero.has_method("calcular_puntuacion_turno"):
 			var puntos_turno = tablero.calcular_puntuacion_turno()
 			sumar_puntos(puntos_turno)
 			puntuacion_jugador_actual = puntuaciones[GameData.jugador_actual]
 			print("✅ Jugada válida! Sumados %d puntos. Total: %d" % [puntos_turno, puntuacion_jugador_actual])
-		
+
 		# Registrar palabras y limpiar turno
 		if tablero.has_method("registrar_palabras_turno_actual"):
 			tablero.registrar_palabras_turno_actual()
-		
+
 		if tablero.has_method("limpiar_fichas_turno"):
 			tablero.limpiar_fichas_turno()
-		
+
 		# Marcar fin del primer turno si era el primero
 		if tablero.es_primer_turno:
 			tablero.es_primer_turno = false
 
-		# Reponer fichas colocadas SOLO si la jugada fue válida
+		# Reponer fichas colocadas
 		if atril.has_method("reponer_fichas_colocadas"):
 			atril.reponer_fichas_colocadas()
 		actualizar_contador_bolsa()
-		
-				# 🔚 Comprobar si la partida ha terminado
+
+		# (opcional) comprobar fin de partida si ya tienes END_SCENE y _es_fin_partida()
 		if _es_fin_partida():
 			print("🎉 Fin de la partida, cambiando a pantalla de fin.")
+			if turno_timer:
+				turno_timer.stop()
 			get_tree().change_scene_to_packed(END_SCENE)
-			return  # Muy importante: no pasar al siguiente jugador
+			return
 
-		# Pasar al siguiente jugador
+		# Terminar turno y pasar al siguiente jugador
+		if turno_timer:
+			turno_timer.stop()
+		tablero.modulate = Color(1, 1, 1, 1)
+		tablero.set_process_input(true)
 		_siguiente_jugador()
-	else:
-		# ❌ JUGADA INVÁLIDA
-		print("❌ Jugada inválida. Manteniendo turno del mismo jugador.")
 
-		# OJO: _validar_jugada ya llama a devolver_fichas_turno()
-		# en los casos importantes, así que aquí no repetimos eso.
+	else:
+		# ❌ CASO C: jugada inválida
+		# _validar_jugada ya habrá devuelto las fichas al atril cuando toca
+		print("❌ Jugada inválida. Manteniendo turno del mismo jugador.")
 
 		# Reactivar botones del atril
 		for child in atril.get_children():
@@ -396,7 +421,7 @@ func _on_finalizar_turno_pressed() -> void:
 		tablero.modulate = Color(1, 1, 1, 1)
 		tablero.set_process_input(true)
 
-		# Le devolvemos el turno al mismo jugador
+		# Sigue siendo el mismo turno (el timer continúa contando)
 		es_mi_turno = true
 
 # NUEVO
