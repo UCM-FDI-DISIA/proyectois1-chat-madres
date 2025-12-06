@@ -10,6 +10,7 @@ var num_jugadores: int = 1   # valor por defecto
 var puntuaciones: Array = []
 var jugador_actual: int = 0
 var atriles_jugadores: Array = []
+var puntuaciones_finales: Array = []
 
 # Nombres de los jugadores
 var player_names: Array = ["", "", "", ""]

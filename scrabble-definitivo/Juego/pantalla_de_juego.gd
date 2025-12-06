@@ -86,6 +86,7 @@ func _ready() -> void:
 	var btn_finalizar := get_node_or_null("FinalizarTurno")
 	var btn_reordenar := get_node_or_null("ReordenarFichas")
 	var btn_cancelar := get_node_or_null("Cancelarcolocacion")
+	var btn_finalizar_partida := get_node_or_null("FinalizarPartida")
 
 	if btn_opciones:
 		var c_op := Callable(self, "_on_opciones_pressed")
@@ -116,6 +117,11 @@ func _ready() -> void:
 		turno_timer.connect("timeout", Callable(self, "_on_TurnoTimer_timeout"))
 	else:
 		push_error("No se encontró TurnoTimer")
+
+	if btn_finalizar_partida:
+		var c_finpar := Callable(self, "_on_finalizar_partida_pressed")
+		if not btn_finalizar_partida.is_connected("pressed", c_finpar):
+			btn_finalizar_partida.connect("pressed", c_finpar)
 	# --------------------------------------------------------
 
 # ===========================
@@ -720,3 +726,19 @@ func _on_TurnoTimer_timeout() -> void:
 func actualizar_ui_tiempo() -> void:
 	if label_tiempo:
 		label_tiempo.text = str(tiempo_restante) + "s"
+
+# función finalizar partida
+func _on_finalizar_partida_pressed() -> void:
+	print("📢 Finalizando partida manualmente…")
+
+	# Para que no sigan funcionando cosas del turno
+	es_mi_turno = false
+
+	if turno_timer:
+		turno_timer.stop()
+
+	# Si quieres, guarda puntuaciones finales en GameData
+	GameData.puntuaciones_finales = puntuaciones.duplicate()
+
+	# Cambiar a pantalla de fin
+	get_tree().change_scene_to_packed(END_SCENE)
