@@ -1,8 +1,9 @@
-[gd_scene load_steps=17 format=4 uid="uid://bgu417px3gdnm"]
+[gd_scene load_steps=18 format=4 uid="uid://bgu417px3gdnm"]
 
 [ext_resource type="Texture2D" uid="uid://21c4krb62sdw" path="res://Juego/Fondo (2).png" id="1_5u6n2"]
 [ext_resource type="PackedScene" uid="uid://cmlki6e4x7jqq" path="res://Casillas/Tablero/board.tscn" id="1_d15d8"]
 [ext_resource type="Script" uid="uid://cigli3d888xs8" path="res://Juego/pantalla_de_juego.gd" id="1_wg8rh"]
+[ext_resource type="Texture2D" uid="uid://bxbyybfxnpdl0" path="res://Juego/Fondo tablero.png" id="3_evtru"]
 [ext_resource type="Script" uid="uid://di5qhd0ug6crr" path="res://Juego/Atril.gd" id="4_xtkgl"]
 [ext_resource type="Script" uid="uid://55xb13pdhrsc" path="res://Juego/tu_turno.gd" id="5_qi2nl"]
 [ext_resource type="Script" uid="uid://dki0gsm3ndnjr" path="res://Juego/hueco_1.gd" id="6_cmwkj"]
@@ -28,9 +29,11 @@ tags = {
 
 [node name="PantallaDeJuego" type="Control"]
 layout_mode = 3
-anchors_preset = 15
+anchor_left = 0.016
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -205.432
+offset_top = -35.0
 offset_right = -1152.0
 offset_bottom = -648.0
 grow_horizontal = 2
@@ -40,12 +43,8 @@ size_flags_vertical = 3
 script = ExtResource("1_wg8rh")
 
 [node name="Fondo(2)" type="Sprite2D" parent="."]
-visible = false
 scale = Vector2(1298, 1298)
 texture = ExtResource("1_5u6n2")
-
-[node name="FondoTablero" type="Sprite2D" parent="."]
-visible = false
 
 [node name="fondoEspecial" type="TextureRect" parent="."]
 custom_minimum_size = Vector2(1152, 648)
@@ -53,12 +52,21 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 1152.0
-offset_bottom = 648.0
+offset_left = 92.0
+offset_top = -8.0
+offset_right = 1244.0
+offset_bottom = 669.0
 grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 1
 stretch_mode = 6
+
+[node name="FondoTablero2" type="Sprite2D" parent="."]
+position = Vector2(508.99997, 346.00003)
+scale = Vector2(0.5187499, 0.9333334)
+texture = ExtResource("3_evtru")
+
+[node name="FondoTablero" type="Sprite2D" parent="."]
 
 [node name="Board" parent="." instance=ExtResource("1_d15d8")]
 position = Vector2(525, 329.99994)
@@ -69,10 +77,10 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -601.0
-offset_top = 38.0
-offset_right = -251.0
-offset_bottom = 80.0
+offset_left = 146.0
+offset_top = 42.0
+offset_right = 496.0
+offset_bottom = 84.0
 grow_horizontal = 0
 theme_override_font_sizes/font_size = 30
 text = "Es el turno del jugador X"
@@ -99,7 +107,7 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 995.99
+offset_left = 857.0
 offset_top = 572.455
 offset_right = 1035.9906
 offset_bottom = 580.455
@@ -137,10 +145,10 @@ script = ExtResource("12_y3uwc")
 
 [node name="Opciones" type="Button" parent="."]
 layout_mode = 0
-offset_left = 1194.0
-offset_top = 84.0
-offset_right = 1224.0
-offset_bottom = 115.0
+offset_left = 1229.0
+offset_top = 98.0
+offset_right = 1259.0
+offset_bottom = 129.0
 text = "⚙️"
 
 [node name="Atril" type="PanelContainer" parent="."]
