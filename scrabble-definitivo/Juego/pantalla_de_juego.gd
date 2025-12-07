@@ -5,6 +5,7 @@ var es_mi_turno: bool = false
 var puntuacion_jugador_actual: int = 0
 var puntuaciones: Array = []
 var tiempo_restante: int = 0
+var turnos_sin_puntos_consecutivos: int = 0
 @onready var turno_timer := $TurnoTimer
 @onready var label_tiempo := $LabelTiempo
 
@@ -335,6 +336,29 @@ func _siguiente_jugador():
 	actualizar_label_turno()
 	set_turno(true)
 
+func _registrar_fin_turno(sin_puntos: bool) -> void:
+	if sin_puntos:
+		turnos_sin_puntos_consecutivos += 1
+	else:
+		turnos_sin_puntos_consecutivos = 0
+
+	print("DEBUG turnos_sin_puntos_consecutivos =", turnos_sin_puntos_consecutivos)
+
+	# Si todo el mundo ha pasado 2 veces seguidas → fin de partida
+	if turnos_sin_puntos_consecutivos >= GameData.num_jugadores * 2:
+		print("🎯 Todos los jugadores han pasado 2 veces seguidas. Fin de partida.")
+		es_mi_turno = false
+
+		if turno_timer:
+			turno_timer.stop()
+
+		# Guardar puntuaciones finales en GameData
+		GameData.puntuaciones_finales = puntuaciones.duplicate()
+
+		get_tree().change_scene_to_packed(END_SCENE)
+	else:
+		_siguiente_jugador()
+
 # ===========================
 # 🔹 Actualizar contador de bolsa
 # ===========================
@@ -415,12 +439,13 @@ func _on_finalizar_turno_pressed() -> void:
 
 	# CASO A: no hay fichas colocadas → pasar turno
 	if not hay_fichas_colocadas:
-		print("➡ Finalizar turno sin colocar fichas: se pasa el turno.")
+		print("➡ Finalizar turno sin colocar fichas: se pasa el turno (sin puntos).")
 		es_mi_turno = false
 		if turno_timer:
 			turno_timer.stop()
-		_siguiente_jugador()
+		_registrar_fin_turno(true)  # turno sin puntos
 		return
+
 
 	# ---------------------------------------
 	# CASO B/C: hay fichas colocadas → validar
@@ -440,30 +465,39 @@ func _on_finalizar_turno_pressed() -> void:
 	var ok := await _validar_jugada(tablero)
 
 	if ok:
-		# ✅ CASO B: jugada válida → sumar puntos y terminar turno
+	# ===============================
+	# 1️⃣ Calcular puntos del turno
+	# ===============================
+		var puntos_turno := 0
 		if tablero.has_method("calcular_puntuacion_turno"):
-			var puntos_turno = tablero.calcular_puntuacion_turno()
+			puntos_turno = tablero.calcular_puntuacion_turno()
 			sumar_puntos(puntos_turno)
 			puntuacion_jugador_actual = puntuaciones[GameData.jugador_actual]
 			print("✅ Jugada válida! Sumados %d puntos. Total: %d" % [puntos_turno, puntuacion_jugador_actual])
 
-		# Registrar palabras y limpiar turno
+	# ===============================
+	# 2️⃣ Registrar palabras y limpiar
+	# ===============================
 		if tablero.has_method("registrar_palabras_turno_actual"):
 			tablero.registrar_palabras_turno_actual()
 
 		if tablero.has_method("limpiar_fichas_turno"):
 			tablero.limpiar_fichas_turno()
 
-		# Marcar fin del primer turno si era el primero
+	# Marcar fin del primer turno
 		if tablero.es_primer_turno:
 			tablero.es_primer_turno = false
 
-		# Reponer fichas colocadas
+	# ===============================
+	# 3️⃣ Reponer fichas
+	# ===============================
 		if atril.has_method("reponer_fichas_colocadas"):
 			atril.reponer_fichas_colocadas()
 		actualizar_contador_bolsa()
 
-		# (opcional) comprobar fin de partida si ya tienes END_SCENE y _es_fin_partida()
+	# ===============================
+	# 4️⃣ Fin de partida clásico
+	# ===============================
 		if _es_fin_partida():
 			print("🎉 Fin de la partida, cambiando a pantalla de fin.")
 			if turno_timer:
@@ -471,12 +505,22 @@ func _on_finalizar_turno_pressed() -> void:
 			get_tree().change_scene_to_packed(END_SCENE)
 			return
 
-		# Terminar turno y pasar al siguiente jugador
+	# ===============================
+	# 5️⃣ Preparar turno
+	# ===============================
 		if turno_timer:
 			turno_timer.stop()
 		tablero.modulate = Color(1, 1, 1, 1)
 		tablero.set_process_input(true)
-		_siguiente_jugador()
+
+	# ===============================
+	# 6️⃣ Nuevo sistema:
+	#     registrar si hubo puntos
+	# ===============================
+	# Si puntos_turno > 0 → reset del contador
+	# Si puntos_turno == 0 → cuenta como "pasar turno"
+		_registrar_fin_turno(puntos_turno <= 0)
+
 
 	else:
 		# ❌ CASO C: jugada inválida
