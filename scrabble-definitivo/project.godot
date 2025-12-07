@@ -18,6 +18,7 @@ config/features=PackedStringArray("4.5", "Forward Plus")
 
 GameData="*res://scripts/GameData.gd"
 Talo="*res://addons/talo/talo_manager.gd"
+Stats="*res://Online/stats.gd"
 
 [display]
 

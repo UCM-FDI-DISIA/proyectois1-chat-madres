@@ -59,11 +59,6 @@ visible = false
 layout_mode = 2
 text = "LEADERBOARD"
 
-[node name="Amigos" type="Button" parent="PanelContainer/VBoxContainer"]
-visible = false
-layout_mode = 2
-text = "AMIGOS"
-
 [node name="Tienda" type="Button" parent="PanelContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
@@ -91,6 +86,10 @@ text = "OPCIONES"
 [node name="Créditos" type="Button" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "CRÉDITOS"
+
+[node name="Guardar" type="Button" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "GUARDAR PARTIDA"
 
 [node name="Salir" type="Button" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -124,5 +123,6 @@ stream = ExtResource("4_msmj0")
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Tutorial" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Controles" to="." method="_on_controles_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Créditos" to="." method="_on_créditos_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Guardar" to="." method="_on_guardar_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Salir" to="." method="_on_salir_pressed"]
 [connection signal="pressed" from="Cuenta" to="." method="_on_cuenta_pressed"]

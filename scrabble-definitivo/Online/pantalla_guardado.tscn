@@ -1,0 +1,65 @@
+[gd_scene load_steps=3 format=3 uid="uid://bsoco7vggbtou"]
+
+[ext_resource type="Script" uid="uid://c46pigyjbdted" path="res://Online/LoadableStats.gd" id="1_ks8ee"]
+[ext_resource type="Texture2D" uid="uid://bxbyybfxnpdl0" path="res://Juego/Fondo tablero.png" id="2_sptfy"]
+
+[node name="PantallaGuardado" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ks8ee")
+
+[node name="FondoTablero" type="Sprite2D" parent="."]
+position = Vector2(606, 343)
+scale = Vector2(1.65, 1.4092592)
+texture = ExtResource("2_sptfy")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -243.0
+offset_top = -128.0
+offset_right = 221.0
+offset_bottom = -105.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "No aprietes el botón hasta que las estadísticas se actualicen"
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -242.0
+offset_top = -92.0
+offset_right = 216.0
+offset_bottom = 29.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Salir" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -145.0
+offset_top = 50.0
+offset_right = 135.0
+offset_bottom = 87.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "SALIR"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Salir" to="." method="_on_salir_pressed"]
