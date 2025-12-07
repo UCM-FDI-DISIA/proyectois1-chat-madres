@@ -29,7 +29,7 @@ func _ready():
 	row2.visible = n >= 2
 	row3.visible = n >= 3
 	row4.visible = n >= 4
-
+	
 	# Cargar los nombres guardados
 	if n >= 1: p1.text = GameData.player_names[0]
 	if n >= 2: p2.text = GameData.player_names[1]
@@ -89,18 +89,40 @@ func _actualizar_fondo():
 
 
 func _on_confirmar_pressed() -> void:
-	# Recoger solo los nombres necesarios
 	var n = GameData.num_jugadores
 	var final_names = []
 
-	if n >= 1: final_names.append(p1.text)
-	if n >= 2: final_names.append(p2.text)
-	if n >= 3: final_names.append(p3.text)
-	if n >= 4: final_names.append(p4.text)
+	# Jugador 1
+	if n >= 1:
+		if p1.text.strip_edges() == "":
+			final_names.append("Jugador 1")
+		else:
+			final_names.append(p1.text)
+
+	# Jugador 2
+	if n >= 2:
+		if p2.text.strip_edges() == "":
+			final_names.append("Jugador 2")
+		else:
+			final_names.append(p2.text)
+
+	# Jugador 3
+	if n >= 3:
+		if p3.text.strip_edges() == "":
+			final_names.append("Jugador 3")
+		else:
+			final_names.append(p3.text)
+
+	# Jugador 4
+	if n >= 4:
+		if p4.text.strip_edges() == "":
+			final_names.append("Jugador 4")
+		else:
+			final_names.append(p4.text)
 
 	GameData.player_names = final_names
 
 	print("Nombres actualizados:", GameData.player_names)
 
-	# ir a la pantalla de juego
+	# Ir a la pantalla de juego
 	get_tree().change_scene_to_file("res://Opciones/Menú principal/Personalizar.tscn")
