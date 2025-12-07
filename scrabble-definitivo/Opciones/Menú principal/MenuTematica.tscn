@@ -1,0 +1,109 @@
+[gd_scene load_steps=10 format=3 uid="uid://d23e1e0xdfeqo"]
+
+[ext_resource type="Texture2D" uid="uid://c62agp0cw1mdi" path="res://Opciones/Menú principal/NAVIDAD.jpg" id="1_0ino4"]
+[ext_resource type="Script" uid="uid://doi2pj7yjetyl" path="res://Opciones/Menú principal/MenuTematica.gd" id="1_nab3y"]
+[ext_resource type="Texture2D" uid="uid://bv304gki7aff1" path="res://Opciones/Menú principal/CIENCIA.jpg" id="2_l4cxu"]
+[ext_resource type="Texture2D" uid="uid://c8ymk32lf6qsa" path="res://Opciones/Menú principal/NATU.jpg" id="2_rscjv"]
+[ext_resource type="Texture2D" uid="uid://c2iewev6bwua7" path="res://Opciones/Menú principal/ARTE.jpg" id="3_wrgvp"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wrgvp"]
+texture = ExtResource("1_0ino4")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_72i0w"]
+texture = ExtResource("2_rscjv")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rscjv"]
+texture = ExtResource("2_l4cxu")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nab3y"]
+texture = ExtResource("3_wrgvp")
+
+[node name="MenuTematica" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+script = ExtResource("1_nab3y")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -402.0
+offset_top = -264.0
+offset_right = 402.0
+offset_bottom = 264.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+custom_minimum_size = Vector2(600, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "SELECCIONE UNA TEMÁTICA:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(800, 400)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+columns = 2
+
+[node name="NAVIDAD" type="Button" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(400, 200)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxTexture_wrgvp")
+text = "NAVIDAD"
+icon_alignment = 1
+expand_icon = true
+
+[node name="NATURALEZA" type="Button" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(400, 200)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxTexture_72i0w")
+text = "NATURALEZA"
+
+[node name="CIENCIA" type="Button" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(400, 200)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxTexture_rscjv")
+text = "CIENCIA"
+
+[node name="ARTE" type="Button" parent="VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(400, 200)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxTexture_nab3y")
+text = "ARTE"
+
+[connection signal="pressed" from="VBoxContainer/GridContainer/NAVIDAD" to="." method="_on_navidad_pressed"]
+[connection signal="pressed" from="VBoxContainer/GridContainer/NATURALEZA" to="." method="_on_naturaleza_pressed"]
+[connection signal="pressed" from="VBoxContainer/GridContainer/CIENCIA" to="." method="_on_ciencia_pressed"]
+[connection signal="pressed" from="VBoxContainer/GridContainer/ARTE" to="." method="_on_arte_pressed"]

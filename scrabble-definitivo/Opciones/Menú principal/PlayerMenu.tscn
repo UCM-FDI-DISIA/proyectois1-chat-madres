@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dwev0bu4uusgl"]
 
 [ext_resource type="Texture2D" uid="uid://b50xaxjvququm" path="res://Casillas/Tablero/Fondo_1.1.1.png" id="1_5plvv"]
-[ext_resource type="Script" path="res://Opciones/Menú principal/player_menu.gd" id="1_mwlru"]
+[ext_resource type="Script" uid="uid://bpkmvrml01v6x" path="res://Opciones/Menú principal/player_menu.gd" id="1_mwlru"]
 
 [node name="PlayerMenu" type="Control"]
 layout_mode = 3
@@ -12,7 +12,28 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_mwlru")
 
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -0.04248047
+offset_right = -0.04248047
+grow_horizontal = 2
+grow_vertical = 2
+stretch_mode = 6
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
 [node name="Fondo1_1_1" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(462, 402)
 texture = ExtResource("1_5plvv")
 

@@ -1,9 +1,8 @@
-[gd_scene load_steps=18 format=4 uid="uid://bgu417px3gdnm"]
+[gd_scene load_steps=17 format=4 uid="uid://bgu417px3gdnm"]
 
 [ext_resource type="Texture2D" uid="uid://21c4krb62sdw" path="res://Juego/Fondo (2).png" id="1_5u6n2"]
 [ext_resource type="PackedScene" uid="uid://cmlki6e4x7jqq" path="res://Casillas/Tablero/board.tscn" id="1_d15d8"]
 [ext_resource type="Script" uid="uid://cigli3d888xs8" path="res://Juego/pantalla_de_juego.gd" id="1_wg8rh"]
-[ext_resource type="Texture2D" uid="uid://bxbyybfxnpdl0" path="res://Juego/Fondo tablero.png" id="2_a8u10"]
 [ext_resource type="Script" uid="uid://di5qhd0ug6crr" path="res://Juego/Atril.gd" id="4_xtkgl"]
 [ext_resource type="Script" uid="uid://55xb13pdhrsc" path="res://Juego/tu_turno.gd" id="5_qi2nl"]
 [ext_resource type="Script" uid="uid://dki0gsm3ndnjr" path="res://Juego/hueco_1.gd" id="6_cmwkj"]
@@ -13,7 +12,7 @@
 [ext_resource type="Script" uid="uid://bwiutq554vxcn" path="res://Juego/hueco_5.gd" id="10_qpeoq"]
 [ext_resource type="Script" uid="uid://tcty2e426dqf" path="res://Juego/hueco_6.gd" id="11_vcpce"]
 [ext_resource type="Script" uid="uid://cuplq10yvrdil" path="res://Juego/hueco_7.gd" id="12_y3uwc"]
-[ext_resource type="Script" path="res://Juego/drag_preview_manager.gd" id="14_dadpr"]
+[ext_resource type="Script" uid="uid://dhut774qwcevi" path="res://Juego/drag_preview_manager.gd" id="14_dadpr"]
 [ext_resource type="Texture2D" uid="uid://2om1aivw88ro" path="res://scripts/Bolsa_1.1.8.png" id="16_qxxvd"]
 
 [sub_resource type="OggPacketSequence" id="OggPacketSequence_ibro0"]
@@ -32,23 +31,34 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -150.0
-offset_top = -24.0
-offset_right = -150.0
-offset_bottom = -24.0
+offset_right = -1152.0
+offset_bottom = -648.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_wg8rh")
 
 [node name="Fondo(2)" type="Sprite2D" parent="."]
-position = Vector2(759, 367)
-scale = Vector2(1.321875, 1.2981483)
+visible = false
+scale = Vector2(1298, 1298)
 texture = ExtResource("1_5u6n2")
 
 [node name="FondoTablero" type="Sprite2D" parent="."]
-position = Vector2(509, 346.49994)
-scale = Vector2(0.5145834, 0.9166667)
-texture = ExtResource("2_a8u10")
+visible = false
+
+[node name="fondoEspecial" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(1152, 648)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1152.0
+offset_bottom = 648.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
 
 [node name="Board" parent="." instance=ExtResource("1_d15d8")]
 position = Vector2(525, 329.99994)
@@ -69,9 +79,12 @@ text = "Es el turno del jugador X"
 horizontal_alignment = 1
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("4_xtkgl")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
@@ -266,7 +279,33 @@ offset_bottom = 425.0
 stream = SubResource("AudioStreamOggVorbis_evtru")
 autoplay = true
 
+[node name="PanelConfirmarPalabra" type="Panel" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 25.0
+offset_top = 50.0
+offset_right = 65.0
+offset_bottom = 90.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelConfirmarPalabra"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LabelPalabra" type="Label" parent="PanelConfirmarPalabra/VBoxContainer"]
+layout_mode = 2
+
+[node name="BotonSi" type="Button" parent="PanelConfirmarPalabra/VBoxContainer"]
+layout_mode = 2
+text = "Sí"
+
+[node name="BotonNo" type="Button" parent="PanelConfirmarPalabra/VBoxContainer"]
+layout_mode = 2
+text = "No"
+
 [connection signal="pressed" from="Opciones" to="." method="_on_opciones_pressed"]
 [connection signal="pressed" from="IntercambiarFichas" to="." method="_on_intercambiar_fichas_pressed"]
 [connection signal="pressed" from="FinalizarTurno" to="." method="_on_finalizar_turno_pressed"]
 [connection signal="pressed" from="ReordenarFichas" to="." method="_on_intercambiar_fichas_pressed"]
+[connection signal="pressed" from="PanelConfirmarPalabra/VBoxContainer/BotonSi" to="." method="_on_boton_si_pressed"]
+[connection signal="pressed" from="PanelConfirmarPalabra/VBoxContainer/BotonNo" to="." method="_on_boton_no_pressed"]

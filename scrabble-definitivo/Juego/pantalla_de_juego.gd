@@ -16,6 +16,12 @@ const END_SCENE := preload("res://Opciones/Menú principal/Pantalla de fin.tscn"
 #bolsa compartida para todos los jugadores
 @onready var bolsa := preload("res://scripts/BolsaFichas.gd").new()
 
+#Variable del fondo
+@onready var fondo = $fondoEspecial
+@onready var color_fondo = $FondoTablero 
+
+
+
 #lista de atriles (uno por jugador)
 var atriles: Array = []
 
@@ -24,6 +30,13 @@ var atriles: Array = []
 # 🔹 Funciones del ciclo de vida
 # ===========================
 func _ready() -> void:
+	_actualizar_fondo()  # <-- fondo inicial
+	print("¿Hay textura?", fondo.texture)
+	print("Visible fondo:", fondo.visible)
+	print("Visible color:", color_fondo.visible)
+	print("Tamaño fondo:", fondo.size)
+	
+	
 	#1 inicializar los datos del juego
 	GameData.inicializar_juego()
 	print("Número de jugadores:", GameData.num_jugadores)
@@ -123,6 +136,55 @@ func _ready() -> void:
 		if not btn_finalizar_partida.is_connected("pressed", c_finpar):
 			btn_finalizar_partida.connect("pressed", c_finpar)
 	# --------------------------------------------------------
+
+
+func _actualizar_fondo():
+	var jugador = GameData.jugador_actual + 1  # jugador 1, 2, 3, 4
+	var tema = GameData.selected_theme
+
+	var ruta : String = ""
+
+	if tema == "navidad":
+		match jugador:
+			1: ruta = "res://Opciones/FONDOS TEMATICAS/NAVIDAD1.jpg"
+			2: ruta = "res://Opciones/FONDOS TEMATICAS/NAVIDADFONDOMULTIJUGADOR.jpg"
+			3: ruta = "res://Opciones/FONDOS TEMATICAS/NAVIDAD3.jpg"
+			4: ruta = "res://Opciones/FONDOS TEMATICAS/NAVIDAD 4.jpg"
+	elif tema == "naturaleza":
+		match jugador:
+			1: ruta = "res://Opciones/FONDOS TEMATICAS/NATURALEZA1.jpg"
+			2: ruta = "res://Opciones/FONDOS TEMATICAS/NATURALEZA2.jpg"
+			3: ruta = "res://Opciones/FONDOS TEMATICAS/NATURALEZAMULTI.jpg"
+			4: ruta = "res://Opciones/FONDOS TEMATICAS/NATURALEZA4.jpg"
+	elif tema == "ciencia":
+		match jugador:
+			1: ruta = "res://Opciones/FONDOS TEMATICAS/CIENCIA1.jpg"
+			2: ruta = "res://Opciones/FONDOS TEMATICAS/CIENCIA2.jpg"
+			3: ruta = "res://Opciones/FONDOS TEMATICAS/CIENCIA3.jpg"
+			4: ruta = "res://Opciones/FONDOS TEMATICAS/CIENCIAMULTI.jpg"
+	elif tema == "arte":
+		match jugador:
+			1: ruta = "res://Opciones/FONDOS TEMATICAS/ARTE1.jpg"
+			2: ruta = "res://Opciones/FONDOS TEMATICAS/ARTE 2.jpg"
+			3: ruta = "res://Opciones/FONDOS TEMATICAS/ARTE3.jpg"
+			4: ruta = "res://Opciones/FONDOS TEMATICAS/ARTEMULTI.jpg"
+	else:
+		# No hay temática → fondo negro
+		fondo.texture = null
+		color_fondo.visible = true
+		fondo.visible = false
+		return
+	
+	# Cargar la textura
+	var tex = load(ruta)
+	if tex != null:
+		fondo.texture = tex
+		fondo.visible = true
+		color_fondo.visible = false
+
+
+
+
 
 # ===========================
 # 🔹 Sistema de Puntuación
@@ -235,6 +297,7 @@ func set_turno(mi_turno: bool) -> void:
 	actualizar_ui_puntuacion()
 
 func _siguiente_jugador():
+	
 	var atril: Node = get_tree().current_scene.get_node_or_null("PanelContainer")
 
 	# 1) Guardar atril del jugador que termina turno
@@ -261,6 +324,8 @@ func _siguiente_jugador():
 	if GameData.jugador_actual >= GameData.num_jugadores:
 		GameData.jugador_actual = 0
 
+	_actualizar_fondo()
+	
 	# 3) Cargar atril del nuevo jugador
 	if atril and atril.has_method("cargar_atril"):
 		var datos = GameData.atriles_jugadores[GameData.jugador_actual]
@@ -454,6 +519,74 @@ func _on_cancelar_colocacion_pressed() -> void:
 
 
 # ===========================
+# 🔹 Preguntar si la palabra cumple la temática
+# ===========================
+var esperando_respuesta: bool = false
+var respuesta_tematica: bool = false
+
+# Función para preguntar si se acepta la palabra en temáticas
+func _preguntar_tematica(palabra: String) -> bool:
+	
+	#Si solo hay un jugador no hace falta validar
+	if GameData.num_jugadores <= 1:
+		return true
+	
+	var panel: Panel = $PanelConfirmarPalabra
+	var label: Label = panel.get_node("VBoxContainer/LabelPalabra") as Label
+	var boton_si: Button = panel.get_node("VBoxContainer/BotonSi") as Button
+	var boton_no: Button = panel.get_node("VBoxContainer/BotonNo") as Button
+
+	# Configurar el panel
+	#label.text = "¿Se acepta la palabra \"%s\"?".format(palabra)
+	label.text = "¿Se acepta la palabra \"%s\"?" % palabra
+	panel.visible = true
+
+	
+	
+	# Variable para almacenar la respuesta
+	var respuesta: bool = false
+
+	# Crear Callables para conectar
+	var callable_si = Callable(self, "_on_boton_si_presionado")
+	var callable_no = Callable(self, "_on_boton_no_presionado")
+
+	# Guardar temporalmente la respuesta
+	_respuesta_tematica = null
+
+	# Conectar botones
+	boton_si.pressed.connect(callable_si)
+	boton_no.pressed.connect(callable_no)
+
+	# Esperar a que el jugador pulse un botón
+	while _respuesta_tematica == null:
+		await get_tree().process_frame
+
+	# Guardar la respuesta final
+	respuesta = _respuesta_tematica
+
+	# Desconectar botones
+	if boton_si.pressed.is_connected(callable_si):
+		boton_si.pressed.disconnect(callable_si)
+	if boton_no.pressed.is_connected(callable_no):
+		boton_no.pressed.disconnect(callable_no)
+
+	# Ocultar panel
+	panel.visible = false
+
+	return respuesta
+
+
+# Funciones que usan los botones
+var _respuesta_tematica  = null
+
+func _on_boton_si_presionado():
+	_respuesta_tematica = true
+
+func _on_boton_no_presionado():
+	_respuesta_tematica = false
+
+
+# ===========================
 # 🔹 VALIDACIÓN DE JUGADA
 # ===========================
 func _validar_jugada(tablero: Node) -> bool:
@@ -514,7 +647,21 @@ func _validar_jugada(tablero: Node) -> bool:
 					tablero.devolver_fichas_turno()
 				await get_tree().create_timer(0.3).timeout
 				return false
+	
+	
+	# ---- Validación temática ----
+	if GameData.selected_theme != "":
+		for palabra in tablero.palabras_turno_actual:
+			var aceptada = await _preguntar_tematica(palabra)
+			if not aceptada:
+				print("Palabra no aceptada por temática:", palabra)
+				if tablero.has_method("devolver_fichas_turno"):
+					tablero.devolver_fichas_turno()
+				await get_tree().create_timer(0.3).timeout
+				return false
 
+
+	
 	print("Jugada válida según reglas de Scrabble.")
 	await get_tree().create_timer(0.6).timeout
 

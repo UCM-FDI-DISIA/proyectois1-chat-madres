@@ -38,30 +38,39 @@ layout_mode = 2
 
 [node name="Jugar" type="Button" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
-text = "JUGAR"
+text = "JUGAR NORMAL"
+
+[node name="PERSONALIZAR PARTIDA" type="Button" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "PERSONALIZAR PARTIDA"
 
 [node name="Misiones" type="Button" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "MISIONES"
 
 [node name="Registro de partidas" type="Button" parent="PanelContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "REGISTRO DE PARTIDAS
 "
 
 [node name="LeaderBoard Global" type="Button" parent="PanelContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "LEADERBOARD"
 
 [node name="Amigos" type="Button" parent="PanelContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "AMIGOS"
 
 [node name="Tienda" type="Button" parent="PanelContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "TIENDA"
 
 [node name="Personalizar" type="Button" parent="PanelContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "PERSONALIZAR
 "
@@ -75,6 +84,7 @@ layout_mode = 2
 text = "CONTROLES"
 
 [node name="Opciones" type="Button" parent="PanelContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "OPCIONES"
 
@@ -110,6 +120,7 @@ autoplay = true
 stream = ExtResource("4_msmj0")
 
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Jugar" to="." method="_on_jugar_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/PERSONALIZAR PARTIDA" to="." method="_on_personalizar_partida_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Tutorial" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Controles" to="." method="_on_controles_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Créditos" to="." method="_on_créditos_pressed"]

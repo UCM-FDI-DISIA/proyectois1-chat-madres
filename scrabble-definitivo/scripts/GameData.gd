@@ -15,6 +15,9 @@ var puntuaciones_finales: Array = []
 # Nombres de los jugadores
 var player_names: Array = ["", "", "", ""]
 
+#personalizacion del juego
+var selected_theme : String = ""
+
 # Inicializar puntuaciones y atriles
 func inicializar_juego():
 	puntuaciones = []

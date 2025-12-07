@@ -36,3 +36,7 @@ func _on_controles_pressed() -> void:
 	$SFXPlayer.play()
 	var t = CONTROLES_SCENE.instantiate()
 	get_tree().current_scene.add_child(t)
+
+
+func _on_personalizar_partida_pressed() -> void:
+	get_tree().change_scene_to_file("res://Opciones/Menú principal/MenuTematica.tscn")
