@@ -854,6 +854,7 @@ func _ocultar_error() -> void:
 # ===========================
 # 🔹 Timeout del Timer
 # ===========================
+
 func _on_TurnoTimer_timeout() -> void:
 	if not es_mi_turno:
 		return
@@ -861,10 +862,123 @@ func _on_TurnoTimer_timeout() -> void:
 	tiempo_restante -= 1
 	actualizar_ui_tiempo()
 
-	if tiempo_restante <= 0:
-		print("⏱ Tiempo agotado para jugador", GameData.jugador_actual + 1)
-		turno_timer.stop()  # detener timer para no seguir restando
+	if tiempo_restante > 0:
+		return
+
+	print("⏱ Tiempo agotado para jugador", GameData.jugador_actual + 1)
+	turno_timer.stop()  # detenemos el timer
+
+	# Forzar fin de turno por tiempo agotado
+	await _forzar_fin_turno_por_tiempo()
+
+func _forzar_fin_turno_por_tiempo() -> void:
+	_resetear_interacciones_ui()
+	
+	es_mi_turno = false  # el turno termina sí o sí
+
+	var tablero := get_tree().current_scene.get_node_or_null("Board")
+	var atril := get_tree().current_scene.get_node_or_null("PanelContainer")
+
+	if tablero == null or atril == null:
+		push_warning("No se encontró Board o PanelContainer al forzar fin de turno por tiempo.")
 		_siguiente_jugador()
+		return
+
+	# 1) Mirar si hay fichas colocadas este turno
+	var hay_fichas_colocadas := false
+	if tablero.has_method("get"):
+		var fichas_colocadas = tablero.get("fichas_turno_actual")
+		if typeof(fichas_colocadas) == TYPE_ARRAY and not fichas_colocadas.is_empty():
+			hay_fichas_colocadas = true
+
+	# CASO 1: no hay fichas colocadas -> pasar turno sin más
+	if not hay_fichas_colocadas:
+		print("⏱ Tiempo agotado sin fichas colocadas → turno pasa sin puntos.")
+		_siguiente_jugador()
+		return
+
+	# CASO 2/3: hay fichas colocadas → validar jugada
+	# Bloquear botones del atril
+	for child in atril.get_children():
+		if child is Button:
+			child.disabled = true
+
+	# Atenuar el tablero
+	tablero.modulate = Color(1, 1, 1, 0.6)
+	tablero.set_process_input(false)
+
+	# Validar jugada
+	var ok := await _validar_jugada(tablero)
+
+	if ok:
+		# ✅ Jugada válida: sumar puntos y terminar turno
+		if tablero.has_method("calcular_puntuacion_turno"):
+			var puntos_turno = tablero.calcular_puntuacion_turno()
+			sumar_puntos(puntos_turno)
+			puntuacion_jugador_actual = puntuaciones[GameData.jugador_actual]
+			print("✅ (Tiempo) Jugada válida! Sumados %d puntos. Total: %d" % [puntos_turno, puntuacion_jugador_actual])
+
+		# Registrar palabras y limpiar turno
+		if tablero.has_method("registrar_palabras_turno_actual"):
+			tablero.registrar_palabras_turno_actual()
+
+		if tablero.has_method("limpiar_fichas_turno"):
+			tablero.limpiar_fichas_turno()
+
+		# Marcar fin del primer turno si era el primero
+		if tablero.es_primer_turno:
+			tablero.es_primer_turno = false
+
+		# Reponer fichas colocadas
+		if atril.has_method("reponer_fichas_colocadas"):
+			atril.reponer_fichas_colocadas()
+		actualizar_contador_bolsa()
+
+		# (opcional) fin de partida si ya tienes END_SCENE y _es_fin_partida()
+		if _es_fin_partida():
+			print("🎉 Fin de la partida (por tiempo), cambiando a pantalla de fin.")
+			get_tree().change_scene_to_packed(END_SCENE)
+			return
+
+		print("➡ (Tiempo) Turno finaliza con jugada válida.")
+	else:
+		# ❌ Jugada inválida: _validar_jugada ya habrá devuelto las fichas al atril
+		print("❌ (Tiempo) Jugada inválida, fichas devueltas al atril y turno terminado.")
+		# Por si acaso quieres limpiar algo más:
+		if tablero.has_method("limpiar_fichas_turno"):
+			tablero.limpiar_fichas_turno()
+
+	# Preparar UI para el siguiente jugador
+	for child in atril.get_children():
+		if child is Button:
+			child.disabled = false
+
+	tablero.modulate = Color(1, 1, 1, 1)
+	tablero.set_process_input(true)
+
+	# Pasar al siguiente jugador
+	_siguiente_jugador()
+	
+func _resetear_interacciones_ui() -> void:
+	# 1) Cancelar drag de la GUI estándar
+	var vp := get_viewport()
+	if vp and vp.gui_is_dragging():
+		vp.gui_cancel_drag()
+
+	# 2) Parar DragPreviewManager global si existe
+	var drag_manager := get_tree().current_scene.find_child("DragPreviewManager", true, false)
+	if drag_manager and drag_manager.has_method("stop_preview"):
+		drag_manager.stop_preview()
+
+	# 3) Resetear atril (modos, colores, estados de botones)
+	var atril := get_tree().current_scene.get_node_or_null("PanelContainer")
+	if atril and atril.has_method("cancelar_interacciones"):
+		atril.cancelar_interacciones()
+
+	# 4) 🔴 Resetear tablero (modo fantasma / teclado)
+	var tablero := get_tree().current_scene.get_node_or_null("Board")
+	if tablero and tablero.has_method("cancelar_interacciones"):
+		tablero.cancelar_interacciones()
 
 
 # ===========================

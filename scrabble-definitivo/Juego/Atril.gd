@@ -400,3 +400,22 @@ func limpiar_atril() -> void:
 		b.tooltip_text = ""
 		if b.has_meta("letra"):
 			b.remove_meta("letra")
+
+func cancelar_interacciones() -> void:
+	# Salir de modos especiales
+	modo_intercambio = false
+	modo_reordenar = false
+	cancelar_reordenar_flag = false
+	seleccionadas_para_intercambio.clear()
+	ficha_reordenar_1 = null
+
+	# Restaurar aspecto de todos los huecos
+	for b in huecos:
+		b.modulate = Color(1, 1, 1, 1)
+		# Si el botón tiene método para resetear estados internos, llamarlo
+		if b.has_method("reset_estado_interaccion"):
+			b.reset_estado_interaccion()
+
+	# Por si hubiera algún preview de drag global
+	if drag_preview_manager and drag_preview_manager.has_method("stop_preview"):
+		drag_preview_manager.stop_preview()

@@ -74,3 +74,11 @@ func _gui_input(event: InputEvent) -> void:
 
 		if is_dragging and drag_preview_manager:
 			drag_preview_manager.update_preview(event.global_position)
+			
+func reset_estado_interaccion() -> void:
+	mouse_down = false
+	is_dragging = false
+
+	# Por si acaso hay un preview vivo asociado a esta ficha
+	if drag_preview_manager:
+		drag_preview_manager.stop_preview()

@@ -1062,3 +1062,7 @@ func validar_fin_de_turno() -> bool:
 	es_primer_turno = false
 	print("✅ Jugada válida.")
 	return true
+
+func cancelar_interacciones() -> void:
+	# Cancelar cualquier selección activa (modo fantasma, teclado, etc.)
+	_cancelar_seleccion()
