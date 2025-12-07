@@ -1,5 +1,4 @@
 )
-a
 aba
 ába
 abaá
@@ -98034,7 +98033,6 @@ azuzaste
 azuzasteis
 azuzo
 azuzó
-b
 baalita
 baasismo
 baasista
@@ -115416,7 +115414,6 @@ bypass
 byroniana
 byroniano
 byte
-c
 ca
 caacupeña
 caacupeño
@@ -182183,7 +182180,6 @@ cuzqueño
 cuzul
 cyclo-cross
 czarda
-d
 da
 daba
 dabais
@@ -266867,7 +266863,6 @@ duunviro
 dux
 duz
 DVD
-e
 ea
 eagle
 easonense
@@ -361248,7 +361243,6 @@ ezquerdees
 ezquerdeo
 ezquerdeó
 ezquite
-f
 fa
 faba
 fabada
@@ -376540,7 +376534,6 @@ futurología
 futurólogo
 fututa
 fututo
-g
 gabacha
 gabachada
 gabacho
@@ -390001,7 +389994,6 @@ guzgo
 guzla
 guzmán
 guzpátaro
-h
 ha
 haba
 habada
@@ -401384,7 +401376,6 @@ huyo
 huyó
 huyuya
 huyuyo
-i
 iba
 ibaguereña
 ibaguereño
@@ -420516,7 +420507,6 @@ izquierdizó
 izquierdo
 izquierdosa
 izquierdoso
-j
 ja
 jaba
 jabada
@@ -426071,7 +426061,6 @@ juzguéis
 juzguemos
 juzguen
 juzgues
-k
 ka
 kabuki
 kafkiana
@@ -426255,7 +426244,6 @@ kung-fu
 kurda
 kurdo
 kuwaití
-l
 la
 lábaro
 labe
@@ -438809,7 +438797,6 @@ luzcan
 luzcas
 luzco
 lycra
-m
 ma
 mabí
 mable
@@ -467377,8 +467364,6 @@ mutuo
 muy
 muyahidín
 muzárabe
-n
-ñ
 na
 ña
 naba
@@ -473173,7 +473158,6 @@ nutriz
 nutro
 nutual
 ñuzco
-o
 oa
 oasis
 oaxaqueña
@@ -480725,7 +480709,6 @@ ozonizó
 ozono
 ozonómetro
 ozonosfera
-p
 pa
 pabellón
 pabilo
@@ -523227,7 +523210,6 @@ puzol
 puzolana
 PVC
 pyme
-q
 qu
 quad
 quadrivium
@@ -525241,7 +525223,6 @@ quizarrá
 quizás
 quizcuate
 quorum
-r
 ra
 raba
 rabada
@@ -600803,7 +600784,6 @@ suyo
 suzón
 swahili
 swing
-t
 ta
 taba
 tabacal
@@ -628527,7 +628507,6 @@ tuza
 twahka
 tweed
 twist
-u
 ubajay
 ube
 ubérrima
@@ -630872,7 +630851,6 @@ uyunense
 uzbeka
 uzbeko
 uzo
-v
 va
 vaca
 vacá
@@ -641563,7 +641541,6 @@ vulturno
 vulva
 vusco
 vusted
-w
 wagneriana
 wagneriano
 wahabí
@@ -641601,7 +641578,6 @@ windsurfista
 wok
 wólfram
 wolframio
-x
 xantina
 xantoma
 xeca
@@ -641767,7 +641743,6 @@ xocoatole
 xocoyote
 xola
 xolo
-y
 ya
 yaacabó
 yaba
@@ -642606,7 +642581,6 @@ yuyería
 yuyero
 yuyo
 yuyuba
-z
 za
 zabalmedina
 zabarcera
