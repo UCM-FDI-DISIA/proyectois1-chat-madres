@@ -30,6 +30,13 @@ func _ready():
 	row3.visible = n >= 3
 	row4.visible = n >= 4
 	
+	# Asegurarnos de que GameData.player_names tiene al menos n posiciones
+	if GameData.player_names == null:
+		GameData.player_names = []
+
+	while GameData.player_names.size() < n:
+		GameData.player_names.append("")  # rellenamos con vacío
+	
 	# Cargar los nombres guardados
 	if n >= 1: p1.text = GameData.player_names[0]
 	if n >= 2: p2.text = GameData.player_names[1]
@@ -90,7 +97,7 @@ func _actualizar_fondo():
 
 func _on_confirmar_pressed() -> void:
 	var n = GameData.num_jugadores
-	var final_names = []
+	var final_names: Array[String] = []
 
 	# Jugador 1
 	if n >= 1:
