@@ -11,6 +11,12 @@ Para documentación más detallada, se puede consultar la **Wiki del proyecto**:
 
 ---
 
+## Vista previa del juego
+[![Pantalla Inicial](https://github.com/user-attachments/assets/6e051395-1876-49a4-b51e-d4d6dcb8ce73)](https://github.com/user-attachments/assets/6e051395-1876-49a4-b51e-d4d6dcb8ce73)
+
+[![Tablero y Fichas](https://github.com/user-attachments/assets/038b8258-9ceb-4d60-a2c2-8f9065a47fac)](https://github.com/user-attachments/assets/038b8258-9ceb-4d60-a2c2-8f9065a47fac)
+
+
 ## Índice
 
 - [Objetivos](#objetivos)
@@ -66,7 +72,7 @@ La tabla completa de riesgos está documentada en la Wiki:
 
 ---
 
-## Estructura inicial
+## Estructura 
 
 Actualmente el repositorio cuenta con:
 
@@ -81,20 +87,35 @@ Conforme avance el desarrollo, se agregarán instrucciones de instalación, arqu
 
 ## Sprint
 
-El proyecto trabaja con un backlog inicial de dos semanas cuyo objetivo principal es implementar la primera versión funcional del juego Scrabble.  
-En este ciclo se priorizan las funcionalidades básicas descritas en las historias de usuario y se establece la base de trabajo colaborativo.
+El proyecto se ha desarrollado en 5 sprints y un sprint inicial (el cual se dedicó a la elección del tipo de juego, a la creación de historias de usuario y a la planifiación inicial) cada uno de dos semanas.
 
+Durante los sprints se han implementado:
+
+- **Sprint 1:** estructura base del proyecto, escenas principales e importación en Godot.  
+- **Sprint 2:** diseño del tablero, colocación de fichas y sistema drag & drop.  
+- **Sprint 3:** validación inicial de palabras y lógica de turnos.  
+- **Sprint 4:** sistema de puntuación, mejoras visuales y pantalla de inicio.  
+- **Sprint 5:** pulido del juego, corrección de errores y preparación de la entrega final.
+
+Los sprints se completaron según la planificación del backlog.
 [Ver Sprint](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/wiki#sprint)
 
 ---
 
-## Próximos pasos
+## Estado final del proyecto
 
-- Definir la arquitectura base y las herramientas de desarrollo.  
-- Prototipar la interfaz de usuario.  
-- Implementar validación básica de jugadas.  
-- Añadir lógica de puntuación y turnos.  
-- Crear pruebas para asegurar calidad.
+La versión actual del juego es totalmente funcional.
+
+Incluye:
+- Tablero de 15x15 completamente operativo.  
+- Sistema de colocar fichas en las casillas (con ratón o con teclado).
+- Validación automática de palabras.  
+- Cálculo de puntuación según las reglas oficiales.  
+- Gestión de turnos entre 2 y 4 jugadores.  
+- Pantalla inicial, pantalla de fin, pantalla de carga y diseño visual completo.  
+- Flujo de partida desde inicio hasta final.
+
+El juego está listo para ser presentado y utilizado como prototipo funcional.
 
 [Ver planificación en la Wiki](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/wiki)
 
@@ -106,6 +127,8 @@ En este ciclo se priorizan las funcionalidades básicas descritas en las histori
 - [Gestión de riesgos](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/wiki#gesti%C3%B3n-de-riesgos)  
 - [Sprint](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/wiki#sprint)  
 - [Project Backlog](https://github.com/orgs/UCM-FDI-DISIA/projects/157)
+  
+---
 
 ## Importar proyecto en Godot
 1. Abrir Godot (Godot_v4.5-stable_win64.exe)
@@ -114,6 +137,17 @@ En este ciclo se priorizan las funcionalidades básicas descritas en las histori
 4. Seleccionar el repositorio proyectois1-chat-madres.
 5. Seleccionar la carpeta Scrabble_definitivo.
 
+---
 
+## Ejecutar el proyecto
+1. Abrir el proyecto en Godot siguiendo los pasos anteriores.
+2. Abrir la escena principal preferiblemente:
+   `Pantalladejuego.tscn`
+   (aunque se puede ejecutar desde cualquier escena).
+4. Pulsar F5 o hacer clic en Run Project.
 
-
+## Tecnologías utilizadas
+- Godot Engine 4.5
+- GDScript
+- GitHub Projects (gestión de tareas)
+- Diccionario RAE (para validación de palabras)
