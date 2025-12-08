@@ -6,6 +6,7 @@ const MENU_JUGADORES_SCENE := preload("res://Opciones/Menú principal/MenuMultij
 const CUENTA_SCENE := preload ("res://addons/talo/samples/authentication/authentication.tscn")
 const CONTROLES_SCENE := preload ("res://Opciones/Tutorial/controles.tscn")
 const GUARDAR_SCENE := preload ("res://Online/pantalla_guardado.tscn")
+const MISIONES_SCENE := preload ("res://Escena_misiones/Misiones.tscn")
 
 func _on_tutorial_pressed() -> void:
 	$SFXPlayer.play()
@@ -47,4 +48,11 @@ func _on_guardar_pressed() -> void:
 	$SFXPlayer.play()
 	if Talo.current_player:
 		var t = GUARDAR_SCENE.instantiate()
+		get_tree().current_scene.add_child(t)
+
+
+func _on_misiones_pressed() -> void:
+	$SFXPlayer.play()
+	if Talo.current_player:
+		var t = MISIONES_SCENE.instantiate()
 		get_tree().current_scene.add_child(t)

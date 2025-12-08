@@ -250,7 +250,6 @@ func actualizar_ui_puntuacion():
 
 
 func sumar_puntos(puntos: int):
-	Stats.add_points(puntos)
 	puntuaciones[GameData.jugador_actual]+= puntos
 	actualizar_ui_puntuacion()
 	print("Puntos sumados: %d - Total: %d" % [puntos, puntuaciones[GameData.jugador_actual]])
@@ -385,6 +384,7 @@ func actualizar_contador_bolsa() -> void:
 
 func _es_fin_partida() -> bool:
 	Stats.add_game()
+	Stats.add_exp(100)
 	var atril := get_tree().current_scene.get_node_or_null("PanelContainer")
 	if atril == null:
 		return false
@@ -474,6 +474,8 @@ func _on_finalizar_turno_pressed() -> void:
 		if tablero.has_method("calcular_puntuacion_turno"):
 			puntos_turno = tablero.calcular_puntuacion_turno()
 			sumar_puntos(puntos_turno)
+			Stats.add_points(puntos_turno)
+			Stats.add_exp(puntos_turno)
 			puntuacion_jugador_actual = puntuaciones[GameData.jugador_actual]
 			print("✅ Jugada válida! Sumados %d puntos. Total: %d" % [puntos_turno, puntuacion_jugador_actual])
 
@@ -1047,5 +1049,6 @@ func _on_finalizar_partida_pressed() -> void:
 	# Si quieres, guarda puntuaciones finales en GameData
 	GameData.puntuaciones_finales = puntuaciones.duplicate()
 	Stats.add_game()
+	Stats.add_exp(100)
 	# Cambiar a pantalla de fin
 	get_tree().change_scene_to_packed(END_SCENE)

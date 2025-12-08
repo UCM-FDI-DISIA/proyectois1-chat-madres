@@ -10,6 +10,7 @@ var e_games_played: int = 0
 
 func add_points(amount: int) -> void:
 	e_points += amount
+	print("Se han sumado e_points: ")
 
 func add_exp(amount: int) -> void:
 	e_exp += amount

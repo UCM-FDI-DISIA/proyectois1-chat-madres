@@ -1,0 +1,65 @@
+[gd_scene load_steps=3 format=3 uid="uid://mwq4h5atmfky"]
+
+[ext_resource type="Script" uid="uid://dgj4sejtbo62x" path="res://Escena_misiones/misiones.gd" id="1_nqbea"]
+[ext_resource type="Texture2D" uid="uid://bxbyybfxnpdl0" path="res://Juego/Fondo tablero.png" id="2_n6kxk"]
+
+[node name="Misiones" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -46.0
+offset_top = 2.0
+offset_right = -46.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nqbea")
+
+[node name="FondoTablero" type="Sprite2D" parent="."]
+position = Vector2(650, 326)
+scale = Vector2(1.3916665, 1.3351852)
+texture = ExtResource("2_n6kxk")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 562.0
+offset_top = 76.0
+offset_right = 713.0
+offset_bottom = 135.0
+text = "EXPERIENCIA"
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 448.0
+offset_top = 280.0
+offset_right = 1236.0
+offset_bottom = 501.0
+text = "Jugar 1 partida ----------------------------- 100 EXP
+Conseguir 1 punto ---------------------- 1 EXP"
+
+[node name="BarraExp" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_left = 238.0
+offset_top = 104.0
+offset_right = 1001.0
+offset_bottom = 131.0
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 237.0
+offset_top = 489.0
+offset_right = 1000.0
+offset_bottom = 520.0
+text = "ACTUALIZAR ESTADÍSTICAS"
+
+[node name="Salir" type="Button" parent="."]
+layout_mode = 0
+offset_left = 237.0
+offset_top = 527.0
+offset_right = 1000.0
+offset_bottom = 558.0
+text = "SALIR"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Salir" to="." method="_on_salir_pressed"]
