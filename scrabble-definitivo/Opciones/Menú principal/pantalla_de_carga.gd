@@ -1,7 +1,7 @@
 extends Control
 
 @export_file("*.tscn")
-var escena_destino: String = "res://Juego/Pantalla de Juego.tscn"
+var escena_destino: String = "res://Juego/Pantalladejuego.tscn"
 
 @onready var barra_progreso: ProgressBar = $CenterContainer/VBoxContainer/ProgressBar
 @onready var label_estado: Label = $CenterContainer/VBoxContainer/LabelEstado
