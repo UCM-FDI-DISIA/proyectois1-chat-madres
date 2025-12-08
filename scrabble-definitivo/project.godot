@@ -10,10 +10,12 @@ config_version=5
 
 [application]
 
-config/name="Scrabble_definitivo"
+config/name="Scrabble"
 run/main_scene="uid://ha13x2giomo1"
 config/features=PackedStringArray("4.5", "Forward Plus")
-boot_splash/image="uid://4qlnq0ivfrl3"
+boot_splash/fullsize=false
+boot_splash/image="uid://b8dyaans3ger0"
+config/icon="uid://4qlnq0ivfrl3"
 
 [autoload]
 
@@ -35,3 +37,7 @@ enabled=PackedStringArray("res://addons/talo/plugin.cfg")
 [internationalization]
 
 locale/locale_filter_mode=1
+
+[rendering]
+
+anti_aliasing/quality/msaa_2d=1
