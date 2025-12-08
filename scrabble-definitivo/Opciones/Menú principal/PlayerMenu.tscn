@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dwev0bu4uusgl"]
+[gd_scene load_steps=5 format=3 uid="uid://dwev0bu4uusgl"]
 
 [ext_resource type="Texture2D" uid="uid://b50xaxjvququm" path="res://Casillas/Tablero/Fondo_1.1.1.png" id="1_5plvv"]
 [ext_resource type="Script" uid="uid://bpkmvrml01v6x" path="res://Opciones/Menú principal/player_menu.gd" id="1_mwlru"]
 [ext_resource type="AudioStream" uid="uid://csaggokrvpqa2" path="res://Música/Lobby.ogg" id="3_ogw32"]
+[ext_resource type="Texture2D" uid="uid://4qlnq0ivfrl3" path="res://Logo.png" id="4_wospg"]
 
 [node name="PlayerMenu" type="Control"]
 layout_mode = 3
@@ -131,5 +132,21 @@ text = "CONFIRMAR"
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_ogw32")
 autoplay = true
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -102.00006
+offset_right = 924.0
+offset_bottom = 922.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("4_wospg")
 
 [connection signal="pressed" from="Confirmar" to="." method="_on_confirmar_pressed"]

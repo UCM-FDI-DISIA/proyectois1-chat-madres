@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://ha13x2giomo1"]
 
 [ext_resource type="Script" uid="uid://bcnuj8vkd0me6" path="res://Opciones/Menú principal/menú_principal.gd" id="1_qd1eu"]
-[ext_resource type="Texture2D" uid="uid://cu3sat4q6p2wg" path="res://fondodefinitivo.jpg" id="2_bunev"]
 [ext_resource type="AudioStream" uid="uid://dek51sagbvjuj" path="res://Música/Snowdin Town.ogg" id="3_a40al"]
 [ext_resource type="Texture2D" uid="uid://4qlnq0ivfrl3" path="res://Logo.png" id="3_bunev"]
 [ext_resource type="AudioStream" uid="uid://dpswmwl0pwtru" path="res://Efectos de sonido/Click.ogg" id="4_msmj0"]
+[ext_resource type="Texture2D" uid="uid://d2kdyt6r2d463" path="res://letras.png" id="5_bunev"]
 
 [node name="MenúPrincipal" type="Control"]
 layout_mode = 3
@@ -16,18 +16,14 @@ grow_vertical = 2
 focus_mode = 2
 script = ExtResource("1_qd1eu")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 2.0
-offset_top = 4.0
-offset_right = 2.0
-offset_bottom = 4.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_bunev")
+color = Color(0, 0, 0, 1)
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -146,6 +142,18 @@ grow_horizontal = 0
 grow_vertical = 0
 scale = Vector2(0.09, 0.09)
 texture = ExtResource("3_bunev")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -325.0
+offset_top = 97.0
+offset_right = 358.0
+offset_bottom = 206.0
+grow_horizontal = 2
+texture = ExtResource("5_bunev")
 
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Jugar" to="." method="_on_jugar_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/PERSONALIZAR PARTIDA" to="." method="_on_personalizar_partida_pressed"]
