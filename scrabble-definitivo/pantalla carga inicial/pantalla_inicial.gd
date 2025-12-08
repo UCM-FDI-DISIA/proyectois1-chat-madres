@@ -1,6 +1,6 @@
-extends Control
+extends Node2D
 
-@export var escena_a_cargar: String = "res://menu_principal.tscn"
+@export var escena_a_cargar: String = "res://Menú principal/Menú principal.tscn"
 var loading := false
 
 func _ready():

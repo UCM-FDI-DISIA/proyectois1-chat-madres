@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://ha13x2giomo1"]
+[gd_scene load_steps=7 format=3 uid="uid://ha13x2giomo1"]
 
 [ext_resource type="Script" uid="uid://bcnuj8vkd0me6" path="res://Opciones/Menú principal/menú_principal.gd" id="1_qd1eu"]
+[ext_resource type="Texture2D" uid="uid://cyr4j5hq83mni" path="res://Opciones/Menú principal/scrabble_fixed.png" id="2_kby7x"]
 [ext_resource type="AudioStream" uid="uid://dek51sagbvjuj" path="res://Música/Snowdin Town.ogg" id="3_a40al"]
 [ext_resource type="Texture2D" uid="uid://4qlnq0ivfrl3" path="res://Logo.png" id="3_bunev"]
 [ext_resource type="AudioStream" uid="uid://dpswmwl0pwtru" path="res://Efectos de sonido/Click.ogg" id="4_msmj0"]
@@ -25,6 +26,11 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
+[node name="ScrabbleFixed" type="Sprite2D" parent="."]
+position = Vector2(603, 191)
+scale = Vector2(0.52, 0.52)
+texture = ExtResource("2_kby7x")
+
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 14
@@ -32,9 +38,9 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = 190.0
-offset_top = -63.5
+offset_top = -89.0
 offset_right = -162.0
-offset_bottom = 247.5
+offset_bottom = 222.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -128,22 +134,24 @@ offset_right = 836.0
 offset_bottom = 623.0
 
 [node name="TextureRect2" type="TextureRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -90.0
-offset_top = -88.0
-offset_right = 934.0
-offset_bottom = 936.0
+offset_left = -107.0
+offset_top = -106.0
+offset_right = 917.0
+offset_bottom = 918.0
 grow_horizontal = 0
 grow_vertical = 0
 scale = Vector2(0.09, 0.09)
 texture = ExtResource("3_bunev")
 
 [node name="TextureRect" type="TextureRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5

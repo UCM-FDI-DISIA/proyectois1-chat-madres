@@ -107,6 +107,7 @@ size_flags_horizontal = 4
 text = "Volver al menú principal"
 
 [node name="logo" type="TextureRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0

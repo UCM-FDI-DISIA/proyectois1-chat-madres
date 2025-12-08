@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://djajl143sl463"]
 
 [ext_resource type="Script" uid="uid://db6hru5j2h6sj" path="res://pantalla carga inicial/pantalla_inicial.gd" id="1_t7de5"]
-[ext_resource type="Texture2D" uid="uid://4qlnq0ivfrl3" path="res://Logo.png" id="2_72417"]
+[ext_resource type="Texture2D" uid="uid://b8dyaans3ger0" path="res://Opciones/Menú principal/ChatGPT Image 8 dic 2025, 14_16_41.png" id="2_t7de5"]
 
 [node name="carga inicial" type="Node2D"]
 script = ExtResource("1_t7de5")
@@ -12,4 +12,4 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_72417")
+texture = ExtResource("2_t7de5")

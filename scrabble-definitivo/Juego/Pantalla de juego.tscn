@@ -259,14 +259,12 @@ grow_horizontal = 0
 text = "Finalizar partida"
 
 [node name="PantallaError" type="ColorRect" parent="."]
-visible = false
 layout_mode = 0
 offset_right = 1794.0
 offset_bottom = 828.0
 color = Color(0.89534765, 0, 0.13026825, 1)
 
 [node name="MensajeError" type="Label" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -287,7 +285,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MensajeIntercambio" type="Label" parent="."]
-visible = false
 layout_mode = 0
 offset_left = 565.0
 offset_top = 351.0
@@ -330,6 +327,7 @@ layout_mode = 2
 text = "No"
 
 [node name="TextureRect" type="TextureRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
