@@ -12,9 +12,8 @@ Para documentación más detallada, se puede consultar la **Wiki del proyecto**:
 ---
 
 ## Vista previa del juego
-[![Pantalla Inicial](https://github.com/user-attachments/assets/6e051395-1876-49a4-b51e-d4d6dcb8ce73)](https://github.com/user-attachments/assets/6e051395-1876-49a4-b51e-d4d6dcb8ce73)
-
-[![Tablero y Fichas](https://github.com/user-attachments/assets/038b8258-9ceb-4d60-a2c2-8f9065a47fac)](https://github.com/user-attachments/assets/038b8258-9ceb-4d60-a2c2-8f9065a47fac)
+[![PANTALLA INICIAL](https://github.com/user-attachments/assets/7f7ee51c-2f26-47ff-a368-596ca249a1fd)](https://github.com/user-attachments/assets/7f7ee51c-2f26-47ff-a368-596ca249a1fd)
+[![TABLERO Y FICHAS](https://github.com/user-attachments/assets/8e57307d-65c2-44ad-a4a8-1a77afc3b84a)](https://github.com/user-attachments/assets/8e57307d-65c2-44ad-a4a8-1a77afc3b84a)
 
 
 ## Índice
