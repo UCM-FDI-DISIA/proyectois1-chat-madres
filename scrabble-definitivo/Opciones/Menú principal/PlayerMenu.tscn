@@ -32,7 +32,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 1)
+color = Color(0.050980393, 0.05490196, 0.06666667, 1)
 
 [node name="Fondo1_1_1" type="Sprite2D" parent="."]
 visible = false
@@ -134,19 +134,21 @@ stream = ExtResource("3_ogw32")
 autoplay = true
 
 [node name="TextureRect2" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(1500, 1500)
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -100.0
-offset_top = -102.00006
-offset_right = 924.0
-offset_bottom = 922.0
+offset_left = -162.00006
+offset_top = -161.0
+offset_right = 1338.0
+offset_bottom = 1339.0
 grow_horizontal = 0
 grow_vertical = 0
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("4_wospg")
+expand_mode = 2
 
 [connection signal="pressed" from="Confirmar" to="." method="_on_confirmar_pressed"]
