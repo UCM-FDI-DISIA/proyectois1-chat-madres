@@ -61,7 +61,6 @@ layout_mode = 2
 text = "LEADERBOARD"
 
 [node name="Tienda" type="Button" parent="PanelContainer/VBoxContainer"]
-visible = false
 layout_mode = 2
 text = "TIENDA"
 
@@ -127,6 +126,7 @@ stream = ExtResource("4_msmj0")
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Jugar" to="." method="_on_jugar_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/PERSONALIZAR PARTIDA" to="." method="_on_personalizar_partida_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Misiones" to="." method="_on_misiones_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/Tienda" to="." method="_on_tienda_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Tutorial" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Controles" to="." method="_on_controles_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Créditos" to="." method="_on_créditos_pressed"]

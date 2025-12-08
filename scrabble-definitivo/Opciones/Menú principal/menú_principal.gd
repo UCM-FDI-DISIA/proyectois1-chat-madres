@@ -7,6 +7,7 @@ const CUENTA_SCENE := preload ("res://addons/talo/samples/authentication/authent
 const CONTROLES_SCENE := preload ("res://Opciones/Tutorial/controles.tscn")
 const GUARDAR_SCENE := preload ("res://Online/pantalla_guardado.tscn")
 const MISIONES_SCENE := preload ("res://Escena_misiones/Misiones.tscn")
+const TIENDA_SCENE := preload ("res://Tienda/Tienda.tscn")
 
 func _on_tutorial_pressed() -> void:
 	$SFXPlayer.play()
@@ -41,6 +42,7 @@ func _on_controles_pressed() -> void:
 
 
 func _on_personalizar_partida_pressed() -> void:
+	$SFXPlayer.play()
 	get_tree().change_scene_to_file("res://Opciones/Menú principal/MenuTematica.tscn")
 
 
@@ -55,4 +57,11 @@ func _on_misiones_pressed() -> void:
 	$SFXPlayer.play()
 	if Talo.current_player:
 		var t = MISIONES_SCENE.instantiate()
+		get_tree().current_scene.add_child(t)
+
+
+func _on_tienda_pressed() -> void:
+	$SFXPlayer.play()
+	if Talo.current_player:
+		var t = TIENDA_SCENE.instantiate()
 		get_tree().current_scene.add_child(t)

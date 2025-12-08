@@ -7,6 +7,7 @@ var games_played: int = 0
 var e_points: int = 0
 var e_exp: int = 0
 var e_games_played: int = 0
+var musica_seleccionada : String = "res://Música/Dummy.ogg"
 
 func add_points(amount: int) -> void:
 	e_points += amount

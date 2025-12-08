@@ -8,6 +8,7 @@ var tiempo_restante: int = 0
 var turnos_sin_puntos_consecutivos: int = 0
 @onready var turno_timer := $TurnoTimer
 @onready var label_tiempo := $LabelTiempo
+@onready var music_player = $MusicPlayer
 
 #Constantes
 const OPTIONS_SCENE := preload("res://Opciones/opciones.tscn")
@@ -31,6 +32,15 @@ var atriles: Array = []
 # 🔹 Funciones del ciclo de vida
 # ===========================
 func _ready() -> void:
+	if Stats.musica_seleccionada != "":
+		var audio = load(Stats.musica_seleccionada)
+
+		if audio:
+			music_player.stream = audio
+			music_player.play()
+		else:
+			print("❌ No se pudo cargar la canción:", Stats.musica_seleccionada)
+			
 	_actualizar_fondo()  # <-- fondo inicial
 	print("¿Hay textura?", fondo.texture)
 	print("Visible fondo:", fondo.visible)
