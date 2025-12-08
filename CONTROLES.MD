@@ -13,32 +13,20 @@ https://www.canva.com/design/DAG6MTppx5E/ChQWBAuJGdOY983jszQWsQ/edit?utm_content
 ---
 
 ## Controles generales
-- Objetivo de la interacción: tomar fichas del atril, colocarlas en el tablero formando palabras válidas y confirmar la jugada.
-- Modo de colocación: arrastrar y soltar fichas desde el atril al tablero o seleccionar ficha + seleccionar casilla destino.
-- Validación: cada jugada debe ser confirmada (botón "Finalizar Turno") para que se contabilice y termine el turno.
 
-- Seleccionar fichas de una a una.
+* Colocar fichas del atril en el tablero: seleccionar una a una las fichas de la siguiente forma:
+  - OPCION 1: Hacer click en la ficha a desplazar y la casilla desdeada.
+  - OPCION 2: Con el cursor sobre la ficha a desplazar mantener pulsado hasta la casilla deseada.
+  - OPCION 3 (teclado): Seleccionar 1-7 la ficha a desplazar y utilizar teclas Up, Down, Left, Right hasta llegar a la posición deseada y pulsar ENTER para confirmar.
+   (*) si en algun momento se desea cancelar la colocación pulsar ESC.
 
----
+* Terminar la colocación / pasar turno: pulsar en el botón _Finalizar colocación_.
 
-## Controles en PC (ratón + teclado)
+* Intercambiar fichas con la bolsa: pulsar el botón _Intercambiar fichas_ y hacer click una por una. Tras comprobar que todas todas las que se desea intercambiar cambiar están iluminadas pulsar ENTER.
 
-Ratón (dispositivos celulares)
-- Seleccionar ficha (atril): clic izquierdo sobre la ficha.
+* Reordenar fichas: pulsar botón _Reordenar fichas_ y hacer click en dos fichas para que intercambien posiciones en el atril.
 
-⦁	TECLADO: tecla (1-7) según la posición de la ficha de la letra que queramos colocar
-
-- Arrastrar ficha al tablero: mantener clic izquierdo y arrastrar hasta la casilla deseada; soltar para colocar.
-
-⦁	TECLADO: con las teclas (up,down,left,right) para mover la ficha a la casilla deseada; y ENTER para colocar. Si nos hemos equivocado de letra o queremos cambiar, tecla ESC.
-
-- Mostrar información de ficha (letra / puntuación): mantener el ratón sobre la ficha cuando este en el atril.
-
-- Confirmar jugada o pasar turno: botón "Finalizar Turno"
-- Cancelar colocación actual (devolver fichas colocadas al atril): botón "Cancelar Colocación"
-- Intercambiar fichas con la bolsa: botón "Intercambiar Fichas"
-- Reordenar fichas en el atril: botón "Reordenar Fichas"
-
+* Mostrar información de ficha (letra / puntuación): mantener el ratón sobre la ficha del atril.
 
 ---
 

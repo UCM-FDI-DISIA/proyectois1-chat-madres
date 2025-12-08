@@ -76,7 +76,8 @@ La tabla completa de riesgos está documentada en la Wiki:
 
 Actualmente el repositorio cuenta con:
 
-- `README.md`: información general y enlaces principales.  
+- `README.md`: información general y enlaces principales.
+- `CONTROLES.MD´: información para el usuario acerca de los controles y jugabilidad.  
 - Wiki: documentación funcional (historias de usuario y gestión de riesgos).  
 - Issues y Project Board: seguimiento de tareas y prioridades.
 
@@ -91,11 +92,11 @@ El proyecto se ha desarrollado en 5 sprints y un sprint inicial (el cual se dedi
 
 Durante los sprints se han implementado:
 
-- **Sprint 1:** estructura base del proyecto, escenas principales e importación en Godot.  
-- **Sprint 2:** diseño del tablero, colocación de fichas y sistema drag & drop.  
-- **Sprint 3:** validación inicial de palabras y lógica de turnos.  
-- **Sprint 4:** sistema de puntuación, mejoras visuales y pantalla de inicio.  
-- **Sprint 5:** pulido del juego, corrección de errores y preparación de la entrega final.
+- **Sprint 1:** Planificación del proyecto. Elección de objetivos, elaboración de historias de usuario y toma de decisiones como el motor de desarrollo.
+- **Sprint 2:** Creación de las bases. Diseño del tablero, fichas y pantalla de turno.
+- **Sprint 3:** Tareas esenciales. Implementación de colocación de fichas y validación de palabras y establecimiento de la lógica de turno.
+- **Sprint 4:** Multijugador. Desarrollo del sistema multijugador, lógica de turnos y cálculos de puntuación por jugador.
+- **Sprint 5:** Mejoras. Corrección de errores, mejoras visuales y adición de pequeñas funcionalidades.
 
 Los sprints se completaron según la planificación del backlog.
 [Ver Sprint](https://github.com/UCM-FDI-DISIA/proyectois1-chat-madres/wiki#sprint)
