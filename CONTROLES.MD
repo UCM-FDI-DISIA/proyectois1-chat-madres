@@ -15,9 +15,9 @@ https://www.canva.com/design/DAG6MTppx5E/ChQWBAuJGdOY983jszQWsQ/edit?utm_content
 ## Controles generales
 
 * Colocar fichas del atril en el tablero: seleccionar una a una las fichas de la siguiente forma:
-   OPCION 1: Hacer click en la ficha a desplazar y la casilla desdeada.
-   OPCION 2: Con el cursor sobre la ficha a desplazar mantener pulsado hasta la casilla deseada.
-   OPCION 3 (teclado): Seleccionar 1-7 la ficha a desplazar y utilizar teclas Up, Down, Left, Right hasta llegar a la posición deseada y pulsar ENTER para confirmar.
+  - OPCION 1: Hacer click en la ficha a desplazar y la casilla desdeada.
+  - OPCION 2: Con el cursor sobre la ficha a desplazar mantener pulsado hasta la casilla deseada.
+  - OPCION 3 (teclado): Seleccionar 1-7 la ficha a desplazar y utilizar teclas Up, Down, Left, Right hasta llegar a la posición deseada y pulsar ENTER para confirmar.
    (*) si en algun momento se desea cancelar la colocación pulsar ESC.
 
 * Terminar la colocación / pasar turno: pulsar en el botón _Finalizar colocación_.
