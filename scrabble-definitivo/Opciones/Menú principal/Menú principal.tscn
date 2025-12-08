@@ -123,6 +123,13 @@ autoplay = true
 [node name="SFXPlayer" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_msmj0")
 
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 389.0
+offset_top = 518.0
+offset_right = 836.0
+offset_bottom = 623.0
+
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Jugar" to="." method="_on_jugar_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/PERSONALIZAR PARTIDA" to="." method="_on_personalizar_partida_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Misiones" to="." method="_on_misiones_pressed"]

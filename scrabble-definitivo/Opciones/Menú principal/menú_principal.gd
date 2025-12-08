@@ -1,5 +1,7 @@
 extends Control
 
+@onready var error = $Label
+
 const TUTORIAL_SCENE := preload("res://Opciones/Tutorial/Tutorial.tscn")
 const CREDITS_SCENE := preload("res://Créditos/Créditos.tscn")
 const MENU_JUGADORES_SCENE := preload("res://Opciones/Menú principal/MenuMultijugadores.tscn")
@@ -8,6 +10,12 @@ const CONTROLES_SCENE := preload ("res://Opciones/Tutorial/controles.tscn")
 const GUARDAR_SCENE := preload ("res://Online/pantalla_guardado.tscn")
 const MISIONES_SCENE := preload ("res://Escena_misiones/Misiones.tscn")
 const TIENDA_SCENE := preload ("res://Tienda/Tienda.tscn")
+
+func show_error_message():
+	error.text = "Inicia sesión para poder acceder a esto"
+	error.visible = true
+	await get_tree().create_timer(2.0).timeout
+	error.visible = false
 
 func _on_tutorial_pressed() -> void:
 	$SFXPlayer.play()
@@ -51,6 +59,7 @@ func _on_guardar_pressed() -> void:
 	if Talo.current_player:
 		var t = GUARDAR_SCENE.instantiate()
 		get_tree().current_scene.add_child(t)
+	show_error_message()
 
 
 func _on_misiones_pressed() -> void:
@@ -58,6 +67,7 @@ func _on_misiones_pressed() -> void:
 	if Talo.current_player:
 		var t = MISIONES_SCENE.instantiate()
 		get_tree().current_scene.add_child(t)
+	show_error_message()
 
 
 func _on_tienda_pressed() -> void:
@@ -65,3 +75,4 @@ func _on_tienda_pressed() -> void:
 	if Talo.current_player:
 		var t = TIENDA_SCENE.instantiate()
 		get_tree().current_scene.add_child(t)
+	show_error_message()
