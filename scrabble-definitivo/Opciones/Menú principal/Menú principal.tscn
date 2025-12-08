@@ -17,29 +17,30 @@ focus_mode = 2
 script = ExtResource("1_qd1eu")
 
 [node name="Titulo1_1_2" type="Sprite2D" parent="."]
-position = Vector2(567, 320)
+position = Vector2(563, 324)
 scale = Vector2(0.4, 0.4)
 texture = ExtResource("1_gqs2b")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
-anchors_preset = 14
+anchors_preset = -1
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 207.0
-offset_top = -137.0
-offset_right = -221.0
-offset_bottom = 244.0
+offset_left = 176.0
+offset_top = -102.0
+offset_right = -201.0
+offset_bottom = 209.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
 layout_mode = 2
+size_flags_vertical = 0
 
 [node name="Jugar" type="Button" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
-text = "JUGAR NORMAL"
+text = "JUGAR"
 
 [node name="PERSONALIZAR PARTIDA" type="Button" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -49,12 +50,6 @@ text = "PERSONALIZAR PARTIDA"
 layout_mode = 2
 text = "MISIONES"
 
-[node name="Registro de partidas" type="Button" parent="PanelContainer/VBoxContainer"]
-visible = false
-layout_mode = 2
-text = "REGISTRO DE PARTIDAS
-"
-
 [node name="LeaderBoard Global" type="Button" parent="PanelContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
@@ -63,12 +58,6 @@ text = "LEADERBOARD"
 [node name="Tienda" type="Button" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "TIENDA"
-
-[node name="Personalizar" type="Button" parent="PanelContainer/VBoxContainer"]
-visible = false
-layout_mode = 2
-text = "PERSONALIZAR
-"
 
 [node name="Tutorial" type="Button" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -96,8 +85,8 @@ layout_mode = 2
 text = "SALIR"
 
 [node name="Logo" type="Sprite2D" parent="PanelContainer/VBoxContainer"]
-position = Vector2(899, 413)
-scale = Vector2(0.05, 0.05)
+position = Vector2(895, 373.99997)
+scale = Vector2(0.103515625, 0.10839845)
 texture = ExtResource("3_bunev")
 
 [node name="Donacion" type="Button" parent="."]

@@ -18,3 +18,7 @@ func cerrar_creditos():
 
 	# O si solo es un popup o un canvas que se cierra:
 	# queue_free()
+
+
+func _on_salir_pressed() -> void:
+	queue_free()

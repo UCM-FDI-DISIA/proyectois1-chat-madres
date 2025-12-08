@@ -16,3 +16,18 @@ script = ExtResource("1_8he5w")
 position = Vector2(575, 321)
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("1_ygyur")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.84400004
+anchor_top = 0.254
+anchor_right = 0.84400004
+anchor_bottom = 0.254
+offset_left = 128.71198
+offset_top = -159.59201
+offset_right = 181.71198
+offset_bottom = -128.59201
+text = "X"
+
+[connection signal="pressed" from="Button" to="." method="_on_salir_pressed"]
