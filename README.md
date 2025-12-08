@@ -143,7 +143,7 @@ El juego está listo para ser presentado y utilizado como prototipo funcional.
 ## Ejecutar el proyecto
 1. Abrir el proyecto en Godot siguiendo los pasos anteriores.
 2. Abrir la escena principal preferiblemente:
-   `Menuprincipal.tscn`. (si la buscas en el buscador tener en cuenta la tilde)
+   `menúprincipal.tscn`. (si la buscas en el buscador tener en cuenta la tilde)
 4. Pulsar F5 o hacer clic en Run Project.
 
 ## Tecnologías utilizadas
