@@ -139,4 +139,5 @@ offset_bottom = 623.0
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Créditos" to="." method="_on_créditos_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Guardar" to="." method="_on_guardar_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Salir" to="." method="_on_salir_pressed"]
+[connection signal="pressed" from="Donacion" to="." method="_on_donacion_pressed"]
 [connection signal="pressed" from="Cuenta" to="." method="_on_cuenta_pressed"]

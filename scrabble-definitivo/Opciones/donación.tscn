@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://cyfttakd4uh5l"]
+
+[ext_resource type="Script" uid="uid://ctqudbr1iw386" path="res://Opciones/donación.gd" id="1_k181o"]
+[ext_resource type="Texture2D" uid="uid://bioq765tb3a8k" path="res://scripts/Donacion_1.1.9.png" id="2_71t56"]
+
+[node name="Donación" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_k181o")
+
+[node name="Donacion1_1_9" type="Sprite2D" parent="."]
+position = Vector2(571, 260)
+scale = Vector2(0.30312502, 0.36203706)
+texture = ExtResource("2_71t56")
