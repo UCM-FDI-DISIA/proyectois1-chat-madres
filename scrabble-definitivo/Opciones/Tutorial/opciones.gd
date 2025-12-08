@@ -2,7 +2,6 @@ extends Control
 
 const TUTORIAL_SCENE := preload("res://Opciones/Tutorial/Tutorial.tscn")
 const MENU_SCENE := preload("res://Opciones/Menú principal/Menú principal.tscn")
-const JUEGO_SCENE := preload("res://Juego/Pantalla de juego.tscn")
 const CONTROLES_SCENE := preload("res://Opciones/Tutorial/controles.tscn")
 
 func _on_tutorial_pressed() -> void:

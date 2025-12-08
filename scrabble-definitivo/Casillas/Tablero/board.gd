@@ -175,7 +175,7 @@ func _quitar_tildes(texto: String) -> String:
 
 # ---------------- diccionario ----------------
 func _cargar_diccionario() -> void:
-	var ruta := "res://data/diccionario.txt"
+	var ruta := "res://diccionario.txt"
 	if not FileAccess.file_exists(ruta):
 		push_error("No se encontró el archivo de diccionario en " + ruta)
 		return
