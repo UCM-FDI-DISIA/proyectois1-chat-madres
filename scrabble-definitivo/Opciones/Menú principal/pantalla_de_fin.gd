@@ -18,17 +18,20 @@ func _ready():
 	label_titulo.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label_titulo.add_theme_font_size_override("font_size", 60)
 
+
 	# Ganador / Empate
 	label_ganador.text = ""
 	label_ganador.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label_ganador.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label_ganador.add_theme_font_size_override("font_size", 48)
 
+
 	# Ranking del resto de jugadores
 	label_ranking.text = ""
 	label_ranking.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label_ranking.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label_ranking.add_theme_font_size_override("font_size", 32)
+
 
 	# Botón menú
 	boton_menu.text = "Volver al menú principal"
@@ -67,8 +70,14 @@ func _mostrar_ganador():
 	else:
 		var nombres = []
 		for j in ganadores:
-			nombres.append(GameData.player_names[j] + " (%d puntos)" % GameData.puntuaciones_finales[j])
-		texto_ganador = "🤝 EMPATE ENTRE " + ", ".join(nombres)
+			nombres.append("%s (%d puntos)" % [
+				GameData.player_names[j],
+				GameData.puntuaciones_finales[j]
+			])
+
+		# Crear texto en formato vertical
+		texto_ganador = "🤝 EMPATE\n" + "\n".join(nombres)
+
 
 	# Mostrar ganador/empate
 	label_ganador.text = texto_ganador
