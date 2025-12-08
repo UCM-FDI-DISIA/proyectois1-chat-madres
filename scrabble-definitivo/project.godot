@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Scrabble_definitivo"
-run/main_scene="res://Opciones/Menú principal/pantalla inicial.tscn"
+run/main_scene="uid://ha13x2giomo1"
 config/features=PackedStringArray("4.5", "Forward Plus")
 boot_splash/image="uid://4qlnq0ivfrl3"
 
