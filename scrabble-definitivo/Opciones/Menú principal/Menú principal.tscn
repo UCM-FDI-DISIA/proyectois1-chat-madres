@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://ha13x2giomo1"]
+[gd_scene load_steps=6 format=3 uid="uid://ha13x2giomo1"]
 
 [ext_resource type="Texture2D" uid="uid://c8aopobx6gr3u" path="res://Opciones/Menú principal/Titulo_1.1.2.png" id="1_gqs2b"]
 [ext_resource type="Script" uid="uid://bcnuj8vkd0me6" path="res://Opciones/Menú principal/menú_principal.gd" id="1_qd1eu"]
 [ext_resource type="AudioStream" uid="uid://dek51sagbvjuj" path="res://Música/Snowdin Town.ogg" id="3_a40al"]
+[ext_resource type="Texture2D" uid="uid://4qlnq0ivfrl3" path="res://Logo.png" id="3_bunev"]
 [ext_resource type="AudioStream" uid="uid://dpswmwl0pwtru" path="res://Efectos de sonido/Click.ogg" id="4_msmj0"]
 
 [node name="MenúPrincipal" type="Control"]
@@ -94,6 +95,11 @@ text = "GUARDAR PARTIDA"
 [node name="Salir" type="Button" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "SALIR"
+
+[node name="Logo" type="Sprite2D" parent="PanelContainer/VBoxContainer"]
+position = Vector2(899, 413)
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("3_bunev")
 
 [node name="Donacion" type="Button" parent="."]
 layout_mode = 0

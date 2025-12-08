@@ -24,13 +24,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -243.0
-offset_top = -128.0
-offset_right = 221.0
-offset_bottom = -105.0
+offset_left = -192.0
+offset_top = -126.0
+offset_right = 272.0
+offset_bottom = -103.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "No aprietes el botón hasta que las estadísticas se actualicen"
+text = "Si las estadísticas están en 0 espere un momento "
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 1

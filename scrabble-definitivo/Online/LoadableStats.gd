@@ -1,7 +1,7 @@
 class_name LoadableStats
 extends TaloLoadable
 
-@export var username: String = "username"  # nombre para Talo
+@export var username: String = "username"
 
 @onready var save_label = $Label
 @onready var button = $Button
@@ -10,7 +10,6 @@ func _ready() -> void:
 	super()
 	_update_button_text()
 	
-	# Identificación del jugador
 	Talo.players.identified.connect(_on_identified)
 	Talo.players.identify("username", username)
 
@@ -26,10 +25,16 @@ func on_loaded(data: Dictionary) -> void:
 	_update_button_text()
 
 func _on_button_pressed() -> void:
-	# Aumentar stats (ejemplo)
-	Stats.add_points(50)
-	Stats.add_exp(10)
-	Stats.add_game()
+	# Sumar los stats pendientes
+	Stats.points += Stats.e_points
+	Stats.exp += Stats.e_exp
+	Stats.games_played += Stats.e_games_played
+
+	# Resetear stats pendientes
+	Stats.e_points = 0
+	Stats.e_exp = 0
+	Stats.e_games_played = 0
+
 	show_save_message()
 	_update_button_text()
 

@@ -1,9 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://18vv44sqxegd"]
+[gd_scene load_steps=3 format=3 uid="uid://18vv44sqxegd"]
 
 [ext_resource type="Script" uid="uid://cvccqwgpbvu3b" path="res://Opciones/Menú principal/pantalla_de_carga.gd" id="1_wjbsr"]
+[ext_resource type="Texture2D" uid="uid://4qlnq0ivfrl3" path="res://Logo.png" id="2_kgb44"]
 
 [node name="PantallaDeCarga" type="Control"]
 layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("1_wjbsr")
@@ -38,3 +40,8 @@ horizontal_alignment = 1
 
 [node name="ProgressBar" type="ProgressBar" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
+
+[node name="Logo" type="Sprite2D" parent="."]
+position = Vector2(578, 422)
+scale = Vector2(0.055, 0.055)
+texture = ExtResource("2_kgb44")
