@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://b400mouo0s1bc"]
+[gd_scene load_steps=7 format=3 uid="uid://b400mouo0s1bc"]
 
 [ext_resource type="Script" uid="uid://bmihyuiwqtd8v" path="res://Opciones/Menú principal/personalizar.gd" id="1_nukf5"]
 [ext_resource type="Texture2D" uid="uid://bxbyybfxnpdl0" path="res://Juego/Fondo tablero.png" id="2_nukf5"]
+[ext_resource type="Texture2D" uid="uid://by6m1sxeq5uxn" path="res://relojarena.png" id="2_rfpq0"]
 [ext_resource type="Script" uid="uid://bsxgcxhoi5kug" path="res://Opciones/Menú principal/tiempo_spin_box.gd" id="2_uuu5x"]
 [ext_resource type="AudioStream" uid="uid://csaggokrvpqa2" path="res://Música/Lobby.ogg" id="4_nyffl"]
+[ext_resource type="Texture2D" uid="uid://4qlnq0ivfrl3" path="res://Logo.png" id="6_spnej"]
 
 [node name="Personalizar" type="Control"]
 layout_mode = 3
@@ -14,12 +16,23 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_nukf5")
 
+[node name="fondo" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_rfpq0")
+
 [node name="FondoTablero" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(777.00006, 518)
 scale = Vector2(1.5354167, 1.6037037)
 texture = ExtResource("2_nukf5")
 
 [node name="FondoNegro" type="ColorRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,6 +42,7 @@ grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="FondoEspecial" type="TextureRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -86,3 +100,19 @@ text = "CONFIRMAR"
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_nyffl")
 autoplay = true
+
+[node name="logo" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -123.0
+offset_top = -111.0
+offset_right = 901.0
+offset_bottom = 913.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("6_spnej")

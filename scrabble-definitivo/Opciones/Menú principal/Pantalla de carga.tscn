@@ -44,6 +44,23 @@ horizontal_alignment = 1
 layout_mode = 2
 
 [node name="Logo" type="Sprite2D" parent="."]
-position = Vector2(566, 150)
+visible = false
+top_level = true
+y_sort_enabled = true
+position = Vector2(570, 150)
 scale = Vector2(0.24271485, 0.23026368)
+skew = -0.008726646
+texture = ExtResource("2_kgb44")
+region_rect = Rect2(100, 100, 1000, 100)
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -133.0
+offset_right = 891.0
+offset_bottom = 1024.0
+grow_horizontal = 2
+scale = Vector2(0.25, 0.25)
 texture = ExtResource("2_kgb44")

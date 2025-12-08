@@ -49,10 +49,6 @@ text = "TUTORIAL"
 layout_mode = 2
 text = "CONTROLES"
 
-[node name="Opciones" type="Button" parent="PanelContainer/Popup menu"]
-layout_mode = 2
-text = "OPCIONES"
-
 [node name="Salir" type="Button" parent="PanelContainer/Popup menu"]
 layout_mode = 2
 text = "REANUDAR"

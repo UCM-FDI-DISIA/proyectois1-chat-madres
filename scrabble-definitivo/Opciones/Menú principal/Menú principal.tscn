@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://ha13x2giomo1"]
 
-[ext_resource type="Texture2D" uid="uid://c8aopobx6gr3u" path="res://Opciones/Menú principal/Titulo_1.1.2.png" id="1_gqs2b"]
 [ext_resource type="Script" uid="uid://bcnuj8vkd0me6" path="res://Opciones/Menú principal/menú_principal.gd" id="1_qd1eu"]
+[ext_resource type="Texture2D" uid="uid://cu3sat4q6p2wg" path="res://fondodefinitivo.jpg" id="2_bunev"]
 [ext_resource type="AudioStream" uid="uid://dek51sagbvjuj" path="res://Música/Snowdin Town.ogg" id="3_a40al"]
 [ext_resource type="Texture2D" uid="uid://4qlnq0ivfrl3" path="res://Logo.png" id="3_bunev"]
 [ext_resource type="AudioStream" uid="uid://dpswmwl0pwtru" path="res://Efectos de sonido/Click.ogg" id="4_msmj0"]
@@ -16,27 +16,34 @@ grow_vertical = 2
 focus_mode = 2
 script = ExtResource("1_qd1eu")
 
-[node name="Titulo1_1_2" type="Sprite2D" parent="."]
-position = Vector2(563, 324)
-scale = Vector2(0.4, 0.4)
-texture = ExtResource("1_gqs2b")
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 4.0
+offset_right = 2.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bunev")
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 176.0
-offset_top = -102.0
-offset_right = -201.0
-offset_bottom = 209.0
+offset_left = 190.0
+offset_top = -63.5
+offset_right = -162.0
+offset_bottom = 247.5
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
 layout_mode = 2
-size_flags_vertical = 0
 
 [node name="Jugar" type="Button" parent="PanelContainer/VBoxContainer"]
 layout_mode = 2
@@ -85,24 +92,29 @@ layout_mode = 2
 text = "SALIR"
 
 [node name="Logo" type="Sprite2D" parent="PanelContainer/VBoxContainer"]
-position = Vector2(895, 373.99997)
+visible = false
+position = Vector2(994, 345.99997)
 scale = Vector2(0.103515625, 0.10839845)
 texture = ExtResource("3_bunev")
 
 [node name="Donacion" type="Button" parent="."]
-layout_mode = 0
-offset_left = 14.0
-offset_top = 586.0
-offset_right = 164.0
-offset_bottom = 636.0
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -50.0
+offset_right = 150.0
+grow_vertical = 0
 text = "Apóyanos!!! :)"
 
 [node name="Cuenta" type="Button" parent="."]
-layout_mode = 0
-offset_left = 1054.0
-offset_top = 18.0
-offset_right = 1129.0
-offset_bottom = 92.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -75.0
+offset_bottom = 74.0
+grow_horizontal = 0
 text = "Cuenta"
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
@@ -118,6 +130,22 @@ offset_left = 389.0
 offset_top = 518.0
 offset_right = 836.0
 offset_bottom = 623.0
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -90.0
+offset_top = -88.0
+offset_right = 934.0
+offset_bottom = 936.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.09, 0.09)
+texture = ExtResource("3_bunev")
 
 [connection signal="pressed" from="PanelContainer/VBoxContainer/Jugar" to="." method="_on_jugar_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/PERSONALIZAR PARTIDA" to="." method="_on_personalizar_partida_pressed"]
