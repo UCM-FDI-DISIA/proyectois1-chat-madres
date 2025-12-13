@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://d23e1e0xdfeqo"]
+[gd_scene load_steps=11 format=3 uid="uid://d23e1e0xdfeqo"]
 
 [ext_resource type="Texture2D" uid="uid://c62agp0cw1mdi" path="res://Opciones/Menú principal/NAVIDAD.jpg" id="1_0ino4"]
 [ext_resource type="Script" uid="uid://doi2pj7yjetyl" path="res://Opciones/Menú principal/MenuTematica.gd" id="1_nab3y"]
 [ext_resource type="Texture2D" uid="uid://bv304gki7aff1" path="res://Opciones/Menú principal/CIENCIA.jpg" id="2_l4cxu"]
 [ext_resource type="Texture2D" uid="uid://c8ymk32lf6qsa" path="res://Opciones/Menú principal/NATU.jpg" id="2_rscjv"]
 [ext_resource type="Texture2D" uid="uid://c2iewev6bwua7" path="res://Opciones/Menú principal/ARTE.jpg" id="3_wrgvp"]
+[ext_resource type="Texture2D" uid="uid://4qlnq0ivfrl3" path="res://Logo.png" id="6_72i0w"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wrgvp"]
 texture = ExtResource("1_0ino4")
@@ -102,6 +103,22 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxTexture_nab3y")
 text = "ARTE"
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -104.99988
+offset_top = -104.0
+offset_right = 919.00024
+offset_bottom = 920.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("6_72i0w")
 
 [connection signal="pressed" from="VBoxContainer/GridContainer/NAVIDAD" to="." method="_on_navidad_pressed"]
 [connection signal="pressed" from="VBoxContainer/GridContainer/NATURALEZA" to="." method="_on_naturaleza_pressed"]

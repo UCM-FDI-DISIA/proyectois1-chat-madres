@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://caf7s6rnf7mch"]
+[gd_scene load_steps=7 format=3 uid="uid://caf7s6rnf7mch"]
 
 [ext_resource type="Script" uid="uid://diylu4k32jev6" path="res://Opciones/Menú principal/pantalla_de_fin.gd" id="1_peihm"]
 [ext_resource type="Texture2D" uid="uid://doirbhxqf057r" path="res://podio.jpg" id="2_gk6d7"]
+[ext_resource type="Texture2D" uid="uid://clp3t7a3jx6af" path="res://win.png" id="3_0416c"]
 [ext_resource type="Texture2D" uid="uid://4qlnq0ivfrl3" path="res://Logo.png" id="3_pb0vs"]
 
 [sub_resource type="Gradient" id="Gradient_peihm"]
@@ -20,6 +21,7 @@ grow_vertical = 2
 script = ExtResource("1_peihm")
 
 [node name="TextureRect" type="TextureRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,6 +33,15 @@ offset_bottom = 274.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_gk6d7")
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_0416c")
 
 [node name="FondoOscuro" type="ColorRect" parent="."]
 visible = false
@@ -118,6 +129,22 @@ offset_left = 16.0
 offset_top = 61.0
 offset_right = 1040.0
 offset_bottom = 1085.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("3_pb0vs")
+
+[node name="TextureRect3" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -103.0
+offset_top = -103.00006
+offset_right = 921.0
+offset_bottom = 921.0
 grow_horizontal = 0
 grow_vertical = 0
 scale = Vector2(0.1, 0.1)

@@ -49,6 +49,8 @@ position = Vector2(104.99999, 309.99997)
 scale = Vector2(1298, 1298)
 texture = ExtResource("1_5u6n2")
 
+[node name="FondoTablero" type="Sprite2D" parent="."]
+
 [node name="fondoEspecial" type="TextureRect" parent="."]
 custom_minimum_size = Vector2(1152, 648)
 layout_mode = 1
@@ -69,7 +71,21 @@ position = Vector2(508.99997, 346.00003)
 scale = Vector2(0.5187499, 0.9333334)
 texture = ExtResource("3_evtru")
 
-[node name="FondoTablero" type="Sprite2D" parent="."]
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1013.0
+offset_top = 367.0
+offset_right = 2037.0
+offset_bottom = 1391.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("16_qpeoq")
 
 [node name="Board" parent="." instance=ExtResource("1_d15d8")]
 position = Vector2(525, 329.99994)
@@ -303,7 +319,6 @@ stream = SubResource("AudioStreamOggVorbis_evtru")
 autoplay = true
 
 [node name="PanelConfirmarPalabra" type="Panel" parent="."]
-visible = false
 layout_mode = 0
 offset_left = 25.0
 offset_top = 50.0
@@ -325,23 +340,6 @@ text = "Sí"
 [node name="BotonNo" type="Button" parent="PanelConfirmarPalabra/VBoxContainer"]
 layout_mode = 2
 text = "No"
-
-[node name="TextureRect" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 1013.0
-offset_top = 367.0
-offset_right = 2037.0
-offset_bottom = 1391.0
-grow_horizontal = 0
-grow_vertical = 0
-scale = Vector2(0.1, 0.1)
-texture = ExtResource("16_qpeoq")
 
 [connection signal="pressed" from="Opciones" to="." method="_on_opciones_pressed"]
 [connection signal="pressed" from="IntercambiarFichas" to="." method="_on_intercambiar_fichas_pressed"]

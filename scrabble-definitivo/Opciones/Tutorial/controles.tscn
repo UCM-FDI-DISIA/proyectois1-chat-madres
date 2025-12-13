@@ -12,43 +12,53 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 4.0
+offset_right = 2.0
+offset_bottom = 4.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_8swcw")
 
 [node name="Sprite2D5" type="Sprite2D" parent="."]
-position = Vector2(557, 322.5)
-scale = Vector2(1.2860413, 1.4617116)
+visible = false
+position = Vector2(551.99994, 322.5)
+scale = Vector2(1.2745996, 1.4617116)
 texture = ExtResource("2_km525")
 
 [node name="Sprite2D4" type="Sprite2D" parent="."]
-position = Vector2(556.75, 322.25)
-scale = Vector2(1.2867731, 1.4865168)
+visible = false
+position = Vector2(550.75, 322.25)
+scale = Vector2(1.27309, 1.4865168)
 texture = ExtResource("3_rhtbn")
 
 [node name="Sprite2D3" type="Sprite2D" parent="."]
-position = Vector2(557.25, 326)
-scale = Vector2(1.2692744, 1.438326)
+visible = false
+position = Vector2(555.25, 326)
+scale = Vector2(1.2647393, 1.438326)
 texture = ExtResource("4_ygdem")
 
 [node name="Sprite2D2" type="Sprite2D" parent="."]
-position = Vector2(561, 323.75)
-scale = Vector2(1.2659092, 1.4617977)
+visible = false
+position = Vector2(557, 323.75)
+scale = Vector2(1.2568183, 1.4617977)
 texture = ExtResource("5_r1t5v")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(557, 322.5)
-scale = Vector2(1.276644, 1.4333333)
+position = Vector2(554.99994, 320.00003)
+scale = Vector2(1.2675737, 1.4300001)
 texture = ExtResource("6_qcab1")
 
 [node name="Salida" type="Button" parent="."]
 layout_mode = 1
-anchors_preset = -1
-anchor_right = 0.81200004
-offset_left = 1112.0
-offset_top = 2.0
-offset_right = 215.57593
-offset_bottom = 40.0
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -44.0
+offset_top = -2.0
+offset_right = -4.0
+offset_bottom = 38.0
+grow_horizontal = 0
 text = "X"
 
 [connection signal="pressed" from="Salida" to="." method="_on_salida_pressed"]

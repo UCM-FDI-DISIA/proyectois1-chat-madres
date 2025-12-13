@@ -12,46 +12,58 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 3.0
+offset_right = 2.0
+offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_fdcak")
 
 [node name="Tutorial5" type="Sprite2D" parent="."]
-position = Vector2(560, 320)
+position = Vector2(555.7681, 324)
 rotation = -1.5707964
-scale = Vector2(0.7, 0.7)
+scale = Vector2(0.7780508, 0.9464094)
 texture = ExtResource("1_0xosw")
 
 [node name="Tutorial4" type="Sprite2D" parent="."]
-position = Vector2(560, 320)
+visible = false
+position = Vector2(553.8948, 326)
 rotation = -1.5707964
-scale = Vector2(0.7, 0.7)
+scale = Vector2(0.7722542, 0.94089997)
 texture = ExtResource("2_fdcak")
 
 [node name="Tutorial3" type="Sprite2D" parent="."]
-position = Vector2(560, 320)
+visible = false
+position = Vector2(554, 318.71564)
 rotation = 4.712389
-scale = Vector2(0.7, 0.7)
+scale = Vector2(0.7685324, 0.93899643)
 texture = ExtResource("3_yxve8")
 
 [node name="Tutorial2" type="Sprite2D" parent="."]
-position = Vector2(560, 320)
+visible = false
+position = Vector2(559.26276, 321)
 rotation = -1.5707964
-scale = Vector2(0.7, 0.7)
+scale = Vector2(0.78586847, 0.940152)
 texture = ExtResource("4_3jem4")
 
 [node name="Tutorial1" type="Sprite2D" parent="."]
-position = Vector2(560, 320)
+visible = false
+position = Vector2(554.7791, 320.3895)
 rotation = 4.712389
-scale = Vector2(0.7, 0.7)
+scale = Vector2(0.7649553, 0.9442224)
 texture = ExtResource("1_aqj38")
 
 [node name="Salir" type="Button" parent="."]
-layout_mode = 0
-offset_left = 978.0
-offset_top = 23.0
-offset_right = 996.0
-offset_bottom = 54.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -36.0
+offset_top = -3.0
+offset_right = 4.0
+offset_bottom = 37.0
+grow_horizontal = 0
 text = "x"
 
 [connection signal="pressed" from="Salir" to="." method="_on_salir_pressed"]

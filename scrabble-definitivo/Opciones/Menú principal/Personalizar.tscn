@@ -17,6 +17,7 @@ grow_vertical = 2
 script = ExtResource("1_nukf5")
 
 [node name="fondo" type="TextureRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,13 +27,11 @@ grow_vertical = 2
 texture = ExtResource("2_rfpq0")
 
 [node name="FondoTablero" type="Sprite2D" parent="."]
-visible = false
 position = Vector2(777.00006, 518)
 scale = Vector2(1.5354167, 1.6037037)
 texture = ExtResource("2_nukf5")
 
 [node name="FondoNegro" type="ColorRect" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -42,7 +41,6 @@ grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="FondoEspecial" type="TextureRect" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -113,6 +111,22 @@ offset_left = -123.0
 offset_top = -111.0
 offset_right = 901.0
 offset_bottom = 913.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("6_spnej")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -99.0
+offset_top = -105.0
+offset_right = 925.0
+offset_bottom = 919.0
 grow_horizontal = 0
 grow_vertical = 0
 scale = Vector2(0.1, 0.1)

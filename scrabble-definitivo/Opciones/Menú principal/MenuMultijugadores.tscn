@@ -102,6 +102,22 @@ grow_vertical = 0
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("4_xaaqw")
 
+[node name="TextureRect2" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -102.0
+offset_top = -96.99994
+offset_right = 922.0
+offset_bottom = 927.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("4_xaaqw")
+
 [connection signal="pressed" from="VBox_Botones/boton_1" to="." method="_on_boton_1_pressed"]
 [connection signal="pressed" from="VBox_Botones/boton_2" to="." method="_on_boton_2_pressed"]
 [connection signal="pressed" from="VBox_Botones/boton_3" to="." method="_on_boton_3_pressed"]
