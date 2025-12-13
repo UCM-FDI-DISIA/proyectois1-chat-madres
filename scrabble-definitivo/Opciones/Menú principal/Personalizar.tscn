@@ -38,7 +38,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 1)
+color = Color(0.043137256, 0.05490196, 0.0627451, 1)
 
 [node name="FondoEspecial" type="TextureRect" parent="."]
 layout_mode = 1
@@ -117,16 +117,17 @@ scale = Vector2(0.1, 0.1)
 texture = ExtResource("6_spnej")
 
 [node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(1500, 1500)
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -99.0
-offset_top = -105.0
-offset_right = 925.0
-offset_bottom = 919.0
+offset_left = -162.00006
+offset_top = -161.0
+offset_right = 1338.0
+offset_bottom = 1339.0
 grow_horizontal = 0
 grow_vertical = 0
 scale = Vector2(0.1, 0.1)
